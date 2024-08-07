@@ -1,0 +1,33 @@
+name: git push another repo to deploy to vercel Stage Branch
+
+on:
+    push:
+        branches: [stage]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        container: pandoc/latex
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install mustache (시간 반영)
+              run: apk add ruby && gem install mustache
+
+            - name: output 생성
+              run: sh ./build.sh
+
+            - name: 레포지토리 변경
+              id: push_directory
+              uses: cpina/github-action-push-to-another-repository@main
+              env:
+                  API_TOKEN_GITHUB: ${{ secrets.AUTO_DEPLOYMENT }}
+              with:
+                  source-directory: "output"
+                  destination-github-username: "yoyobar"
+                  destination-repository-name: "stuffrank"
+                  commit-message: ${{ github.event.commits[0].message }}
+                  target-branch: stage
+
+            - name: 레포지토리 변수 확인
+              run: echo $DESTINATION_CLONED_DIRECTORY

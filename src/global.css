@@ -9,3 +9,17 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+
+@font-face {
+    font-family: "Pretendard Variable";
+    src: url("/src/assets/fonts/PretendardVariable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Elice Digital Baeum";
+    src: url("/src/assets/fonts/EliceDigitalBaeum.woff2") format("woff2");
+    font-weight: normal;
+    font-display: swap;
+}

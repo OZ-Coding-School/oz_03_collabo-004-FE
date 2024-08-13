@@ -30,6 +30,8 @@ jobs:
               run: npm install
 
             - name: react build
+              env:
+                  VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
               run: npm run build
 
             - name: Configure AWS credentials

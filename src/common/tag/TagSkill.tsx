@@ -34,7 +34,7 @@ const TagSkill = ({ tagIcon, tagText }: TagSkillProps) => {
                     isClicked ? "text-primary-second-dark" : "text-primary-background"
                 )}
             >
-                {tagText}
+                <p className="font-medium">{tagText}</p>
             </div>
         </div>
     );

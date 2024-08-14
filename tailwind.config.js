@@ -12,7 +12,7 @@ export default {
                 zero: "0px",
                 xs: ["12px", { lineHeight: "18px", fontWeight: "200" }],
                 sm: ["14px", { lineHeight: "22px", fontWeight: "300" }],
-                base: ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                md: ["16px", { lineHeight: "24px", fontWeight: "400" }],
                 lg: ["20px", { lineHeight: "30px", fontWeight: "500" }],
                 xl: ["24px", { lineHeight: "36px", fontWeight: "600" }],
                 "2xl": ["32px", { lineHeight: "48px", fontWeight: "700" }],

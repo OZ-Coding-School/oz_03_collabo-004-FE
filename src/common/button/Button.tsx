@@ -12,13 +12,13 @@ const Button = ({ color = "default", className, onClick, type = "button", childr
     return (
         <button
             className={tw(
-                "font-default text-base py-2 px-4",
+                "font-default text-base py-2 px-4 text-literal-normal",
                 "hover:text-white transition rounded-md",
                 color === "default" && "bg-slate-200 hover:bg-slate-600",
                 color === "danger" && "bg-slate-200 hover:bg-literal-error",
                 color === "info" && "bg-slate-200 hover:bg-literal-info",
                 color === "confirm" && "bg-slate-200 hover:bg-literal-confirm",
-                color === "primary" && "bg-primary-second hover:bg-primary-second-dark hover:text-black",
+                color === "primary" && "bg-primary-second hover:bg-primary-second-dark hover:text-literal-normal",
                 className
             )}
             onClick={onClick}

@@ -6,8 +6,17 @@ import BadgeTopic from "../common/badge/BadgeTopic";
 import ProfileImage from "../common/profile/ProfileImage";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import Header from "../common/header/Header";
+import Toast from "../common/toast/Toast";
+import { useModalStore } from "../config/store";
+import { AnimatePresence } from "framer-motion";
 
 const PageComponent = () => {
+    const { modal, setModal } = useModalStore();
+
+    const toastHandler = () => {
+        setModal(true);
+    };
+
     return (
         <>
             <Header />
@@ -25,6 +34,7 @@ const PageComponent = () => {
                     <Button color="info">Info</Button>
                     <Button color="confirm">Confirm</Button>
                     <Button color="primary">Primary</Button>
+                    <Button onClick={toastHandler}>Toast Test</Button>
                 </div>
                 <div className="mt-4 flex flex-col gap-2">
                     <ButtonLogin type="normal" />
@@ -57,6 +67,7 @@ const PageComponent = () => {
 
                     <ProfileStatus />
                 </div>
+                <AnimatePresence>{modal && <Toast message="Test" />}</AnimatePresence>
             </div>
         </>
     );

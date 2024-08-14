@@ -24,7 +24,7 @@ export default {
                     DEFAULT: "#092232",
                     second: "#FABC75",
                     "second-dark": "#FF941A",
-                    background: "#28201E",
+                    background: "#4a3f39",
                     "background-second": "#796661",
                 },
                 background: {

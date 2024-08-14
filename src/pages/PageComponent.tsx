@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import TagSkill from "../common/tag/TagSkill";
-import { FaGamepad } from "react-icons/fa";
 import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
 import InfoMyPageRight from "../common/info/InfoMyPageRight";
 import Button from "../common/button/Button";
@@ -13,6 +12,7 @@ import Header from "../common/header/Header";
 import Toast from "../common/toast/Toast";
 import { useModalStore } from "../config/store";
 import { AnimatePresence } from "framer-motion";
+import { FaGamepad } from "react-icons/fa";
 
 const PageComponent = () => {
     const { modal, setModal } = useModalStore();
@@ -20,6 +20,16 @@ const PageComponent = () => {
     const toastHandler = () => {
         setModal(true);
     };
+    const dummyTags = [
+        { id: 0, icon: <FaGamepad />, text: "연애 훈수" },
+        { id: 1, icon: <FaGamepad />, text: "집안일 훈수" },
+        { id: 2, icon: <FaGamepad />, text: "고민 훈수" },
+        { id: 3, icon: <FaGamepad />, text: "소소 훈수" },
+        { id: 4, icon: <FaGamepad />, text: "상상 훈수" },
+        { id: 5, icon: <FaGamepad />, text: "패션 훈수" },
+        { id: 6, icon: <FaGamepad />, text: "게임 훈수" },
+        { id: 7, icon: <FaGamepad />, text: "교육 훈수" },
+    ];
 
     return (
         <>
@@ -72,17 +82,17 @@ const PageComponent = () => {
                     <ProfileStatus />
                 </div>
                 <div className="mt-4 flex flex-col gap-4">
-                <div className="bg-white p-2 m-2 flex flex-wrap gap-2">
-                {dummyTags.map((tag) => (
-                    <TagSkill key={tag.id} tagIcon={tag.icon} tagText={tag.text} />
-                ))}
-            </div>
-            <div className="mt-2">
-                <InfoMyPageLeft />
-            </div>
-            <div className="mt-2">
-                <InfoMyPageRight />
-            </div>  
+                    <div className="bg-white p-2 m-2 flex flex-wrap gap-2">
+                        {dummyTags.map((tag) => (
+                            <TagSkill key={tag.id} tagIcon={tag.icon} tagText={tag.text} />
+                        ))}
+                    </div>
+                    <div className="mt-2">
+                        <InfoMyPageLeft />
+                    </div>
+                    <div className="mt-2">
+                        <InfoMyPageRight />
+                    </div>
                 </div>
                 <AnimatePresence>{modal && <Toast message="Test" />}</AnimatePresence>
             </div>

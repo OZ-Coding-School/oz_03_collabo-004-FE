@@ -3,17 +3,19 @@ import Button from "../common/button/Button";
 import ButtonLogin from "../common/button/ButtonLogin";
 import Badge from "../common/badge/Badge";
 import BadgeTopic from "../common/badge/BadgeTopic";
+import ProfileImage from "../common/profile/ProfileImage";
+import ProfileStatus from "../common/profile/ProfileStatus";
 
 const PageComponent = () => {
     return (
-        <div className="select-none font-default bg-black w-full h-[100vh] p-10">
+        <div className="select-none font-default bg-background w-full h-[100vh] p-10">
             <Link
                 to={"/"}
                 className="font-point text-lg p-2 rounded-md bg-primary-background-second hover:bg-primary-background transition text-white"
             >
                 돌아가기
             </Link>
-            <div className="text-2xl text-white mt-4">Buttons</div>
+            <div className="text-2xl mt-4">Buttons</div>
             <div className="mt-4 flex gap-2">
                 <Button>Continue</Button>
                 <Button color="danger">Danger</Button>
@@ -25,7 +27,7 @@ const PageComponent = () => {
                 <ButtonLogin type="normal" />
                 <ButtonLogin type="social" />
             </div>
-            <div className="text-2xl text-white mt-4">Badges</div>
+            <div className="text-2xl mt-4">Badges</div>
             <div className="mt-4 flex gap-2">
                 <Badge>댓글</Badge>
                 <Badge>싫어요</Badge>
@@ -44,6 +46,10 @@ const PageComponent = () => {
             </div>
             <div className="mt-4 flex">
                 <BadgeTopic />
+            </div>
+            <div className="mt-4 flex gap-4">
+                <ProfileImage />
+                <ProfileStatus />
             </div>
         </div>
     );

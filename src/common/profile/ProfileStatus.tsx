@@ -9,7 +9,9 @@ const mockData = {
 const ProfileStatus = () => {
     return (
         <div className="flex gap-[5px] text-literal-normal">
-            <ProfileImage />
+            <div className="w-[50px] h-[50px]">
+                <ProfileImage />
+            </div>
             <div className="flex flex-col">
                 <div className="font-semibold">{mockData.name}</div>
                 <div className="flex gap-1">

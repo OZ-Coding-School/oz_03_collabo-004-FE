@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import TagSkill from "../common/tag/TagSkill";
+import { FaGamepad } from "react-icons/fa";
+import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
+import InfoMyPageRight from "../common/info/InfoMyPageRight";
 import Button from "../common/button/Button";
 import ButtonLogin from "../common/button/ButtonLogin";
 import Badge from "../common/badge/Badge";
@@ -66,6 +70,19 @@ const PageComponent = () => {
                     </div>
 
                     <ProfileStatus />
+                </div>
+                <div className="mt-4 flex flex-col gap-4">
+                <div className="bg-white p-2 m-2 flex flex-wrap gap-2">
+                {dummyTags.map((tag) => (
+                    <TagSkill key={tag.id} tagIcon={tag.icon} tagText={tag.text} />
+                ))}
+            </div>
+            <div className="mt-2">
+                <InfoMyPageLeft />
+            </div>
+            <div className="mt-2">
+                <InfoMyPageRight />
+            </div>  
                 </div>
                 <AnimatePresence>{modal && <Toast message="Test" />}</AnimatePresence>
             </div>

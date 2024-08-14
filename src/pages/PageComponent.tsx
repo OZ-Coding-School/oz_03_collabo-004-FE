@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import TagSkill from "../common/tag/TagSkill";
 import { FaGamepad } from "react-icons/fa";
 import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
+import InfoMyPageRight from "../common/info/InfoMyPageRight";
 
 const PageComponent = () => {
     const dummyTags = [
@@ -30,6 +31,9 @@ const PageComponent = () => {
             </div>
             <div className="mt-2">
                 <InfoMyPageLeft />
+            </div>
+            <div className="mt-2">
+                <InfoMyPageRight />
             </div>
         </div>
     );

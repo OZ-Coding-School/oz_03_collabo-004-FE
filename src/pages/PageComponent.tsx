@@ -13,6 +13,7 @@ import Toast from "../common/toast/Toast";
 import { useModalStore } from "../config/store";
 import { AnimatePresence } from "framer-motion";
 import { FaGamepad } from "react-icons/fa";
+import ContentMyPage from "../common/content/ContentMyPage";
 
 const PageComponent = () => {
     const { modal, setModal } = useModalStore();
@@ -92,6 +93,9 @@ const PageComponent = () => {
                     </div>
                     <div className="mt-2">
                         <InfoMyPageRight />
+                    </div>
+                    <div className="mt-2">
+                        <ContentMyPage />
                     </div>
                 </div>
                 <AnimatePresence>{modal && <Toast message="Test" />}</AnimatePresence>

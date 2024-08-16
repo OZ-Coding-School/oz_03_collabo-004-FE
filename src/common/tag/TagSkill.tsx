@@ -16,7 +16,7 @@ const TagSkill = ({ tagIcon, tagText }: TagSkillProps) => {
         <div
             onClick={handleClick}
             className={tw(
-                "w-[150px] h-[40px] flex rounded-full py-2 px-5 cursor-pointer gap-1",
+                "min-w-[150px] max-h-[40px] flex rounded-full py-2 px-5 cursor-pointer gap-1",
                 isClicked ? "bg-primary-background" : " border-primary-background border"
             )}
         >

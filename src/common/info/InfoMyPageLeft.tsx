@@ -7,14 +7,25 @@ const InfoMyPageLeft = () => {
         <div className="bg-white w-[387px] min-h-[298px] rounded-2xl px-5 py-6 flex flex-col">
             <div className="flex flex-col flex-grow gap-8">
                 <div className="flex gap-5 items-center">
-                    <input type="file" id="profileImage" className="hidden" />
-                    <label htmlFor="profileImage" className="cursor-pointer">
+                    {isEdit ? (
+                        <>
+                            <input type="file" id="profileImage" className="hidden" />
+                            <label htmlFor="profileImage" className="cursor-pointer">
+                                <img
+                                    src="https://dummyimage.com/80x80/000/fff"
+                                    alt="user_image"
+                                    className="rounded-full w-[80px] h-[80px] object-cover"
+                                />
+                            </label>
+                        </>
+                    ) : (
                         <img
                             src="https://dummyimage.com/80x80/000/fff"
                             alt="user_image"
-                            className="rounded-full w-[80px] h-[80px] object-cover"
+                            className="rounded-full w-[80px] h-[80px]"
                         />
-                    </label>
+                    )}
+
                     <div className="flex flex-col gap-1 flex-grow">
                         <p className="text-sm px-2 font-semibold text-literal-normal">별명</p>
                         {isEdit ? (

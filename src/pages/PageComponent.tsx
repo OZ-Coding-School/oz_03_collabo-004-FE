@@ -12,8 +12,8 @@ import Header from "../common/header/Header";
 import Toast from "../common/toast/Toast";
 import { useModalStore } from "../config/store";
 import { AnimatePresence } from "framer-motion";
-import { FaGamepad } from "react-icons/fa";
 import ContentMyPage from "../common/content/ContentMyPage";
+import { dummyTags } from "../data/dummyTags";
 
 const PageComponent = () => {
     const { modal, setModal } = useModalStore();
@@ -21,16 +21,6 @@ const PageComponent = () => {
     const toastHandler = () => {
         setModal(true);
     };
-    const dummyTags = [
-        { id: 0, icon: <FaGamepad />, text: "연애 훈수" },
-        { id: 1, icon: <FaGamepad />, text: "집안일 훈수" },
-        { id: 2, icon: <FaGamepad />, text: "고민 훈수" },
-        { id: 3, icon: <FaGamepad />, text: "소소 훈수" },
-        { id: 4, icon: <FaGamepad />, text: "상상 훈수" },
-        { id: 5, icon: <FaGamepad />, text: "패션 훈수" },
-        { id: 6, icon: <FaGamepad />, text: "게임 훈수" },
-        { id: 7, icon: <FaGamepad />, text: "교육 훈수" },
-    ];
 
     return (
         <>

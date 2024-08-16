@@ -1,23 +1,13 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 import Button from "../button/Button";
 import { useState } from "react";
-import { FaGamepad } from "react-icons/fa";
 import TagSkill from "../tag/TagSkill";
+import { dummyTags } from "../../data/dummyTags";
 
 const InfoMyPageRight = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const progress = 15;
     const len = 0;
-    const dummyTags = [
-        { id: 0, icon: <FaGamepad />, text: "연애 훈수" },
-        { id: 1, icon: <FaGamepad />, text: "집안일 훈수" },
-        { id: 2, icon: <FaGamepad />, text: "고민 훈수" },
-        { id: 3, icon: <FaGamepad />, text: "소소 훈수" },
-        { id: 4, icon: <FaGamepad />, text: "상상 훈수" },
-        { id: 5, icon: <FaGamepad />, text: "패션 훈수" },
-        { id: 6, icon: <FaGamepad />, text: "게임 훈수" },
-        { id: 7, icon: <FaGamepad />, text: "교육 훈수" },
-    ];
 
     return (
         <div className="bg-white max-w-[780px] min-h-[270px] rounded-2xl py-5 px-10 flex-col">

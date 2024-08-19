@@ -7,7 +7,7 @@ import { FaTshirt } from "react-icons/fa";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaFeatherPointed } from "react-icons/fa6";
 
-export const dummyTags = [
+export const DUMMY_TAGS = [
     { id: 0, icon: <FaHeart />, text: "연애 훈수" },
     { id: 1, icon: <FaHouse />, text: "집안일 훈수" },
     { id: 2, icon: <FaQuestionCircle />, text: "고민 훈수" },

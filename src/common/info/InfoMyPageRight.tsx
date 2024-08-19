@@ -2,7 +2,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import Button from "../button/Button";
 import { useState } from "react";
 import TagSkill from "../tag/TagSkill";
-import { dummyTags } from "../../data/dummyTags";
+import { DUMMY_TAGS } from "../../config/const";
 
 const InfoMyPageRight = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const InfoMyPageRight = () => {
             </div>
             <div className="flex flex-wrap  gap-3">
                 {isEdit ? (
-                    dummyTags.map((tag) => <TagSkill key={tag.id} tagIcon={tag.icon} tagText={tag.text} />)
+                    DUMMY_TAGS.map((tag) => <TagSkill key={tag.id} tagIcon={tag.icon} tagText={tag.text} />)
                 ) : len <= 0 ? (
                     <div className="font-default text-sm text-center w-full my-2">나만의 훈수 태그를 골라보세요!</div>
                 ) : null}

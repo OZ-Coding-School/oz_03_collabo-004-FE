@@ -24,13 +24,11 @@ function Layout() {
 
 function App() {
     return (
-        <>
-            <Routes>
-                <Route index element={<Layout />} />
-                <Route path="/color" element={<PageColor />} />
-                <Route path="/component" element={<PageComponent />} />
-            </Routes>
-        </>
+        <Routes>
+            <Route index element={<Layout />} />
+            <Route path="/color" element={<PageColor />} />
+            <Route path="/component" element={<PageComponent />} />
+        </Routes>
     );
 }
 

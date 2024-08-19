@@ -7,7 +7,7 @@ interface ButtonProps {
     type: "normal" | "social";
 }
 
-const ButtonLogin = ({ onClick, type }: ButtonProps) => {
+const ButtonRegister = ({ onClick, type }: ButtonProps) => {
     return (
         <button
             className={tw(
@@ -18,15 +18,15 @@ const ButtonLogin = ({ onClick, type }: ButtonProps) => {
             )}
             onClick={onClick}
         >
-            {type === "normal" && "이메일 계정으로 로그인"}
+            {type === "normal" && "이메일 계정으로 가입"}
             {type === "social" && (
                 <>
                     <FcGoogle className="w-[20px] h-[20px] mr-1" />
-                    <div>구글 계정으로 로그인</div>
+                    <div>구글 계정으로 가입</div>
                 </>
             )}
         </button>
     );
 };
 
-export default ButtonLogin;
+export default ButtonRegister;

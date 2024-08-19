@@ -12,9 +12,9 @@ const ButtonLogin = ({ onClick, type }: ButtonProps) => {
         <button
             className={tw(
                 "rounded-[5px] font-default w-[409px] h-[42px] text-literal-normal flex justify-center items-center",
-                type === "normal" && "bg-primary-second hover:bg-primary-second-dark transition font-bold",
+                type === "normal" && "bg-primary-second hover:bg-primary-second-dark transition font-semibold",
                 type === "social" &&
-                    "text-white bg-primary-background-second hover:bg-primary-background transition font-bold"
+                    "text-white bg-primary-background-second hover:bg-primary-background transition font-semibold"
             )}
             onClick={onClick}
         >

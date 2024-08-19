@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import BadgeDesc from "../badge/BadgeDesc";
 import { IoClose } from "react-icons/io5";
-import ButtonRegister from "../button/ButtonRegister";
 import { ModalProps } from "../../config/types";
+import Button from "../button/Button";
 
-const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
+const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
     const [modalRoot] = useState(() => document.createElement("div"));
-    const modalRef = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         document.body.appendChild(modalRoot);
@@ -22,10 +21,10 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
         const headerElement = document.querySelector(".header");
 
         if (isOpen) {
-            document.body.style.overflowY = "hidden";
-            modalRef.current?.focus();
+            document.body.style.overflow = "hidden";
             parentElement?.classList.add("blur-[2px]");
             headerElement?.classList.add("blur-[2px]");
+            modalRef.current?.focus();
         }
 
         return () => {
@@ -45,7 +44,7 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
             ></motion.nav>
             <div
                 onClick={onClose}
-                className="text-literal-normal font-default inset-0 z-40 fixed flex items-center justify-center"
+                className="text-literal-normal inset-0 font-default z-40 fixed flex items-center justify-center"
             >
                 <motion.nav
                     tabIndex={-1}
@@ -55,22 +54,23 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none mx-2 md:mx-0 w-[570px] h-[584px] rounded-3xl bg-white relative"
+                    className="px-[110px] outline-none mx-2 md:mx-0 w-[570px] h-[240px] rounded-3xl bg-white relative"
                 >
-                    <div className="flex flex-col justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수왕 가입</div>
-                        <div className="w-full text-center mt-5 text-gray-400">
-                            훈수왕은 유머와 창의성으로 가득 찬 전문가들이 모여
+                    <div className="flex flex-col">
+                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 삭제</div>
+                        <div className="text-literal-error mt-5 w-full text-center font-semibold">
+                            정말 게시글을 삭제하시겠습니까?
                         </div>
-                        <div className="w-full text-center text-gray-400">조언과 피드백을 나누는 공간입니다.</div>
-                        <div className="mt-10">
-                            <BadgeDesc />
-                        </div>
-                        <div className="flex flex-col justify-center items-center mt-16 gap-[13px]">
-                            <ButtonRegister type="social" />
-                            <ButtonRegister type="normal" />
+                        <div className="w-full flex gap-5 mt-10">
+                            <Button className="w-full" color="danger">
+                                삭제
+                            </Button>
+                            <Button onClick={onClose} className="w-full">
+                                취소
+                            </Button>
                         </div>
                     </div>
+
                     <IoClose
                         onClick={onClose}
                         title="닫기"
@@ -83,4 +83,4 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
     );
 };
 
-export default ModalRegister;
+export default ModalDelete;

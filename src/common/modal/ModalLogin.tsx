@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import BadgeDesc from "../badge/BadgeDesc";
 import { IoClose } from "react-icons/io5";
-import ButtonRegister from "../button/ButtonRegister";
 import { ModalProps } from "../../config/types";
+import ButtonLogin from "../button/ButtonLogin";
 
-const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
+const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
     const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +58,7 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
                     className="outline-none mx-2 md:mx-0 w-[570px] h-[584px] rounded-3xl bg-white relative"
                 >
                     <div className="flex flex-col justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수왕 가입</div>
+                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수왕 로그인</div>
                         <div className="w-full text-center mt-5 text-gray-400">
                             훈수왕은 유머와 창의성으로 가득 찬 전문가들이 모여
                         </div>
@@ -67,8 +67,8 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
                             <BadgeDesc />
                         </div>
                         <div className="flex flex-col justify-center items-center mt-16 gap-[13px]">
-                            <ButtonRegister type="social" />
-                            <ButtonRegister type="normal" />
+                            <ButtonLogin type="social" />
+                            <ButtonLogin type="normal" />
                         </div>
                     </div>
                     <IoClose
@@ -83,4 +83,4 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
     );
 };
 
-export default ModalRegister;
+export default ModalLogin;

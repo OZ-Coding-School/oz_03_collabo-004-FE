@@ -23,3 +23,28 @@ body {
     font-weight: normal;
     font-style: normal;
 }
+
+* {
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(115, 115, 115, 1) transparent;
+}
+
+/* Webkit (Chrome, Safari) */
+*::-webkit-scrollbar {
+    width: 9px;
+    height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+    background: black;
+    border-radius: 5px;
+    margin: 10px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #dad0ea;
+    border-radius: 10px;
+}

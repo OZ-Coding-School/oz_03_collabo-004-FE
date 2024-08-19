@@ -1,14 +1,9 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { ModalProps } from "../../config/types";
 
-interface ModalPictureProps {
-    onClose: () => void;
-    isOpen: boolean;
-    parent: string;
-}
-
-const ModalPicture = ({ onClose, isOpen, parent }: ModalPictureProps) => {
+const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
     const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +38,7 @@ const ModalPicture = ({ onClose, isOpen, parent }: ModalPictureProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="fixed flex justify-center inset-0 bg-black w-full h-full"
             ></motion.nav>
             <div onClick={onClose} className="inset-0 select-none z-40 fixed flex items-center justify-center">
                 <motion.nav

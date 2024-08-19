@@ -16,6 +16,9 @@ import { FaGamepad } from "react-icons/fa";
 import { useState } from "react";
 import ModalPicture from "../common/modal/ModalPicture";
 import ModalRegister from "../common/modal/ModalRegister";
+import ModalLogin from "../common/modal/ModalLogin";
+import ModalReport from "../common/modal/ModalReport";
+import ModalDelete from "../common/modal/ModalDelete";
 
 const dummyTags = [
     { id: 0, icon: <FaGamepad />, text: "연애 훈수" },
@@ -31,6 +34,9 @@ const dummyTags = [
 const PageComponent = () => {
     const [picture, setPicture] = useState(false);
     const [register, setRegister] = useState(false);
+    const [login, setLogin] = useState(false);
+    const [report, setReport] = useState(false);
+    const [deleted, setDeleted] = useState(false);
     const { modal, setModal } = useModalStore();
 
     const toastHandler = () => {
@@ -44,6 +50,15 @@ const PageComponent = () => {
     const registerOpenHandler = () => {
         setRegister(true);
     };
+    const loginOpenHandler = () => {
+        setLogin(true);
+    };
+    const reportOpenHandler = () => {
+        setReport(true);
+    };
+    const deleteOpenHandler = () => {
+        setDeleted(true);
+    };
     //? MODAL CLOSE
     const pictureCloseHandler = () => {
         setPicture(false);
@@ -51,11 +66,20 @@ const PageComponent = () => {
     const registerCloseHandler = () => {
         setRegister(false);
     };
+    const loginCloseHandler = () => {
+        setLogin(false);
+    };
+    const reportCloseHandler = () => {
+        setReport(false);
+    };
+    const deleteCloseHandler = () => {
+        setDeleted(false);
+    };
 
     return (
         <>
             <Header />
-            <div className="test-parent">
+            <div className="test-parent font-default">
                 <div className="pt-[100px] select-none bg-background w-full p-10">
                     <Link
                         to={"/"}
@@ -75,6 +99,9 @@ const PageComponent = () => {
                     <div className="mt-4 flex gap-2">
                         <Button onClick={pictureOpenHandler}>사진 모달</Button>
                         <Button onClick={registerOpenHandler}>회원가입 모달</Button>
+                        <Button onClick={loginOpenHandler}>로그인 모달</Button>
+                        <Button onClick={reportOpenHandler}>신고 모달</Button>
+                        <Button onClick={deleteOpenHandler}>게시글 삭제 모달</Button>
                     </div>
                     <div className="mt-4 flex flex-col gap-2">
                         <ButtonLogin type="normal" />
@@ -128,6 +155,9 @@ const PageComponent = () => {
                     {register && (
                         <ModalRegister parent="test-parent" isOpen={register} onClose={registerCloseHandler} />
                     )}
+                    {login && <ModalLogin parent="test-parent" isOpen={login} onClose={loginCloseHandler} />}
+                    {report && <ModalReport parent="test-parent" isOpen={report} onClose={reportCloseHandler} />}
+                    {deleted && <ModalDelete parent="test-parent" isOpen={deleted} onClose={deleteCloseHandler} />}
                 </AnimatePresence>
             </div>
         </>

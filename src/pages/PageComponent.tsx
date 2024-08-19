@@ -117,11 +117,11 @@ const PageComponent = () => {
                     </div>
                     <div>
                         <p className="text-xl mb-2">Skeleton Content 타입 1</p>
-                        <SkeletonContent type="1" />
+                        <SkeletonContent type={1} />
                     </div>
                     <div>
                         <p className="text-xl mb-2">Skeleton Content 타입 2</p>
-                        <SkeletonContent type="2" />
+                        <SkeletonContent type={2} />
                     </div>
                     <SkeletonTrendingContent />
                     <SkeletonTrendingComment />

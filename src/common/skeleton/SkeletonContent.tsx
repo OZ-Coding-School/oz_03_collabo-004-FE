@@ -1,7 +1,7 @@
 import Skeleton from "./Skeleton";
 
 interface SkeletonContentProps {
-    type: "1" | "2";
+    type: 1 | 2;
 }
 
 const SkeletonContent1 = () => {
@@ -68,10 +68,10 @@ const SkeletonContent2 = () => {
 };
 
 const SkeletonContent = ({ type }: SkeletonContentProps) => {
-    if (type === "1") {
+    if (type === 1) {
         return <SkeletonContent1 />;
     }
-    if (type === "2") {
+    if (type === 2) {
         return <SkeletonContent2 />;
     }
 };

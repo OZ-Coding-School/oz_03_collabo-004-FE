@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../button/Button";
 
 const InfoMyPageLeft = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -55,12 +56,9 @@ const InfoMyPageLeft = () => {
                     )}
                 </div>
             </div>
-            <button
-                onClick={() => setIsEdit(!isEdit)}
-                className="bg-primary-second py-2 rounded-md text-sm hover:bg-primary-second-dark"
-            >
+            <Button color="primary" onClick={() => setIsEdit(!isEdit)}>
                 {isEdit ? "프로필 수정 완료" : "프로필 수정"}
-            </button>
+            </Button>
         </div>
     );
 };

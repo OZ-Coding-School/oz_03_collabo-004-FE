@@ -2,12 +2,13 @@ import { useState } from "react";
 
 const InfoMyPageLeft = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
+
     return (
-        <div className="bg-white w-[387px] h-[298px] rounded-2xl px-5 py-6 flex flex-col">
+        <div className="bg-white w-[387px] min-h-[298px] rounded-2xl px-5 py-6 flex flex-col">
             <div className="flex flex-col flex-grow gap-8">
-                {isEdit ? (
-                    <>
-                        <div className="flex gap-5 items-center">
+                <div className="flex gap-5 items-center">
+                    {isEdit ? (
+                        <>
                             <input type="file" id="profileImage" className="hidden" />
                             <label htmlFor="profileImage" className="cursor-pointer">
                                 <img
@@ -16,39 +17,43 @@ const InfoMyPageLeft = () => {
                                     className="rounded-full w-[80px] h-[80px] object-cover"
                                 />
                             </label>
-                            <div className="flex flex-col gap-2 flex-grow">
-                                <p className="text-sm font-medium">별명</p>
-                                <input
-                                    type="text"
-                                    value="나는 훈수왕"
-                                    className=" text-sm text-literal-normal border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <div className="text-primary-background text-sm font-medium">소개</div>
+                        </>
+                    ) : (
+                        <img
+                            src="https://dummyimage.com/80x80/000/fff"
+                            alt="user_image"
+                            className="rounded-full w-[80px] h-[80px]"
+                        />
+                    )}
+
+                    <div className="flex flex-col gap-1 flex-grow">
+                        <p className="text-sm px-2 font-semibold text-literal-normal">별명</p>
+                        {isEdit ? (
                             <input
-                                value="안녕하세요 최고의 훈수가가 되는 게 꿈입니다."
-                                className="text-sm text-literal-normal border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
+                                type="text"
+                                defaultValue="나는 훈수왕"
+                                className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
                             />
+                        ) : (
+                            <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
+                                나는 훈수왕
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <div className="text-literal-normal text-sm font-semibold px-2">한 줄 소개</div>
+                    {isEdit ? (
+                        <input
+                            defaultValue="안녕하세요 최고의 훈수가가 되는 게 꿈입니다."
+                            className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
+                        />
+                    ) : (
+                        <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
+                            안녕하세요 최고의 훈수가가 되는 게 꿈입니다.
                         </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="flex gap-5">
-                            <img
-                                src="https://dummyimage.com/80x80/000/fff"
-                                alt="user_image"
-                                className="rounded-full w-[80px] h-[80px]"
-                            />
-                            <div className="my-auto text-sm font-medium text-literal-normal">나는 훈수왕</div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <div className="text-primary-background text-sm font-medium">소개</div>
-                            <div className="text-sm text-gray-700">안녕하세요 최고의 훈수가가 되는 게 꿈입니다.</div>
-                        </div>
-                    </>
-                )}
+                    )}
+                </div>
             </div>
             <button
                 onClick={() => setIsEdit(!isEdit)}

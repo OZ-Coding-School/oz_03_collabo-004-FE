@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-import { useModalStore } from "../../config/store";
+import { useToastStore } from "../../config/store";
 import { motion } from "framer-motion";
 
 interface ToastDefaultProps {
-    message: string;
     duration?: number;
 }
 
-const Toast = ({ message, duration = 2000 }: ToastDefaultProps) => {
+const Toast = ({ duration = 2000 }: ToastDefaultProps) => {
+    const { toast, setToast } = useToastStore();
     const [progress, setProgress] = useState(100);
-    const { setModal } = useModalStore();
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setModal(false);
+            setToast(false, "");
         }, duration);
 
         const interval = setInterval(() => {
@@ -30,7 +29,7 @@ const Toast = ({ message, duration = 2000 }: ToastDefaultProps) => {
             clearTimeout(timer);
             clearInterval(interval);
         };
-    }, [duration, setModal]);
+    }, [duration, setToast]);
     return (
         <motion.div
             initial={{ opacity: 0, translateX: 200 }}
@@ -39,7 +38,7 @@ const Toast = ({ message, duration = 2000 }: ToastDefaultProps) => {
             transition={{ type: "tween" }}
             className="w-[300px] bottom-10 right-10 h-[80px] bg-white fixed z-50 px-5 py-2 rounded-2xl flex flex-col justify-center"
         >
-            <div className="flex-grow">{message}</div>
+            <div className="flex-grow">{toast.text}</div>
             <div className="h-1 bg-background rounded-full">
                 <div
                     className="h-1 bg-primary-second-dark rounded-full transition-all duration-100 ease-linear"

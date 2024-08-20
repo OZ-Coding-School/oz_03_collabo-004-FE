@@ -12,7 +12,6 @@ import ProfileImage from "../common/profile/ProfileImage";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import Header from "../common/header/Header";
 import Toast from "../common/toast/Toast";
-import { useModalStore } from "../config/store";
 import ContentMyPage from "../common/content/ContentMyPage";
 import { DUMMY_TAGS } from "../config/const";
 import Skeleton from "../common/skeleton/Skeleton";
@@ -24,6 +23,8 @@ import ModalRegister from "../common/modal/ModalRegister";
 import ModalLogin from "../common/modal/ModalLogin";
 import ModalReport from "../common/modal/ModalReport";
 import ModalDelete from "../common/modal/ModalDelete";
+import { ModalPortal } from "../config/modalPortal";
+import { useToastStore } from "../config/store";
 
 const PageComponent = () => {
     const [modalStates, setModalStates] = useState({
@@ -34,16 +35,18 @@ const PageComponent = () => {
         deleted: false,
     });
 
-    const { modal, setModal } = useModalStore();
-
-    const toastHandler = () => setModal(true);
+    const { toast, setToast } = useToastStore();
 
     const modalHandler = (modalType: string, isOpen: boolean) => {
         setModalStates((prevState) => ({ ...prevState, [modalType]: isOpen }));
     };
 
+    const toastHandler = () => {
+        setToast(true, "으아아아아아아악");
+    };
+
     return (
-        <>
+        <div className="test-parent">
             <Header />
             <div className="pt-[100px] select-none font-default bg-background w-full h-full p-10">
                 <Link
@@ -129,46 +132,48 @@ const PageComponent = () => {
                     <InfoMyPageRight />
                 </section>
 
-                <AnimatePresence>
-                    {modal && <Toast message="Test" />}
-                    {modalStates.picture && (
-                        <ModalPicture
-                            parent="test-parent"
-                            isOpen={modalStates.picture}
-                            onClose={() => modalHandler("picture", false)}
-                        />
-                    )}
-                    {modalStates.register && (
-                        <ModalRegister
-                            parent="test-parent"
-                            isOpen={modalStates.register}
-                            onClose={() => modalHandler("register", false)}
-                        />
-                    )}
-                    {modalStates.login && (
-                        <ModalLogin
-                            parent="test-parent"
-                            isOpen={modalStates.login}
-                            onClose={() => modalHandler("login", false)}
-                        />
-                    )}
-                    {modalStates.report && (
-                        <ModalReport
-                            parent="test-parent"
-                            isOpen={modalStates.report}
-                            onClose={() => modalHandler("report", false)}
-                        />
-                    )}
-                    {modalStates.deleted && (
-                        <ModalDelete
-                            parent="test-parent"
-                            isOpen={modalStates.deleted}
-                            onClose={() => modalHandler("deleted", false)}
-                        />
-                    )}
-                </AnimatePresence>
+                <ModalPortal>
+                    <AnimatePresence>
+                        {toast.status && <Toast />}
+                        {modalStates.picture && (
+                            <ModalPicture
+                                parent="test-parent"
+                                isOpen={modalStates.picture}
+                                onClose={() => modalHandler("picture", false)}
+                            />
+                        )}
+                        {modalStates.register && (
+                            <ModalRegister
+                                parent="test-parent"
+                                isOpen={modalStates.register}
+                                onClose={() => modalHandler("register", false)}
+                            />
+                        )}
+                        {modalStates.login && (
+                            <ModalLogin
+                                parent="test-parent"
+                                isOpen={modalStates.login}
+                                onClose={() => modalHandler("login", false)}
+                            />
+                        )}
+                        {modalStates.report && (
+                            <ModalReport
+                                parent="test-parent"
+                                isOpen={modalStates.report}
+                                onClose={() => modalHandler("report", false)}
+                            />
+                        )}
+                        {modalStates.deleted && (
+                            <ModalDelete
+                                parent="test-parent"
+                                isOpen={modalStates.deleted}
+                                onClose={() => modalHandler("deleted", false)}
+                            />
+                        )}
+                    </AnimatePresence>
+                </ModalPortal>
             </div>
-        </>
+        </div>
     );
 };
 

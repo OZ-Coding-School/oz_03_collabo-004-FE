@@ -1,10 +1,16 @@
 import { create } from "zustand";
 
-interface ModalStore {
-    modal: boolean;
-    setModal: (bool: boolean) => void;
+interface ToastStore {
+    toast: {
+        status: boolean;
+        text: string;
+    };
+    setToast: (bool: boolean, text: string) => void;
 }
-export const useModalStore = create<ModalStore>((set) => ({
-    modal: false,
-    setModal: (bool: boolean) => set(() => ({ modal: bool })),
+export const useToastStore = create<ToastStore>((set) => ({
+    toast: {
+        status: false,
+        text: "",
+    },
+    setToast: (bool, text) => set(() => ({ toast: { status: bool, text: text } })),
 }));

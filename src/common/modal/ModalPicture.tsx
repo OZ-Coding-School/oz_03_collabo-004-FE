@@ -1,18 +1,9 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import { useEffect, useRef } from "react";
 import { ModalProps } from "../../config/types";
 
 const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
-    const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        document.body.appendChild(modalRoot);
-        return () => {
-            document.body.removeChild(modalRoot);
-        };
-    }, [modalRoot]);
 
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
@@ -32,7 +23,7 @@ const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
         };
     }, [isOpen, parent]);
 
-    return ReactDOM.createPortal(
+    return (
         <>
             <motion.nav
                 initial={{ opacity: 0 }}
@@ -49,16 +40,15 @@ const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none mx-2 md:mx-0 w-[570px] h-[584px] relative"
+                    className="outline-none w-[570px] h-[584px] relative"
                 >
                     <img
-                        className="w-full h-full rounded-3xl"
+                        className="w-full h-full md:rounded-3xl"
                         src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     ></img>
                 </motion.nav>
             </div>
-        </>,
-        modalRoot
+        </>
     );
 };
 

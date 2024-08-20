@@ -15,13 +15,13 @@ const SkeletonTrendingComment = () => {
                 <FaFireAlt className="text-literal-highlight ml-1" />
                 <p className="font-default text-md text-literal-highlight">인기 훈수</p>
             </div>
-            <div className="w-full h-[186px] bg-white rounded-md py-1 px-3 flex flex-col justify-between">
+            <div className="w-full h-[248px] bg-white rounded-md py-2 px-3 flex flex-col justify-between">
                 {items.map((item) => (
-                    <div key={item.rank} className="flex gap-2 items-center">
+                    <div key={item.rank} className="flex gap-2 items-center h-10">
                         <p className="font-point text-base text-slate-600">{item.rank}</p>
                         <div className="flex flex-col gap-1">
                             <div className="flex gap-1">
-                                <div className="size-4 bg-gray-200 my-auto rounded-full animate-pulse"></div>
+                                <div className="size-5 bg-gray-200 my-auto rounded-full animate-pulse"></div>
                                 <div className="my-auto">
                                     <Skeleton size="s" />
                                 </div>

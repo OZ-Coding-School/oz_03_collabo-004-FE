@@ -49,7 +49,7 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {TOPIC_TAGS.slice(0, 6).map((i) => (
-                        <li className="flex items-center gap-2 duration-150 hover:text-primary-second-dark cursor-pointer">
+                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>
                     ))}
@@ -72,7 +72,7 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {TOPIC_TAGS.slice(6, 8).map((i) => (
-                        <li className="flex items-center gap-2 duration-150 hover:text-primary-second-dark cursor-pointer">
+                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>
                     ))}
@@ -95,7 +95,7 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {TOPIC_TAGS.slice(8, 9).map((i) => (
-                        <li className="flex items-center gap-2 duration-150 hover:text-primary-second-dark cursor-pointer">
+                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>
                     ))}

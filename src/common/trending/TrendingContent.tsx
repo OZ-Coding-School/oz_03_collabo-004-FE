@@ -17,7 +17,7 @@ const TrendingContent = () => {
             </div>
             <div className="w-full h-auto bg-white rounded-md py-1 px-1 flex flex-col ">
                 {items.map((item) => (
-                    <div className="flex gap-2 items-center px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100">
+                    <div className="flex gap-2 items-center px-2 py-1 rounded-md cursor-pointer transition hover:bg-gray-100">
                         <p className="font-point text-base text-slate-600">{item.rank}</p>
                         <img
                             src="https://dummyimage.com/32x32/000/fff"

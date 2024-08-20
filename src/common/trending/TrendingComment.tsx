@@ -18,7 +18,7 @@ const TrendingComment = () => {
                 {items.map((item) => (
                     <div
                         key={item.rank}
-                        className="flex gap-2 px-2 py-1 items-center rounded-md cursor-pointer hover:bg-gray-100"
+                        className="flex gap-2 px-2 py-1 items-center rounded-md cursor-pointer transition hover:bg-gray-100"
                     >
                         <p className="font-point text-base text-slate-600">{item.rank}</p>
                         <div className="flex flex-col">

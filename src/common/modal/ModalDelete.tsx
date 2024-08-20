@@ -1,20 +1,11 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
 
 const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
-    const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-        document.body.appendChild(modalRoot);
-        return () => {
-            document.body.removeChild(modalRoot);
-        };
-    }, [modalRoot]);
 
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
@@ -34,7 +25,7 @@ const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
         };
     }, [isOpen, parent]);
 
-    return ReactDOM.createPortal(
+    return (
         <>
             <motion.nav
                 initial={{ opacity: 0 }}
@@ -54,10 +45,10 @@ const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="px-[110px] outline-none mx-2 md:mx-0 w-[570px] h-[240px] rounded-3xl bg-white relative"
+                    className="outline-none w-full h-full md:w-[570px] md:h-[240px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
-                    <div className="flex flex-col">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 삭제</div>
+                    <div className="px-12 md:px-[110px] flex flex-col w-full h-full justify-center items-center">
+                        <div className="w-full font-bold text-lg font-point text-center ">훈수 삭제</div>
                         <div className="text-literal-error mt-5 w-full text-center font-semibold">
                             정말 게시글을 삭제하시겠습니까?
                         </div>
@@ -78,8 +69,7 @@ const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
                     />
                 </motion.nav>
             </div>
-        </>,
-        modalRoot
+        </>
     );
 };
 

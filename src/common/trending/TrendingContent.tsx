@@ -15,16 +15,16 @@ const TrendingContent = () => {
                 <FaFireAlt className="text-literal-highlight ml-1" />
                 <p className="font-default text-md text-literal-highlight">인기 게시글</p>
             </div>
-            <div className="w-full h-auto bg-white rounded-md py-2 px-3 flex flex-col gap-2">
+            <div className="w-full h-auto bg-white rounded-md py-1 px-1 flex flex-col ">
                 {items.map((item) => (
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100">
                         <p className="font-point text-base text-slate-600">{item.rank}</p>
                         <img
                             src="https://dummyimage.com/32x32/000/fff"
                             alt="trending-content-image"
                             className="rounded-md"
                         />
-                        <p className="text-xs font-default font-normal">{item.title}</p>
+                        <p className="text-xs font-default font-normal text-literal-normal">{item.title}</p>
                     </div>
                 ))}
             </div>

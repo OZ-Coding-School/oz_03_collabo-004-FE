@@ -14,9 +14,12 @@ const TrendingComment = () => {
                 <FaFireAlt className="text-literal-highlight ml-1" />
                 <p className="font-default text-md text-literal-highlight">인기 훈수</p>
             </div>
-            <div className="w-full h-auto bg-white rounded-md py-2 px-3 flex flex-col gap-2">
+            <div className="w-full h-auto bg-white rounded-md py-1 px-1 flex flex-col">
                 {items.map((item) => (
-                    <div key={item.rank} className="flex gap-2 items-center">
+                    <div
+                        key={item.rank}
+                        className="flex gap-2 px-2 py-1 items-center rounded-md cursor-pointer hover:bg-gray-100"
+                    >
                         <p className="font-point text-base text-slate-600">{item.rank}</p>
                         <div className="flex flex-col">
                             <div className="flex gap-1 items-center">
@@ -25,9 +28,9 @@ const TrendingComment = () => {
                                     alt="trending-content-image"
                                     className="rounded-full size-5"
                                 />
-                                <p className="text-sm font-default">김민수</p>
+                                <p className="text-sm font-default text-literal-normal">김민수</p>
                             </div>
-                            <p className="font-default text-xs">Lorem Ipsum Lorem Ipsum Lorem...</p>
+                            <p className="font-default text-xs text-literal-normal">Lorem Ipsum Lorem Ipsum Lorem...</p>
                         </div>
                     </div>
                 ))}

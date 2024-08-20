@@ -25,6 +25,8 @@ import ModalReport from "../common/modal/ModalReport";
 import ModalDelete from "../common/modal/ModalDelete";
 import { ModalPortal } from "../config/modalPortal";
 import { useToastStore } from "../config/store";
+import TrendingComment from "../common/trending/TrendingComment";
+import TrendingContent from "../common/trending/TrendingContent";
 
 const PageComponent = () => {
     const [modalStates, setModalStates] = useState({
@@ -130,6 +132,12 @@ const PageComponent = () => {
                     <SkeletonTrendingComment />
                     <InfoMyPageLeft />
                     <InfoMyPageRight />
+                </section>
+                <section className="mt-2">
+                    <TrendingComment />
+                </section>
+                <section className="mt-2">
+                    <TrendingContent />
                 </section>
 
                 <ModalPortal>

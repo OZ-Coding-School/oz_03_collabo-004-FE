@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
-import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { TOPIC_TAGS } from "../../config/const";
 import { motion, Variants } from "framer-motion";
@@ -40,7 +39,18 @@ const Topic = () => {
                         isDailyOpen && "bg-gray-100"
                     )}
                 >
-                    일상 {isDailyOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
+                    일상
+                    <motion.div
+                        animate={isDailyOpen ? "open" : "closed"}
+                        variants={{
+                            open: { rotate: 180 },
+                            closed: { rotate: 0 },
+                        }}
+                        transition={{ duration: 0.2 }}
+                        style={{ originY: 0.55 }}
+                    >
+                        <IoMdArrowDropup />
+                    </motion.div>
                 </button>
                 <motion.ul
                     initial={false}
@@ -63,7 +73,18 @@ const Topic = () => {
                         isGameOpen && "bg-gray-100"
                     )}
                 >
-                    게임 {isGameOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
+                    게임
+                    <motion.div
+                        animate={isGameOpen ? "open" : "closed"}
+                        variants={{
+                            open: { rotate: 180 },
+                            closed: { rotate: 0 },
+                        }}
+                        transition={{ duration: 0.2 }}
+                        style={{ originY: 0.55 }}
+                    >
+                        <IoMdArrowDropup />
+                    </motion.div>
                 </button>
                 <motion.ul
                     initial={false}
@@ -86,8 +107,19 @@ const Topic = () => {
                         isEduOpen && "bg-gray-100"
                     )}
                 >
-                    교육 {isEduOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
-                </button>{" "}
+                    교육
+                    <motion.div
+                        animate={isEduOpen ? "open" : "closed"}
+                        variants={{
+                            open: { rotate: 180 },
+                            closed: { rotate: 0 },
+                        }}
+                        transition={{ duration: 0.2 }}
+                        style={{ originY: 0.55 }}
+                    >
+                        <IoMdArrowDropup />
+                    </motion.div>
+                </button>
                 <motion.ul
                     initial={false}
                     animate={isEduOpen ? "open" : "closed"}

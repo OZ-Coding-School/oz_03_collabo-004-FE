@@ -28,6 +28,7 @@ import { useToastStore } from "../config/store";
 import TrendingComment from "../common/trending/TrendingComment";
 import TrendingContent from "../common/trending/TrendingContent";
 import Topic from "../common/topic/Topic";
+import ContentFooter from "../common/content/ContentFooter";
 
 const PageComponent = () => {
     const [modalStates, setModalStates] = useState({
@@ -142,6 +143,9 @@ const PageComponent = () => {
                 </section>
                 <section className="mt-2">
                     <Topic />
+                </section>
+                <section className="mt-2">
+                    <ContentFooter />
                 </section>
 
                 <ModalPortal>

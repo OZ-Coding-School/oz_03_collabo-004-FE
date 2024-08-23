@@ -4,8 +4,8 @@ interface TagSkillProps {
     tagIcon: React.ReactNode;
     tagText: string;
     isClicked?: boolean;
-    isEdit: boolean;
-    onClick: () => void;
+    isEdit?: boolean;
+    onClick?: () => void;
 }
 
 const TagSkill = ({ tagIcon, tagText, isClicked, isEdit, onClick }: TagSkillProps) => {

@@ -35,7 +35,7 @@ const InfoMyPageRight = () => {
     };
 
     return (
-        <div className="bg-white w-full min-w-[300px] rounded-2xl py-6 px-10 flex-col">
+        <div className="bg-white max-w-[780px] min-w-[300px] rounded-2xl py-6 px-10 flex-col">
             {toast.status && <Toast />}
             <div className="flex mb-6">
                 <div className="font-point font-bold text-lg text-literal-normal">훈수 레벨 : LV 1</div>

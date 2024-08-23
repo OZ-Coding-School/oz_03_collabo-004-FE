@@ -5,7 +5,7 @@ const InfoMyPageLeft = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
     return (
-        <div className="bg-white w-[387px] min-h-[298px] rounded-2xl px-5 py-6 flex flex-col">
+        <div className="bg-white max-w-[387px] w-[387px] min-w-[300px] h-[298px] rounded-2xl px-5 py-6 flex flex-col">
             <div className="flex flex-col flex-grow gap-8">
                 <div className="flex gap-5 items-center">
                     {isEdit ? (

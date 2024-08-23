@@ -27,6 +27,10 @@ import { ModalPortal } from "../config/modalPortal";
 import { useToastStore } from "../config/store";
 import { useGoogleLogin } from "@react-oauth/google";
 import { authApi } from "../api";
+import TrendingComment from "../common/trending/TrendingComment";
+import TrendingContent from "../common/trending/TrendingContent";
+import Topic from "../common/topic/Topic";
+import ContentFooter from "../common/content/ContentFooter";
 
 const PageComponent = () => {
     const [modalStates, setModalStates] = useState({
@@ -142,16 +146,28 @@ const PageComponent = () => {
                     </div>
                     <div>
                         <p className="text-xl mb-2">Skeleton Content 타입 1</p>
-                        <SkeletonContent type="1" />
+                        <SkeletonContent type={1} />
                     </div>
                     <div>
                         <p className="text-xl mb-2">Skeleton Content 타입 2</p>
-                        <SkeletonContent type="2" />
+                        <SkeletonContent type={2} />
                     </div>
                     <SkeletonTrendingContent />
                     <SkeletonTrendingComment />
                     <InfoMyPageLeft />
                     <InfoMyPageRight />
+                </section>
+                <section className="mt-2">
+                    <TrendingComment />
+                </section>
+                <section className="mt-2">
+                    <TrendingContent />
+                </section>
+                <section className="mt-2">
+                    <Topic />
+                </section>
+                <section className="mt-2">
+                    <ContentFooter />
                 </section>
 
                 <ModalPortal>

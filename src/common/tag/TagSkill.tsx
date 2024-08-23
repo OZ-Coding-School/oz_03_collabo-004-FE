@@ -1,16 +1,18 @@
-import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 
 interface TagSkillProps {
     tagIcon: React.ReactNode;
     tagText: string;
+    isClicked?: boolean;
+    isEdit?: boolean;
+    onClick?: () => void;
 }
 
-const TagSkill = ({ tagIcon, tagText }: TagSkillProps) => {
-    const [isClicked, setIsClicked] = useState<boolean>(false);
-
+const TagSkill = ({ tagIcon, tagText, isClicked, isEdit, onClick }: TagSkillProps) => {
     const handleClick = () => {
-        setIsClicked(!isClicked);
+        if (isEdit || !isClicked) {
+            onClick();
+        }
     };
     return (
         <div

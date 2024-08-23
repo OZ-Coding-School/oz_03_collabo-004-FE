@@ -16,7 +16,7 @@ const SkeletonTrendingContent = () => {
                 <FaFireAlt className="text-literal-highlight ml-1" />
                 <p className="font-default text-md text-literal-highlight">인기 게시글</p>
             </div>
-            <div className="w-full h-[186px] bg-white rounded-md py-1 px-3 flex flex-col justify-between">
+            <div className="w-full h-[208px] bg-white rounded-md py-2 px-3 flex flex-col justify-between">
                 {items.map((item) => (
                     <div key={item.rank} className="flex gap-2 items-center">
                         <p className="font-point text-base text-slate-600">{item.rank}</p>

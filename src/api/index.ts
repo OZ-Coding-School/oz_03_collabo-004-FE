@@ -1,3 +1,3 @@
-import * as AuthApi from "./auth";
+import * as authApi from "./auth";
 
-export { AuthApi };
+export { authApi };

@@ -25,6 +25,8 @@ import ModalReport from "../common/modal/ModalReport";
 import ModalDelete from "../common/modal/ModalDelete";
 import { ModalPortal } from "../config/modalPortal";
 import { useToastStore } from "../config/store";
+import { useGoogleLogin } from "@react-oauth/google";
+import { authApi } from "../api";
 
 const PageComponent = () => {
     const [modalStates, setModalStates] = useState({
@@ -44,6 +46,26 @@ const PageComponent = () => {
     const toastHandler = () => {
         setToast(true, "으아아아아아아악");
     };
+
+    const googleLoginRequest = async (token: string) => {
+        console.log(token);
+        try {
+            const result = await authApi.userGoogleAccessTokenReceiver(token);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const googleLoginHandler = useGoogleLogin({
+        onSuccess: (res) => {
+            googleLoginRequest(res.access_token);
+        },
+
+        onError: () => {
+            console.error("Unexpected Login Request Error");
+        },
+    });
 
     return (
         <div className="test-parent">
@@ -75,7 +97,7 @@ const PageComponent = () => {
                     </div>
                     <div className="mt-4 flex flex-col gap-2">
                         <ButtonLogin type="normal" />
-                        <ButtonLogin type="social" />
+                        <ButtonLogin onClick={googleLoginHandler} type="social" />
                     </div>
                 </section>
 

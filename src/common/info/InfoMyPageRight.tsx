@@ -35,13 +35,13 @@ const InfoMyPageRight = () => {
     };
 
     return (
-        <div className="bg-white max-w-[780px] min-w-[300px] rounded-2xl py-6 px-10 flex-col">
+        <div className="bg-white w-full min-w-[300px] rounded-2xl py-6 px-10 flex-col">
             {toast.status && <Toast />}
             <div className="flex mb-6">
                 <div className="font-point font-bold text-lg text-literal-normal">훈수 레벨 : LV 1</div>
                 <div className="flex flex-col items-end font-default text-xs ml-auto">
-                    <p className="text-literal-normal">채택된 훈수 1개</p>
-                    <p className="text-literal-highlight">받은 경고 1건</p>
+                    <p className="text-literal-normal">채택된 훈수 9,999개</p>
+                    <p className="text-literal-highlight">받은 경고 3건</p>
                 </div>
             </div>
             <div className="w-full h-[42px]">
@@ -65,7 +65,7 @@ const InfoMyPageRight = () => {
                     {isEdit ? "완료" : "수정"}
                 </Button>
             </div>
-            <div className="flex flex-wrap  gap-3">
+            <div className="flex flex-wrap gap-1 md:gap-3">
                 {isEdit ? (
                     DUMMY_TAGS.map((tag, index) => (
                         <TagSkill

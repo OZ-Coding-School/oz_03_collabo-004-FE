@@ -5,13 +5,13 @@ const InfoMyPageLeft = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
     return (
-        <div className="bg-white max-w-[387px] w-[387px] min-w-[300px] h-[298px] rounded-2xl px-5 py-6 flex flex-col">
+        <div className="bg-white w-full min-w-[300px] min-h-[298px] rounded-2xl px-5 py-6 flex flex-col sticky top-5">
             <div className="flex flex-col flex-grow gap-8">
                 <div className="flex gap-5 items-center">
                     {isEdit ? (
                         <>
                             <input type="file" id="profileImage" className="hidden" />
-                            <label htmlFor="profileImage" className="cursor-pointer">
+                            <label htmlFor="profileImage" className="cursor-pointer w-[80px] h-[80px] flex-shrink-0">
                                 <img
                                     src="https://dummyimage.com/80x80/000/fff"
                                     alt="user_image"
@@ -33,7 +33,7 @@ const InfoMyPageLeft = () => {
                             <input
                                 type="text"
                                 defaultValue="나는 훈수왕"
-                                className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
+                                className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second w-full"
                             />
                         ) : (
                             <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">

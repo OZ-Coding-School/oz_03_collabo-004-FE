@@ -5,8 +5,8 @@ import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
 import MyPage from "./pages/MyPage";
 import ErrorPage from "./pages/ErrorPage";
-import PrivateRoute from "./PrivateRoute";
-import AdminRoute from "./AdminRoute";
+import PrivateRoute from "./routes/PrivateRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 function App() {
     return (

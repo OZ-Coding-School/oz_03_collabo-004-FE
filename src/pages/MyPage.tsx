@@ -4,7 +4,7 @@ import ContentMyPage from "../common/content/ContentMyPage";
 import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
 import InfoMyPageRight from "../common/info/InfoMyPageRight";
 import { accountApi } from "../api";
-import { ModalPortal } from "../config/modalPortal";
+import { ModalPortal } from "../config/ModalPortal";
 import ModalDetail from "../common/modal/ModalDetail";
 
 const MyPage = () => {

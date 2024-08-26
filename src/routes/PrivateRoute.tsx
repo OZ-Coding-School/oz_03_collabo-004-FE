@@ -17,14 +17,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Component, ...rest
 
     useEffect(() => {
         const verifyUser = async () => {
-            try {
-                await refreshToken();
-                await verifyToken();
-            } catch (error) {
-                console.error("verifyUser Failed", error);
-            } finally {
-                setIsLoading(true);
-            }
+            await refreshToken();
+            await verifyToken();
+            setIsLoading(false);
         };
         verifyUser();
     }, [refreshToken, verifyToken]);

@@ -19,7 +19,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Component, ...rest
         const verifyUser = async () => {
             await refreshToken();
             await verifyToken();
-            setIsLoading(true);
+            setIsLoading(false);
         };
         verifyUser();
     }, [refreshToken, verifyToken]);

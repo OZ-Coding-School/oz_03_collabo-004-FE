@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
 import { authApi } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const useVerify = () => {
     const [isLogin, setIsLogin] = useState(false);
+    const nav = useNavigate();
 
     const refreshToken = useCallback(async () => {
         try {
@@ -20,8 +22,9 @@ const useVerify = () => {
         } catch (error) {
             console.error("token is not Verified", error);
             setIsLogin(false);
+            nav("/");
         }
-    }, []);
+    }, [nav]);
 
     return { refreshToken, verifyToken, isLogin };
 };

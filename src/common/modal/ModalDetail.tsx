@@ -30,18 +30,18 @@ const ModalDetail = ({ onClose, isOpen, parent }: ModalProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full "
             ></motion.nav>
             <div
                 onClick={onClose}
-                className="text-literal-normal inset-0 font-default z-40 fixed flex items-center justify-center md:px-2"
+                className="text-literal-normal inset-0 font-default z-60 fixed flex items-center justify-center md:px-2 comment-parent"
             >
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[870px] md:max-h-[650px] md:rounded-3xl bg-white relative py-10 px-14"
+                    className="outline-none w-full h-full md:w-[870px] md:max-h-[650px] md:rounded-3xl bg-white relative py-10 px-14 "
                 >
                     <div className="flex flex-col gap-2">
                         <div className="flex justify-between">
@@ -59,19 +59,11 @@ const ModalDetail = ({ onClose, isOpen, parent }: ModalProps) => {
                             <p>내용들..</p>
                         </div>
                         <form className="my-5">
-                            <WriteModal />
+                            <WriteModal onClose={onClose} />
                         </form>
-                        <div>
-                            <Comment />
+                        <div className="flex justify-end">
+                            <Comment color="ai" parent="comment-parent" />
                         </div>
-
-                        {/* <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 신고</div>
-                        <div className="w-full font-default text-center mt-5 text-literal-error">
-                            부적절한 신고는 다른 사용자에게 불필요한 피해를 줄 수 있습니다.
-                        </div>
-                        <div className="w-full font-default text-center text-literal-error">
-                            신고 사유를 신중하게 작성해 주시기 바랍니다.
-                        </div> */}
                     </div>
                     <IoClose
                         onClick={onClose}

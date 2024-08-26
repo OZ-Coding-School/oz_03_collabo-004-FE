@@ -36,15 +36,10 @@ const MyPage = () => {
     };
 
     return (
-        <div className="max-w-[1280px] mx-auto py-4 px-3 ">
+        <div className="max-w-[1280px] mx-auto py-4 px-3 detail-parent">
             <div className="flex flex-col gap-3 md:flex-row md:justify-evenly">
                 <div className="md:mr-3 md:w-[387px]">
                     <InfoMyPageLeft />
-                    <ModalPortal>
-                        {isDetailModalOpen && (
-                            <ModalDetail isOpen={isDetailModalOpen} parent="test-parent" onClose={closeDetailModal} />
-                        )}
-                    </ModalPortal>
                     <button onClick={openDetailModal}>모달테스트</button>
                 </div>
                 <div className="flex flex-col w-full md:w-[780px]">
@@ -74,6 +69,11 @@ const MyPage = () => {
                     <div className="my-5">{activeTab === 0 && <ContentMyPage />}</div>
                 </div>
             </div>
+            <ModalPortal>
+                {isDetailModalOpen && (
+                    <ModalDetail isOpen={isDetailModalOpen} parent="detail-parent" onClose={closeDetailModal} />
+                )}
+            </ModalPortal>
         </div>
     );
 };

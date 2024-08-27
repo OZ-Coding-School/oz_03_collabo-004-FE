@@ -15,7 +15,7 @@ const InfoMyPageRight = () => {
     const progress = 0;
 
     useEffect(() => {
-        setSelectedTags([1, 2, 3]);
+        // setSelectedTags([1, 2, 3]);
     }, []);
 
     const toastHandler = () => {

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import Button from "../button/Button";
+import ProfileImage from "../profile/ProfileImage";
 
 const InfoMyPageLeft = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
+    const [bioText, setBioText] = useState("");
+    const [nicknameText, setNicknameText] = useState("");
 
     return (
         <div className="bg-white w-full min-w-[300px] min-h-[298px] rounded-2xl px-5 py-6 flex flex-col sticky top-5">
@@ -20,11 +23,7 @@ const InfoMyPageLeft = () => {
                             </label>
                         </>
                     ) : (
-                        <img
-                            src="https://dummyimage.com/80x80/000/fff"
-                            alt="user_image"
-                            className="rounded-full w-[80px] h-[80px]"
-                        />
+                        <ProfileImage />
                     )}
 
                     <div className="flex flex-col gap-1 flex-grow">
@@ -32,7 +31,7 @@ const InfoMyPageLeft = () => {
                         {isEdit ? (
                             <input
                                 type="text"
-                                defaultValue="나는 훈수왕"
+                                value={nicknameText}
                                 className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second w-full"
                             />
                         ) : (
@@ -46,12 +45,15 @@ const InfoMyPageLeft = () => {
                     <div className="text-literal-normal text-sm font-semibold px-2">한 줄 소개</div>
                     {isEdit ? (
                         <input
-                            defaultValue="안녕하세요 최고의 훈수가가 되는 게 꿈입니다."
+                            value={bioText}
+                            maxLength={50}
+                            onChange={(e) => setBioText(e.target.value)}
                             className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
                         />
                     ) : (
                         <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
-                            안녕하세요 최고의 훈수가가 되는 게 꿈입니다.
+                            {/* 안녕하세요 최고의 훈수가가 되는 게 꿈입니다. */}
+                            {bioText}
                         </div>
                     )}
                 </div>

@@ -3,45 +3,53 @@ import Button from "../button/Button";
 import { useEffect, useState } from "react";
 import TagSkill from "../tag/TagSkill";
 import { DUMMY_TAGS } from "../../config/const";
-import { useToastStore } from "../../config/store";
+import { useToastStore, useUserStore } from "../../config/store";
 import Toast from "../../common/toast/Toast";
+import { userInfoUpdate } from "../../api/account";
 
 const InfoMyPageRight = () => {
     const { toast, setToast } = useToastStore();
+    const { user } = useUserStore();
     const [isEdit, setIsEdit] = useState<boolean>(false);
-
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
+
     const len = selectedTags.length;
     const progress = 0;
 
     useEffect(() => {
-        // setSelectedTags([1, 2, 3]);
-    }, []);
+        setSelectedTags(user.selected_tags);
+    }, [user]);
 
     const toastHandler = () => {
         setToast(true, "최대 3개의 태그만 선택할 수 있습니다.");
     };
 
-    const handleTagClick = (index: number) => {
+    const handleTagClick = async (index: number) => {
         if (selectedTags.includes(index)) {
             // 선택된 태그를 클릭하면 선택 해제
             setSelectedTags(selectedTags.filter((tagIndex) => tagIndex !== index));
         } else if (selectedTags.length < 3) {
-            // 3개 미만일 때만 추가
             setSelectedTags([...selectedTags, index]);
         } else {
             toastHandler();
         }
     };
 
+    const handleTagUpdate = async () => {
+        await userInfoUpdate({ selected_tags: selectedTags });
+        setIsEdit(false);
+    };
+
     return (
         <div className="bg-white w-full min-w-[300px] rounded-2xl py-6 px-10 flex-col">
             {toast.status && <Toast />}
             <div className="flex mb-6">
-                <div className="font-point font-bold text-lg text-literal-normal">훈수 레벨 : LV 1</div>
+                <div className="font-point font-bold text-lg text-literal-normal">
+                    훈수 레벨 : LV {user.hunsoo_level}
+                </div>
                 <div className="flex flex-col items-end font-default text-xs ml-auto">
-                    <p className="text-literal-normal">채택된 훈수 9,999개</p>
-                    <p className="text-literal-highlight">받은 경고 3건</p>
+                    <p className="text-literal-normal">채택된 훈수 {user.selected_comment_count}개</p>
+                    <p className="text-literal-highlight">받은 경고 {user.warning_count}건</p>
                 </div>
             </div>
             <div className="w-full h-[42px]">
@@ -61,7 +69,10 @@ const InfoMyPageRight = () => {
             </div>
             <div className="flex mt-9 mb-5 justify-between">
                 <p className="font-point text-base text-literal-normal">나의 전문 훈수는</p>
-                <Button onClick={() => setIsEdit(!isEdit)} className={"text-xs w-13 h-6 py-1"}>
+                <Button
+                    onClick={() => (isEdit ? handleTagUpdate() : setIsEdit(true))}
+                    className={"text-xs w-13 h-6 py-1"}
+                >
                     {isEdit ? "완료" : "수정"}
                 </Button>
             </div>

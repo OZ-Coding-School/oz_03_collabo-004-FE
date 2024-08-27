@@ -1,15 +1,34 @@
 import { useGoogleLogin } from "@react-oauth/google";
-import { authApi } from "../api";
+import { accountApi, authApi } from "../api";
 import ButtonLogin from "../common/button/ButtonLogin";
+import { useQuery } from "@tanstack/react-query";
+import { useUserStore } from "../config/store";
+import { UserData } from "../config/types";
+import { useEffect } from "react";
 
 const HomePage = () => {
+    const { initUser, user } = useUserStore();
+
+    const { data: userInfo, refetch: refetchUserInfo } = useQuery({
+        queryKey: ["userInfo"],
+        queryFn: accountApi.userInfo,
+        enabled: false,
+    });
+
+    //? TEST CODE
+    useEffect(() => {
+        if (userInfo) {
+            initUser(userInfo!.data as UserData);
+        }
+        console.log(user);
+    }, [user, userInfo, initUser]);
+
     const googleLoginRequest = async (token: string) => {
-        console.log(token);
         try {
-            const result = await authApi.userGoogleAccessTokenReceiver(token);
-            console.log(result);
+            await authApi.userGoogleAccessTokenReceiver(token);
+            await refetchUserInfo();
         } catch (error) {
-            console.error(error);
+            console.error("login failed", error);
         }
     };
 

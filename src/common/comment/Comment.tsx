@@ -80,9 +80,9 @@ const Comment = ({ className, color = "default", parent }: CommentProps) => {
                     onClick={handleReportClick}
                 ></div>
                 <div className="flex-wrap justify-between sm:flex">
-                    <div className="flex items-center gap-1 mt-auto cursor-pointer duration-200 rounded-md px-1 hover:bg-red-100">
+                    <div className="flex items-center gap-1 mt-auto cursor-pointer duration-200 rounded-md px-1">
                         <RiAlarmWarningFill className="text-literal-highlight" />
-                        <p className="text-literal-highlight text-sm" onClick={handleReportClick}>
+                        <p className="text-literal-highlight font-medium text-sm" onClick={handleReportClick}>
                             신고하기
                         </p>
                     </div>

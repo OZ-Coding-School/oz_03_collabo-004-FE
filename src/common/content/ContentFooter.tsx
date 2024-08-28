@@ -4,9 +4,12 @@ import { PiCursorClickFill } from "react-icons/pi";
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import { motion } from "framer-motion";
+import { ContentAddView, ContentAddLike } from "../../api/article";
 
 const ContentFooter = () => {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+    const [likeCount, setLikeCount] = useState<number>(99);
+    const [viewCount, setViewCount] = useState<number>(999999999);
 
     const handleMouseEnter = (i: number) => {
         setHoverIndex(i);
@@ -16,22 +19,42 @@ const ContentFooter = () => {
         setHoverIndex(null);
     };
 
+    const handleAddView = async () => {
+        try {
+            await ContentAddView();
+            setViewCount(viewCount + 1);
+        } catch (error) {
+            console.error("Failed to add view:", error);
+        }
+    };
+
+    const handleAddLike = async () => {
+        try {
+            await ContentAddLike();
+            setLikeCount(likeCount + 1);
+        } catch (error) {
+            console.error("Failed to add like:", error);
+        }
+    };
+
     const data = [
         { icon: FaMessage, text: "댓글", count: "999,999" },
-        { icon: FaSmile, text: "좋아요", count: "99" },
-        { icon: PiCursorClickFill, text: "조회수", count: "999,999,999" },
+        { icon: FaSmile, text: "좋아요", count: likeCount, onClick: handleAddLike },
+        { icon: PiCursorClickFill, text: "조회수", count: viewCount, onClick: handleAddView },
     ];
 
     return (
         <div className="w-[626px] h-[50px] bg-white rounded-b-2xl py-2 px-14">
-            <div className="flex justify-between items-center h-full font-default">
+            <div className="flex items-center justify-between h-full font-default">
                 {data.map((item, index) => {
                     const Icon = item.icon;
                     return (
                         <div
-                            className="flex items-center gap-2 relative"
+                            key={index}
+                            className="relative flex items-center gap-2 cursor-pointer"
                             onMouseEnter={() => handleMouseEnter(index)}
                             onMouseLeave={handleMouseLeave}
+                            onClick={item.onClick}
                         >
                             <Icon
                                 className={tw(
@@ -43,7 +66,7 @@ const ContentFooter = () => {
                             {hoverIndex === index && (
                                 <motion.div
                                     animate={{ opacity: [0, 1], translateY: [10, 0] }}
-                                    className="absolute bg-slate-200 text-literal-normal font-normal text-xs mt-1 rounded top-full left-6 px-2"
+                                    className="absolute px-2 mt-1 text-xs font-normal rounded bg-slate-200 text-literal-normal top-full left-6"
                                 >
                                     {item.text}
                                 </motion.div>

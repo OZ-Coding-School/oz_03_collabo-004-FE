@@ -3,7 +3,7 @@ import { RiEmotionUnhappyFill, RiEmotionHappyFill, RiAlarmWarningFill } from "re
 import { twMerge as tw } from "tailwind-merge";
 import ModalReport from "../modal/ModalReport";
 import ModalPicture from "../modal/ModalPicture";
-import { ModalPortal } from "../../config/modalPortal";
+import { ModalPortal } from "../../config/ModalPortal";
 
 interface CommentProps {
     onClick?: () => void;

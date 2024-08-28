@@ -17,3 +17,7 @@ export const userTokenRefresh = () => {
         withCredential: true,
     });
 };
+
+export const userLogout = () => {
+    return axiosInstance.post("auth/logout/");
+};

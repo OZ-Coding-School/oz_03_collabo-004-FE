@@ -14,7 +14,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: "http://52.78.179.207:8000",
+                target: "https://api.hunsuking.yoyobar.xyz",
                 changeOrigin: true,
                 secure: false,
                 rewrite: (path) => path.replace(/^\/api/, "/api"),

@@ -42,7 +42,11 @@ const HomePage = () => {
         },
     });
 
-    return <ButtonLogin onClick={googleLoginHandler} type="social" />;
+    return (
+        <>
+            <ButtonLogin onClick={googleLoginHandler} type="social" />
+        </>
+    );
 };
 
 export default HomePage;

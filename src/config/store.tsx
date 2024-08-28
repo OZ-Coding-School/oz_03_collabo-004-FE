@@ -18,11 +18,12 @@ export const useToastStore = create<ToastStore>((set) => ({
 interface UserStore {
     user: UserData;
     initUser: (Form: UserData) => void;
+    updateUser: (user: Partial<UserData>) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
     user: {
-        article: [],
+        articles: [],
         bio: null,
         comments: [],
         hunsoo_level: 1,
@@ -31,6 +32,11 @@ export const useUserStore = create<UserStore>((set) => ({
         selected_comment_count: 0,
         selected_tags: [],
         warning_count: 0,
+        status: true,
     },
     initUser: (form: UserData) => set(() => ({ user: form })),
+    updateUser: (updatedUser) =>
+        set((state) => ({
+            user: { ...state.user, ...updatedUser },
+        })),
 }));

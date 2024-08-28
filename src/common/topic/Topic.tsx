@@ -59,7 +59,10 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(0, 6).map((i) => (
-                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
+                        <li
+                            key={i.id}
+                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                        >
                             {i.icon} {i.text}
                         </li>
                     ))}
@@ -93,7 +96,10 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(6, 9).map((i) => (
-                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
+                        <li
+                            key={i.id}
+                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                        >
                             {i.icon} {i.text}
                         </li>
                     ))}
@@ -127,7 +133,10 @@ const Topic = () => {
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(9, 10).map((i) => (
-                        <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
+                        <li
+                            key={i.id}
+                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                        >
                             {i.icon} {i.text}
                         </li>
                     ))}

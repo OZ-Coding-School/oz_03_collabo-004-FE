@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import { IoMdArrowDropup } from "react-icons/io";
-import { TOPIC_TAGS } from "../../config/const";
+import { DUMMY_TAGS } from "../../config/const";
 import { motion, Variants } from "framer-motion";
 
 const dropdownVariants: Variants = {
@@ -58,7 +58,7 @@ const Topic = () => {
                     variants={dropdownVariants}
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
-                    {TOPIC_TAGS.slice(0, 6).map((i) => (
+                    {DUMMY_TAGS.slice(0, 6).map((i) => (
                         <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>
@@ -92,7 +92,7 @@ const Topic = () => {
                     variants={dropdownVariants}
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
-                    {TOPIC_TAGS.slice(6, 8).map((i) => (
+                    {DUMMY_TAGS.slice(6, 9).map((i) => (
                         <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>
@@ -126,7 +126,7 @@ const Topic = () => {
                     variants={dropdownVariants}
                     className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
                 >
-                    {TOPIC_TAGS.slice(8, 9).map((i) => (
+                    {DUMMY_TAGS.slice(9, 10).map((i) => (
                         <li className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer">
                             {i.icon} {i.text}
                         </li>

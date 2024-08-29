@@ -19,6 +19,6 @@ export const userInfoImageUpdate = (image: File) => {
 };
 
 //다른 유저의 마이페이지 볼 수 있는
-export const userInfoPublic = (userId: string) => {
+export const userInfoPublic = (userId: number) => {
     return axiosInstance.get(`/account/profile/${userId}/`);
 };

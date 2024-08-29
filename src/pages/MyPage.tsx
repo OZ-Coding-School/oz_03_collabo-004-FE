@@ -8,27 +8,31 @@ import { accountApi } from "../api";
 import Header from "../common/header/Header";
 import { useUserStore } from "../config/store";
 import TabItem from "../common/tab/TabItem";
+import { useParams } from "react-router-dom";
 
 const MyPage = () => {
     const [isUserMypage, setIsUserMypage] = useState<boolean>(true); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const { getUserInfo } = useUser();
     const { user } = useUserStore();
+    const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
 
     //! -> 다른 사용자 클릭하면 사용자 아이디랑 자기 아이디를 같이 백엔드에 보내서 거기서 true/false로 판단하는 값 + 클릭한 아이디의 마이페이지 정보 보내주기..?
-    //나중에 지울것 잠깐 콘솔만 보느라..
+    // 다른 유저 마이페이지 조회하기
     useEffect(() => {
         const getDataUserProfile = async () => {
+            if (!userId) return;
             try {
-                const response = await accountApi.userInfo();
+                // const response = await accountApi.userInfo();
+                const response = await accountApi.userInfoPublic(parseInt(userId));
                 console.log(response.data);
             } catch (error) {
                 console.error("Error: ", error);
             }
         };
         getDataUserProfile();
-    }, []);
-    console.log(user);
+    }, [userId]);
+    console.log(user.comments);
 
     //새로고침해도 store에 있는 user 유지되도록
     useEffect(() => {

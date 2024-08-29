@@ -18,6 +18,7 @@ const RegisterPage = () => {
         handleSubmit,
         formState: { errors },
         getValues,
+        reset,
     } = useForm<RegisterData>({
         defaultValues: {
             id: "",
@@ -29,6 +30,7 @@ const RegisterPage = () => {
     });
 
     const onSubmit: SubmitHandler<RegisterData> = (data) => {
+        reset();
         console.log(data);
     };
     return (

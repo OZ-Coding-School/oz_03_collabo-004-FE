@@ -14,6 +14,7 @@ const LoginPage = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm<LoginData>({
         defaultValues: {
             id: "",
@@ -22,6 +23,7 @@ const LoginPage = () => {
     });
 
     const onSubmit: SubmitHandler<LoginData> = (data) => {
+        reset();
         console.log(data);
     };
     return (

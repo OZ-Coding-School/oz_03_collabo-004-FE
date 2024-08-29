@@ -28,15 +28,15 @@ const LoginPage = () => {
         <>
             <Header />
             <div className="flex w-screen justify-center items-center min-h-screen font-default sm:bg-transparent bg-white ">
-                <div className="w-[520px] sm:h-[582px] sm:bg-white h-screen sm:rounded-[50px] sm:border-2 sm:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-14 px-10">
+                <div className="w-[520px] sm:bg-white sm:rounded-[40px] sm:border-2 sm:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <Link to={"/"}>
-                        <img className="w-[150px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
+                        <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
-                    <form className="flex flex-col w-full gap-2" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="flex flex-col w-full gap-1" onSubmit={handleSubmit(onSubmit)}>
                         <label className="text-sm font-medium px-1">아이디 *</label>
                         <input
                             className={tw(
-                                "p-2 rounded-md border border-gray-200 focus:outline-primary-second",
+                                "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
                                 errors.id && "focus:outline-literal-highlight"
                             )}
                             type="text"
@@ -49,12 +49,12 @@ const LoginPage = () => {
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.id ? "2~15글자 사이로 작성해주세요." : null}
+                            {errors.id && "2~15글자 사이로 작성해주세요."}
                         </p>
                         <label className="text-sm font-medium px-1">비밀번호 *</label>
                         <input
                             className={tw(
-                                "p-2 rounded-md border border-gray-200 focus:outline-primary-second",
+                                "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
                                 errors.password && "focus:outline-literal-highlight"
                             )}
                             type="password"
@@ -65,7 +65,7 @@ const LoginPage = () => {
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.password ? "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요." : null}
+                            {errors.password && "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요."}
                         </p>
                         <Button className="mt-4 py-3" type="submit" color="primary">
                             로그인

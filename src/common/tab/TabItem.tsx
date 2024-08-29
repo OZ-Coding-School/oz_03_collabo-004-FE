@@ -36,6 +36,10 @@ const TabItem = () => {
                     user.articles.map((article) => (
                         <ContentMyPage key={article.article_id} activeTab={activeTab} article={article} />
                     ))}
+                {activeTab === 1 &&
+                    user.comments.map((comment) => (
+                        <ContentMyPage key={comment.id} activeTab={activeTab} comment={comment} />
+                    ))}
             </div>
         </>
     );

@@ -19,7 +19,6 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
 
     const len = selectedTags.length;
     const progress = 94;
-    const otheruser = "따지고 보면 잔소리라 생각되진 않아";
 
     useEffect(() => {
         setSelectedTags(user.selected_tags);
@@ -64,7 +63,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     style={{ width: `${progress * 2}%` }}
                 >
                     <p className="font-default text-sm font-medium text-primary-second-dark min-w-[60px] text-center">
-                        궁극의 훈수꾼{" "}
+                        궁극의 훈수꾼
                     </p>
                     <IoMdArrowDropdown className="text-primary-second-dark" />
                 </div>
@@ -81,7 +80,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                         "나의 전문 훈수는"
                     ) : (
                         <>
-                            <span className="font-default font-medium">' {otheruser} '</span> 님의 전문 훈수는
+                            <span className="font-default font-medium">' {user.nickname} '</span> 님의 전문 훈수는
                         </>
                     )}
                 </p>

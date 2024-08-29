@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-const useFormatDate = (dateString: string) => {
+const useFormatDate = (dateString: string | null) => {
     return useMemo(() => {
         if (!dateString) return "";
 

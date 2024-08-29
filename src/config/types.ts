@@ -7,7 +7,7 @@ export interface ModalProps {
 export interface UserData {
     articles: Article[];
     bio: string | null;
-    comments: string[];
+    comments: Comment[];
     hunsoo_level: number;
     nickname: string | null;
     profile_image: string | null;
@@ -37,6 +37,19 @@ export interface Article {
         nickname: string;
     };
     view_count: number;
+}
+
+export interface Comment {
+    id: number;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    helpful_count: number;
+    not_helpful_count: number;
+    is_selected: boolean;
+    images: string[];
+    user: number;
+    user_nickname: string;
 }
 
 export interface UserUpdateData {

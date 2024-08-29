@@ -17,7 +17,7 @@ const RegisterPage = () => {
         register,
         handleSubmit,
         formState: { errors },
-        watch,
+        getValues,
     } = useForm<RegisterData>({
         defaultValues: {
             id: "",
@@ -49,14 +49,23 @@ const RegisterPage = () => {
                             type="text"
                             placeholder="아이디를 입력해주세요."
                             {...register("id", {
-                                required: true,
-                                minLength: 2,
-                                maxLength: 15,
-                                pattern: /^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/i,
+                                required: "필수 항목입니다.",
+                                minLength: {
+                                    value: 6,
+                                    message: "아이디는 최소 6글자 이상이어야 합니다.",
+                                },
+                                maxLength: {
+                                    value: 15,
+                                    message: "아이디는 최대 15글자 이하이어야 합니다.",
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9]{6,15}$/,
+                                    message: "아이디는 알파벳과 숫자만 사용하여 6~15글자 사이로 입력해주세요.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.id && "2~15글자 사이로 작성해주세요."}
+                            {errors.id && errors.id.message}
                         </p>
 
                         <label className="text-sm font-medium px-1">별명</label>
@@ -85,12 +94,15 @@ const RegisterPage = () => {
                             type="email"
                             placeholder="hunsuking@example.com"
                             {...register("email", {
-                                required: true,
-                                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                                required: "필수 항목입니다.",
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                                    message: "이메일 형식에 먖춰 입력해주세요.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.email && "이메일 형식에 먖춰 입력해주세요."}
+                            {errors.email && errors.email.message}
                         </p>
 
                         <label className="text-sm font-medium px-1">비밀번호 *</label>
@@ -103,12 +115,15 @@ const RegisterPage = () => {
                             autoComplete="off"
                             placeholder="비밀번호를 입력해주세요."
                             {...register("password", {
-                                required: true,
-                                pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                required: "필수 항목입니다.",
+                                pattern: {
+                                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                    message: "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.password && "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요."}
+                            {errors.password && errors.password.message}
                         </p>
 
                         <label className="text-sm font-medium px-1">비밀번호 확인 *</label>
@@ -121,18 +136,22 @@ const RegisterPage = () => {
                             autoComplete="off"
                             placeholder="비밀번호를 확인해주세요."
                             {...register("confirmPassword", {
-                                required: true,
-                                validate: (value) => value === watch("password"),
+                                required: "필수 항목입니다.",
+                                validate: {
+                                    check: (value) => {
+                                        if (getValues("password") !== value) return "비밀번호가 일치하지 않습니다.";
+                                    },
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.confirmPassword && "비밀번호가 일치하지 않습니다."}
+                            {errors.confirmPassword && errors.confirmPassword.message}
                         </p>
                         <Button className="mt-4 py-3" type="submit" color="primary">
                             회원가입
                         </Button>
                         <Link to={"/login"}>
-                            <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 cursor-pointer">
+                            <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 duration-200 cursor-pointer">
                                 로그인 하러 가기
                             </p>
                         </Link>

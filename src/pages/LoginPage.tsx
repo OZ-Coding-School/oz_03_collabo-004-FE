@@ -42,14 +42,23 @@ const LoginPage = () => {
                             type="text"
                             placeholder="아이디를 입력해주세요."
                             {...register("id", {
-                                required: "아이디를 입력해주세요.",
-                                minLength: 2,
-                                maxLength: 15,
-                                pattern: /^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/i,
+                                required: "필수 항목입니다.",
+                                minLength: {
+                                    value: 6,
+                                    message: "아이디는 최소 6글자 이상이어야 합니다.",
+                                },
+                                maxLength: {
+                                    value: 15,
+                                    message: "아이디는 최대 15글자 이하이어야 합니다.",
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9]{6,15}$/,
+                                    message: "6~15글자 사이로 작성해주세요.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.id && "2~15글자 사이로 작성해주세요."}
+                            {errors.id && errors.id.message}
                         </p>
                         <label className="text-sm font-medium px-1">비밀번호 *</label>
                         <input
@@ -60,18 +69,21 @@ const LoginPage = () => {
                             type="password"
                             placeholder="비밀번호를 입력해주세요."
                             {...register("password", {
-                                required: "비밀번호를 입력해주세요.",
-                                pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                required: "필수 항목입니다.",
+                                pattern: {
+                                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                    message: "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.password && "영어, 숫자, 특수문자를 포함하여 8글자 이상 작성해주세요."}
+                            {errors.password && errors.password.message}
                         </p>
                         <Button className="mt-4 py-3" type="submit" color="primary">
                             로그인
                         </Button>
                         <Link to={"/register"}>
-                            <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 cursor-pointer">
+                            <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 duration-200 cursor-pointer">
                                 회원가입 하러 가기
                             </p>
                         </Link>

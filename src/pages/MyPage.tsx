@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
 import InfoMyPageRight from "../common/info/InfoMyPageRight";
-import { ModalPortal } from "../config/ModalPortal";
-import ModalDetail from "../common/modal/ModalDetail";
 import useUser from "../hooks/useUser";
 import { accountApi } from "../api";
 import Header from "../common/header/Header";
@@ -12,7 +10,6 @@ import { useParams } from "react-router-dom";
 
 const MyPage = () => {
     const [isUserMypage, setIsUserMypage] = useState<boolean>(true); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const { getUserInfo } = useUser();
     const { user } = useUserStore();
     const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
@@ -43,14 +40,6 @@ const MyPage = () => {
         refreshUserInfo();
     }, [getUserInfo, user.status]);
 
-    //모달관련
-    const openDetailModal = () => {
-        setIsDetailModalOpen(true);
-    };
-    const closeDetailModal = () => {
-        setIsDetailModalOpen(false);
-    };
-
     return (
         <>
             <Header />
@@ -64,12 +53,6 @@ const MyPage = () => {
                         <TabItem />
                     </div>
                 </div>
-                <button onClick={openDetailModal}>모달테스트</button>
-                <ModalPortal>
-                    {isDetailModalOpen && (
-                        <ModalDetail isOpen={isDetailModalOpen} parent="detail-parent" onClose={closeDetailModal} />
-                    )}
-                </ModalPortal>
             </div>
         </>
     );

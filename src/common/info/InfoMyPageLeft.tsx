@@ -50,6 +50,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         }
     };
 
+    //이미지삭제진행중..
     const handleImageDelete = async () => {
         try {
             await userInfoImageDelete();
@@ -86,7 +87,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                         />
                                     )}
                                     <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
-                                    {profileImage !== null && (
+                                    {user.profile_image !== null && (
                                         <button
                                             onClick={handleImageDelete}
                                             className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"

@@ -2,12 +2,13 @@ export interface ModalProps {
     onClose: () => void;
     isOpen: boolean;
     parent: string;
+    articleData?: MyArticle;
 }
 
 export interface UserData {
-    articles: Article[];
+    articles: MyArticle[];
     bio: string | null;
-    comments: Comment[];
+    comments: MyComment[];
     hunsoo_level: number;
     nickname: string | null;
     profile_image: string | null;
@@ -22,6 +23,11 @@ export interface Tag {
     name: string;
 }
 
+export interface User {
+    user_id: number;
+    nickname: string;
+}
+
 export interface Article {
     article_id: number;
     comments_count: number;
@@ -32,16 +38,11 @@ export interface Article {
     thumbnail_image: string | null;
     title: string;
     updated_at: string;
-    user: {
-        user_id: number;
-        nickname: string;
-    };
+    user: User;
     view_count: number;
 }
 
 export interface Comment {
-    article_tags: Tag[];
-    article_title: string;
     id: number;
     content: string;
     created_at: string;
@@ -52,6 +53,18 @@ export interface Comment {
     images: string[];
     user: number;
     user_nickname: string;
+}
+
+export interface MyArticle extends Article {
+    comments: MyComment[];
+}
+
+export interface MyComment extends Comment {
+    article_tags?: Tag[]; // 댓글이 달린 게시글 태그
+    article_title?: string; // 댓글이 달린 게시글 제목
+    article_user_id?: number;
+    article_user_nickname?: string;
+    article_id?: string;
 }
 
 export interface UserUpdateData {

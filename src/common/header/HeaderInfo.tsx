@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Button from "../button/Button";
 import ProfileImage from "../profile/ProfileImage";
 import { HiMenu, HiX } from "react-icons/hi";
+import { authApi } from "../../api";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const menuVariants = {
     closed: { opacity: 0, x: 50 },
@@ -11,6 +13,23 @@ const menuVariants = {
 
 const HeaderInfo = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const googleLoginRequest = async (token: string) => {
+        try {
+            await authApi.userGoogleAccessTokenReceiver(token);
+        } catch (error) {
+            console.error("login failed", error);
+        }
+    };
+    const googleLoginHandler = useGoogleLogin({
+        onSuccess: (res) => {
+            googleLoginRequest(res.access_token);
+        },
+
+        onError: () => {
+            console.error("Unexpected Login Request Error");
+        },
+    });
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -21,7 +40,7 @@ const HeaderInfo = () => {
             </div>
             <div className="h-[36px] w-[1px] bg-slate-200 mx-3 hidden md:flex"></div>
             <div className="gap-[10px] hidden md:flex">
-                <Button>로그인</Button>
+                <Button onClick={googleLoginHandler}>로그인</Button>
                 <Button>회원가입</Button>
             </div>
             <motion.div className="md:hidden" initial={false} animate={isMenuOpen ? "open" : "closed"}>

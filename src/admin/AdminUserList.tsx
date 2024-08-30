@@ -46,7 +46,7 @@ const AdminUserList = () => {
     const filteredData = userData?.sort((a, b) => a.id - b.id);
 
     return (
-        <div className="max-w-[1380px] w-full p-4">
+        <div className=" max-w-[1380px] w-full p-4">
             <h1 className="text-xl font-point mb-4">사용자 목록</h1>
 
             <div className="overflow-x-auto">

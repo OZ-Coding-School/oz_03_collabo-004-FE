@@ -40,6 +40,8 @@ export interface Article {
 }
 
 export interface Comment {
+    article_tags: Tag[];
+    article_title: string;
     id: number;
     content: string;
     created_at: string;

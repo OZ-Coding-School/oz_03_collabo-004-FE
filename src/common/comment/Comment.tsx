@@ -4,17 +4,20 @@ import { twMerge as tw } from "tailwind-merge";
 import ModalReport from "../modal/ModalReport";
 import ModalPicture from "../modal/ModalPicture";
 import { ModalPortal } from "../../config/ModalPortal";
+import { MyComment } from "../../config/types";
 
 interface CommentProps {
     onClick?: () => void;
     className?: string;
     color?: "default" | "writer" | "ai";
     parent: string;
+    comment?: MyComment;
 }
 
-const Comment = ({ className, color = "default", parent }: CommentProps) => {
+const Comment = ({ className, color = "default", parent, comment }: CommentProps) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
+    console.log(comment);
 
     const handleReportClick = () => {
         setIsReportModalOpen(true);
@@ -32,6 +35,17 @@ const Comment = ({ className, color = "default", parent }: CommentProps) => {
         setIsPictureModalOpen(false);
     };
 
+    const formatDate = (apiDate: string | undefined | null) => {
+        if (!apiDate) return;
+        const date = new Date(apiDate);
+
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+
+        return `${month}-${day} ${hours}:${minutes}`;
+    };
     return (
         <div
             className={tw(
@@ -42,7 +56,7 @@ const Comment = ({ className, color = "default", parent }: CommentProps) => {
                 className
             )}
         >
-            <div className="absolute top-2 right-4 text-literal-highlight">08-10 17:31</div>
+            <div className="absolute top-2 right-4 text-literal-highlight">{formatDate(comment?.created_at)}</div>
             <div
                 className={tw(
                     "absolute top-8 right-8 text-literal-highlight",
@@ -54,23 +68,15 @@ const Comment = ({ className, color = "default", parent }: CommentProps) => {
             </div>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                    <img
-                        className="w-[45px] h-[40px] cursor-pointer"
-                        src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        onClick={handlePictureClick}
-                    ></img>
-                    <img
-                        className="w-[45px] h-[40px] cursor-pointer"
-                        src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        onClick={handlePictureClick}
-                    ></img>
-                    <img
-                        className="w-[45px] h-[40px] cursor-pointer"
-                        src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        onClick={handlePictureClick}
-                    ></img>
+                    {comment?.images && comment.images.length > 0 && (
+                        <img
+                            className="w-[45px] h-[40px] cursor-pointer"
+                            src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            onClick={handlePictureClick}
+                        ></img>
+                    )}
                 </div>
-                <div className="my-3 text-base">이야기 잘 봤음, 이사진 참고해서 작성해보셈. 문제 없을듯</div>
+                <div className="my-3 text-base px-1">{comment?.content}</div>
                 <div
                     className={tw(
                         "flex items-center w-[80px] cursor-pointer text-literal-highlight",

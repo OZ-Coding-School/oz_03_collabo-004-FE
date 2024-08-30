@@ -32,7 +32,7 @@ const MyPage = () => {
         };
         getDataUserProfile();
     }, [userId]);
-    console.log(user.comments);
+    console.log(user);
 
     //새로고침해도 store에 있는 user 유지되도록
     useEffect(() => {
@@ -56,15 +56,15 @@ const MyPage = () => {
             <Header />
             <div className="max-w-[1280px] mx-auto py-10 px-3 detail-parent">
                 <div className="flex flex-col gap-3 md:flex-row md:justify-evenly">
-                    <div className="md:mr-3 md:w-[387px]">
+                    <div className="md:mr-3 md:w-[387px] mt-7">
                         <InfoMyPageLeft isUserMypage={isUserMypage} />
-                        <button onClick={openDetailModal}>모달테스트</button>
                     </div>
                     <div className="flex flex-col w-full md:w-[780px]">
                         <InfoMyPageRight isUserMypage={isUserMypage} />
                         <TabItem />
                     </div>
                 </div>
+                <button onClick={openDetailModal}>모달테스트</button>
                 <ModalPortal>
                     {isDetailModalOpen && (
                         <ModalDetail isOpen={isDetailModalOpen} parent="detail-parent" onClose={closeDetailModal} />

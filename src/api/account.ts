@@ -22,3 +22,7 @@ export const userInfoImageUpdate = (image: File) => {
 export const userInfoPublic = (userId: number) => {
     return axiosInstance.get(`/account/profile/${userId}/`);
 };
+
+export const userInfoImageDelete = () => {
+    return axiosInstance.delete("/account/profle/image/delete", { withCredentials: true });
+};

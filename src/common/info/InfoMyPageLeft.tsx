@@ -3,7 +3,7 @@ import Button from "../button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
-import { userInfoImageUpdate, userInfoUpdate } from "../../api/account";
+import { userInfoImageUpdate, userInfoUpdate, userInfoImageDelete } from "../../api/account";
 
 type InfoMyPageLeftProps = {
     isUserMypage: boolean;
@@ -21,7 +21,6 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         if (user.nickname) setNicknameText(user.nickname);
         if (user.bio) setBioText(user.bio);
     }, [user]);
-    console.log(user.profile_image);
 
     const handleUpdate = async () => {
         if (!nicknameText.trim() || !bioText.trim()) {
@@ -32,7 +31,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
             await userInfoUpdate({ nickname: nicknameText, bio: bioText });
             if (profileImage) {
                 await userInfoImageUpdate(profileImage);
-                // // 이미지 업로드 후 사용자 스토어 업데이트
+                // 이미지 업로드 후 사용자 스토어 업데이트
                 // updateUser({ profile_image: response.data });
             }
         } catch (error) {
@@ -46,9 +45,17 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         const file = event.target.files?.[0];
         if (file) {
             setProfileImage(file);
-            // 이미지를 선택하면 즉시 미리보기 업데이트
             const imageUrl = URL.createObjectURL(file);
             updateUser({ profile_image: imageUrl }); // 미리보기 업데이트
+        }
+    };
+
+    const handleImageDelete = async () => {
+        try {
+            await userInfoImageDelete();
+            setProfileImage(null);
+        } catch (error) {
+            console.log("이미지 삭제 실패 ", error);
         }
     };
 
@@ -68,7 +75,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                 htmlFor="profileImage"
                                 className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
                             >
-                                <div className="relative rounded-full w-[80px] h-[80px] opacity-60 bg-black">
+                                <div className="relative rounded-full w-[80px] h-[80px]">
                                     {user.profile_image === null ? (
                                         <ProfileImage />
                                     ) : (
@@ -78,12 +85,26 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                             className="rounded-full w-[80px] h-[80px] object-cover"
                                         />
                                     )}
-                                    <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 rounded-full"></div>
+                                    <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
+                                    {profileImage !== null && (
+                                        <button
+                                            onClick={handleImageDelete}
+                                            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"
+                                        >
+                                            삭제
+                                        </button>
+                                    )}
                                 </div>
                             </label>
                         </>
+                    ) : user.profile_image === null ? (
+                        <ProfileImage />
                     ) : (
-                        user.profile_image === null && <ProfileImage />
+                        <img
+                            src={user.profile_image}
+                            alt="user_image"
+                            className="rounded-full w-[80px] h-[80px] object-cover"
+                        />
                     )}
 
                     <div className="flex flex-col gap-1 flex-grow">
@@ -98,7 +119,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             />
                         ) : (
                             <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
-                                {user.nickname}
+                                {nicknameText}
                             </div>
                         )}
                     </div>

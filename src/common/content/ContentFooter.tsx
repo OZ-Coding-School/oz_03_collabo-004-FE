@@ -4,12 +4,19 @@ import { PiCursorClickFill } from "react-icons/pi";
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import { motion } from "framer-motion";
-import { ContentAddView, ContentAddLike } from "../../api/article";
+import { ArticleAddView, ArticleAddLike } from "../../api/article";
 
-const ContentFooter = () => {
+interface ContentFooterProps {
+    articleId: number;
+    likeCount: number;
+    viewCount: number;
+    commentsCount: number;
+}
+
+const ContentFooter = ({ articleId, likeCount, viewCount, commentsCount }: ContentFooterProps) => {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-    const [likeCount, setLikeCount] = useState<number>(99);
-    const [viewCount, setViewCount] = useState<number>(999999999);
+    const [currentLikeCount, setCurrentLikeCount] = useState<number>(likeCount);
+    const [currentViewCount, setCurrentViewCount] = useState<number>(viewCount);
 
     const handleMouseEnter = (i: number) => {
         setHoverIndex(i);
@@ -21,8 +28,8 @@ const ContentFooter = () => {
 
     const handleAddView = async () => {
         try {
-            await ContentAddView();
-            setViewCount(viewCount + 1);
+            await ArticleAddView(Number(articleId));
+            setCurrentViewCount(currentViewCount + 1);
         } catch (error) {
             console.error("Failed to add view:", error);
         }
@@ -30,17 +37,22 @@ const ContentFooter = () => {
 
     const handleAddLike = async () => {
         try {
-            await ContentAddLike();
-            setLikeCount(likeCount + 1);
+            const response = await ArticleAddLike(Number(articleId));
+
+            if (response.message === "Like added") {
+                setCurrentLikeCount(currentLikeCount + 1);
+            } else if (response.message === "Like removed") {
+                setCurrentLikeCount(currentLikeCount - 1);
+            }
         } catch (error) {
-            console.error("Failed to add like:", error);
+            console.error("Failed to toggle like:", error);
         }
     };
 
     const data = [
-        { icon: FaMessage, text: "댓글", count: "999,999" },
-        { icon: FaSmile, text: "좋아요", count: likeCount, onClick: handleAddLike },
-        { icon: PiCursorClickFill, text: "조회수", count: viewCount, onClick: handleAddView },
+        { icon: FaMessage, text: "댓글", count: commentsCount },
+        { icon: FaSmile, text: "좋아요", count: currentLikeCount, onClick: handleAddLike },
+        { icon: PiCursorClickFill, text: "조회수", count: currentViewCount, onClick: handleAddView },
     ];
 
     return (

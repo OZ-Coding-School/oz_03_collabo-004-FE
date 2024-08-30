@@ -17,7 +17,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
 
     if (isArticleTab) {
         return (
-            <div className="max-w-[780px] min-w-[300px] my-4">
+            <div className="max-w-[780px] min-w-[300px] my-5">
                 <div className="sm:flex gap-2 mb-3 ml-2">
                     <div className="flex gap-2 sm:mt-0 mt-2">
                         <p className="text-sm text-gray-600 mr-2 font-default">{formattedDate}</p>
@@ -42,15 +42,23 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
 
     if (isCommentTab) {
         return (
-            <div className="max-w-[780px] min-w-[300px] my-4">
+            <div className="max-w-[780px] min-w-[300px] my-5">
                 <div className="sm:flex gap-2 mb-3 ml-2">
                     <p className="text-sm font-medium mr-4 text-literal-normal">{comment.user_nickname}</p>
 
                     <div className="flex gap-2 sm:mt-0 mt-2">
                         <p className="text-sm text-gray-600 mr-2 font-default">{formattedDate}</p>
+                        {comment.article_tags.map((tag) => (
+                            <Badge key={tag.tag_id} color="yellow">
+                                {tag.name.slice(0, -2)}
+                            </Badge>
+                        ))}
                     </div>
                 </div>
                 <div className="bg-white px-6 py-4 w-full rounded-2xl">
+                    <p className="text-base sm:text-lg font-default text-literal-normal pb-3 border-b border-b-gray-100">
+                        {comment.article_title}
+                    </p>
                     <p className="font-default text-sm text-gray-600 font-normal p-2">
                         {comment.is_selected ? <span className="text-literal-highlight">채택</span> : "미채택"}
                     </p>

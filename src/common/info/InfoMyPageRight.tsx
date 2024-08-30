@@ -40,7 +40,6 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     };
 
     const handleTagUpdate = async () => {
-        console.log(selectedTags);
         await userInfoUpdate({ selected_tags: selectedTags });
         setIsEdit(false);
     };
@@ -53,11 +52,11 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     훈수 레벨 : LV {user.hunsoo_level}
                 </div>
                 <div className="flex flex-col items-end font-default text-xs ml-auto">
-                    {isUserMypage && <p className="text-literal-normal">채택된 훈수 {user.selected_comment_count}개</p>}
+                    <p className="text-literal-normal">채택된 훈수 {user.selected_comment_count}개</p>
                     <p className="text-literal-highlight">받은 경고 {user.warning_count}건</p>
                 </div>
             </div>
-            <div className="w-full h-[42px] relative">
+            <div className="w-full h-11 relative">
                 <div
                     className="absolute flex flex-col items-center transition-all duration-300"
                     style={{ left: `${progress}%`, transform: "translateX(-50%)", bottom: "20px" }}

@@ -10,7 +10,7 @@ const Badge = ({ color = "default", children }: BadgeProps) => {
         <>
             <div
                 className={tw(
-                    "w-[52px] flex justify-center text-literal-normal items-center text-sm font-semibold rounded-[5px]",
+                    "min-w-[52px] px-1 flex justify-center text-literal-normal items-center text-sm font-semibold rounded-[5px]",
                     color === "yellow" && "bg-literal-star",
                     color === "default" && "bg-slate-200"
                 )}

@@ -18,7 +18,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
     const len = selectedTags.length;
-    const progress = 94;
+    const progress = 95;
 
     useEffect(() => {
         setSelectedTags(user.selected_tags);
@@ -57,17 +57,17 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     <p className="text-literal-highlight">받은 경고 {user.warning_count}건</p>
                 </div>
             </div>
-            <div className="w-full h-[42px]">
+            <div className="w-full h-[42px] relative">
                 <div
-                    className="flex flex-col items-center rounded-full transition-all duration-300"
-                    style={{ width: `${progress * 2}%` }}
+                    className="absolute flex flex-col items-center transition-all duration-300"
+                    style={{ left: `${progress}%`, transform: "translateX(-50%)", bottom: "20px" }}
                 >
-                    <p className="font-default text-sm font-medium text-primary-second-dark min-w-[60px] text-center">
-                        궁극의 훈수꾼
+                    <p className="font-default text-sm font-medium text-primary-second-dark min-w-24 text-center">
+                        풋내기 훈수꾼
                     </p>
                     <IoMdArrowDropdown className="text-primary-second-dark" />
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2">
+                <div className="absolute bottom-0 w-full bg-gray-100 rounded-full h-2">
                     <div
                         className="bg-primary-second-dark h-full rounded-full transition-all duration-300"
                         style={{ width: `${progress}%` }}

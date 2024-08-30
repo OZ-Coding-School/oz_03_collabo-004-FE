@@ -18,6 +18,6 @@ export const userTokenRefresh = () => {
     });
 };
 
-export const userLogout = () => {
-    return axiosInstance.post("auth/logout/");
+export const userRoleStatus = () => {
+    return axiosInstance.get(`/auth/status/`);
 };

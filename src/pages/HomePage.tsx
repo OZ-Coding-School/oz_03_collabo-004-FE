@@ -1,50 +1,83 @@
-import { useGoogleLogin } from "@react-oauth/google";
-import { accountApi, authApi } from "../api";
-import ButtonLogin from "../common/button/ButtonLogin";
-import { useQuery } from "@tanstack/react-query";
-import { useUserStore } from "../config/store";
-import { UserData } from "../config/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Header from "../common/header/Header";
+import Topic from "./../common/topic/Topic";
+import TrendingContent from "./../common/trending/TrendingContent";
+import ProfileStatus from "./../common/profile/ProfileStatus";
+import TrendingComment from "./../common/trending/TrendingComment";
+import ProfileImage from "./../common/profile/ProfileImage";
+import WriteModal from "./../common/writeModal/WriteModal";
+import Content from "../common/content/Content";
+import ContentFooter from "../common/content/ContentFooter";
+import { Article, ArticleList } from "../api/article";
 
 const HomePage = () => {
-    const { initUser, user } = useUserStore();
+    const [isHidden, setIsHidden] = useState(false);
+    const [articles, setArticles] = useState<Article[]>([]);
 
-    const { data: userInfo, refetch: refetchUserInfo } = useQuery({
-        queryKey: ["userInfo"],
-        queryFn: accountApi.userInfo,
-        enabled: false,
-    });
+    const [, setLoading] = useState(true);
 
-    //? TEST CODE
-    useEffect(() => {
-        if (userInfo) {
-            initUser(userInfo!.data as UserData);
-        }
-        console.log(user);
-    }, [user, userInfo, initUser]);
-
-    const googleLoginRequest = async (token: string) => {
-        try {
-            await authApi.userGoogleAccessTokenReceiver(token);
-            await refetchUserInfo();
-        } catch (error) {
-            console.error("login failed", error);
-        }
+    const checkScreenSize = () => {
+        const screenWidth = window.innerWidth;
+        setIsHidden(screenWidth < 768);
     };
 
-    const googleLoginHandler = useGoogleLogin({
-        onSuccess: (res) => {
-            googleLoginRequest(res.access_token);
-        },
+    useEffect(() => {
+        checkScreenSize();
+        window.addEventListener("resize", checkScreenSize);
+        return () => {
+            window.removeEventListener("resize", checkScreenSize);
+        };
+    }, []);
 
-        onError: () => {
-            console.error("Unexpected Login Request Error");
-        },
-    });
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const data = await ArticleList();
+                setArticles(data);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchArticles();
+    }, []);
 
     return (
         <>
-            <ButtonLogin onClick={googleLoginHandler} type="social" />
+            <div className="relative min-h-screen">
+                <div className="fixed top-0 left-0 z-10 w-full bg-white shadow-md">
+                    <Header />
+                </div>
+                <div className="flex flex-col px-4 mt-16 md:flex-row max-w-[1280px] mx-auto  bg-gray-100">
+                    <div className={`flex flex-col mt-4 items-center  ${isHidden ? "hidden" : "md:w-[226px]"}`}>
+                        <Topic />
+                    </div>
+                    <div className="flex flex-col items-center flex-1 md:w-[658px]">
+                        <div className="flex items-center mt-4 mb-4 space-x-4">
+                            <ProfileImage />
+                            <WriteModal />
+                        </div>
+
+                        {articles.map((article) => (
+                            <div key={article.article_id} className="mb-8">
+                                <ProfileStatus userName={article.user.nickname} />
+                                <Content article={article} />
+                                <ContentFooter
+                                    articleId={Number(article.article_id)}
+                                    likeCount={article.like_count}
+                                    viewCount={article.view_count}
+                                    commentsCount={article.comments_count}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <div className={`flex flex-col mt-4 ${isHidden ? "hidden" : "md:w-[226px]"} space-y-4`}>
+                        <TrendingContent />
+                        <TrendingComment />
+                    </div>
+                </div>
+            </div>
         </>
     );
 };

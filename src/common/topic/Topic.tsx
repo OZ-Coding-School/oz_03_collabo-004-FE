@@ -29,8 +29,8 @@ const Topic = () => {
     const [isEduOpen, setIsEduOpen] = useState(true);
 
     return (
-        <div className="w-[190px] bg-white h-auto p-2 rounded-md font-default ">
-            <p className="font-medium text-lg text-primary-second-dark px-1 py-2">카테고리</p>
+        <div className="w-[226px] bg-white h-auto p-2 rounded-md font-default ">
+            <p className="px-1 py-2 text-lg font-medium text-primary-second-dark">카테고리</p>
             <div className="w-full mb-2">
                 <button
                     onClick={() => setIsDailyOpen(!isDailyOpen)}
@@ -56,7 +56,7 @@ const Topic = () => {
                     initial={false}
                     animate={isDailyOpen ? "open" : "closed"}
                     variants={dropdownVariants}
-                    className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
+                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(0, 6).map((i) => (
                         <li
@@ -93,7 +93,7 @@ const Topic = () => {
                     initial={false}
                     animate={isGameOpen ? "open" : "closed"}
                     variants={dropdownVariants}
-                    className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
+                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(6, 9).map((i) => (
                         <li
@@ -130,7 +130,7 @@ const Topic = () => {
                     initial={false}
                     animate={isEduOpen ? "open" : "closed"}
                     variants={dropdownVariants}
-                    className="overflow-hidden text-sm pl-2 space-y-2 text-literal-normal"
+                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
                 >
                     {DUMMY_TAGS.slice(9, 10).map((i) => (
                         <li

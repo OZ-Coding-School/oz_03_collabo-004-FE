@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import ProfileImage from "../profile/ProfileImage";
 
 interface WriteModalProps {
-    onClose: () => void;
+    onClose?: () => void;
 }
 
-const WriteModal = ({ onClose }: WriteModalProps) => {
+const WriteModal = ({ onClose = () => {} }: WriteModalProps) => {
     const writeRef = useRef<HTMLInputElement>(null);
     const [text, setText] = useState("");
 

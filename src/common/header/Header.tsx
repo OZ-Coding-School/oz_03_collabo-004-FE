@@ -6,7 +6,7 @@ interface HeaderProps {
     isAdmin?: boolean;
 }
 
-const Header = ({ isAdmin = true }: HeaderProps) => {
+const Header = ({ isAdmin = false }: HeaderProps) => {
     const isLogin = false;
     return (
         <div className="fixed header z-40 w-full h-[52px] bg-primary flex justify-center items-center">

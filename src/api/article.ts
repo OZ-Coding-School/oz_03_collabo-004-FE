@@ -2,6 +2,7 @@ import { axiosInstance } from "./axios";
 
 export const articleDetail = (article_id: number) => {
     return axiosInstance.get(`/article/${article_id}/`);
+};
 export interface User {
     user_id: number;
     nickname: string;
@@ -9,7 +10,7 @@ export interface User {
 
 export interface Tag {
     tag_id: number;
-    name: string; 
+    name: string;
 }
 
 export interface Article {

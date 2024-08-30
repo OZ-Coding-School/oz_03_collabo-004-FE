@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import Badge from "../badge/Badge";
-import WriteModal from "../writeModal/WriteModal";
+import WriteModal from "../comment/CommentInput";
 import Comment from "../comment/Comment";
 import useFormatDate from "../../hooks/useFormatDate";
 

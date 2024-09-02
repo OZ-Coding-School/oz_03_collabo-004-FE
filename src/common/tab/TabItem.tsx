@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import ContentMyPage from "../content/ContentMyPage";
-import { useUserStore } from "../../config/store";
+import { useOtherUserStore, useUserStore } from "../../config/store";
 
-const TabItem = () => {
+type TabItemProps = {
+    isUserMypage: boolean;
+};
+
+const TabItem = ({ isUserMypage }: TabItemProps) => {
     const [activeTab, setActiveTab] = useState(0);
     const { user } = useUserStore();
+    const { otherUser } = useOtherUserStore();
     const activeTabStyle = "border-b-primary-second-dark text-primary-second-dark";
     const defaultTabStyle =
         "w-[50%] text-center mt-3 py-5 border-b text-gray-400 cursor-pointer transition-colors duration-300 text-sm font-medium";
@@ -32,14 +37,29 @@ const TabItem = () => {
                 </p>
             </div>
             <div>
-                {activeTab === 0 &&
-                    user.articles.map((article) => (
-                        <ContentMyPage key={article.article_id} activeTab={activeTab} article={article} />
-                    ))}
-                {activeTab === 1 &&
-                    user.comments.map((comment) => (
-                        <ContentMyPage key={comment.id} activeTab={activeTab} comment={comment} />
-                    ))}
+                {isUserMypage ? (
+                    <>
+                        {activeTab === 0 &&
+                            user.articles.map((article) => (
+                                <ContentMyPage key={article.article_id} activeTab={activeTab} article={article} />
+                            ))}
+                        {activeTab === 1 &&
+                            user.comments.map((comment) => (
+                                <ContentMyPage key={comment.id} activeTab={activeTab} comment={comment} />
+                            ))}
+                    </>
+                ) : (
+                    <>
+                        {activeTab === 0 &&
+                            otherUser.articles.map((article) => (
+                                <ContentMyPage key={article.article_id} activeTab={activeTab} article={article} />
+                            ))}
+                        {activeTab === 1 &&
+                            otherUser.comments.map((comment) => (
+                                <ContentMyPage key={comment.id} activeTab={activeTab} comment={comment} />
+                            ))}
+                    </>
+                )}
             </div>
         </>
     );

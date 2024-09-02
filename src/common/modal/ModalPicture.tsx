@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { ModalProps } from "../../config/types";
 
-const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
+const ModalPicture = ({ onClose, isOpen, parent, imageUrl }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -42,10 +42,7 @@ const ModalPicture = ({ onClose, isOpen, parent }: ModalProps) => {
                     onClick={(e) => e.stopPropagation()}
                     className="outline-none w-[570px] h-[584px] relative"
                 >
-                    <img
-                        className="w-full h-full md:rounded-3xl"
-                        src="https://images.unsplash.com/photo-1723894960978-3f1e1cead774?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    ></img>
+                    <img className="w-full h-full md:rounded-3xl" src={imageUrl}></img>
                 </motion.nav>
             </div>
         </>

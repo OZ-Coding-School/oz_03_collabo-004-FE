@@ -97,6 +97,16 @@ const HomePage = () => {
                     <TrendingContent />
                     <TrendingComment />
                 </div>
+                <ModalPortal>
+                    {isDetailModalOpen && selectedArticleId && (
+                        <ModalDetail
+                            isOpen={isDetailModalOpen}
+                            parent="content-parent"
+                            onClose={closeDetailModal}
+                            articleId={selectedArticleId}
+                        />
+                    )}
+                </ModalPortal>
             </div>
         </div>
     );

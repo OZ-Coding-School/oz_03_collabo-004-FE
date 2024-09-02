@@ -4,12 +4,11 @@ import Badge from "../badge/Badge";
 import ModalDetail from "../modal/ModalDetail";
 import { ModalPortal } from "../../config/ModalPortal";
 import { useState } from "react";
-import { articleDetail } from "../../api/Article";
 
 interface ContentMyPageProps {
     activeTab: number;
-    article?: MyArticle;
-    comment?: MyComment;
+    article?: MyArticle | null;
+    comment?: MyComment | null;
 }
 
 const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
@@ -19,21 +18,14 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
     const createdAt = isArticleTab ? article.created_at : isCommentTab ? comment.created_at : null;
     const formattedDate = useFormatDate(createdAt);
 
-    const [articleData, setArticleData] = useState<MyArticle>();
-
     //모달관련
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const openDetailModal = async (article_id: number) => {
+    const [selectedArticleId, setSelectedArticleId] = useState<number>();
+    const openDetailModal = (article_id: number) => {
+        setSelectedArticleId(article_id);
         setIsDetailModalOpen(true);
-        console.log(article_id);
-        try {
-            const response = await articleDetail(article_id);
-            console.log(response.data);
-            setArticleData(response.data);
-        } catch (error) {
-            console.log("게시글 불러오기 실패", error);
-        }
     };
+
     const closeDetailModal = () => {
         setIsDetailModalOpen(false);
     };
@@ -64,12 +56,12 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                 </div>
 
                 <ModalPortal>
-                    {isDetailModalOpen && (
+                    {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
                             isOpen={isDetailModalOpen}
                             parent="content-parent"
                             onClose={closeDetailModal}
-                            articleData={articleData}
+                            articleId={article.article_id}
                         />
                     )}
                 </ModalPortal>
@@ -107,12 +99,12 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     </div>
                 </div>
                 <ModalPortal>
-                    {isDetailModalOpen && (
+                    {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
                             isOpen={isDetailModalOpen}
                             parent="content-parent"
                             onClose={closeDetailModal}
-                            articleData={articleData}
+                            articleId={Number(comment.article_id)}
                         />
                     )}
                 </ModalPortal>
@@ -120,7 +112,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
         );
     }
 
-    return null; // 아무 것도 없을 경우 null 반환
+    return null;
 };
 
 export default ContentMyPage;

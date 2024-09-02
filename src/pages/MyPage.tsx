@@ -4,41 +4,58 @@ import InfoMyPageRight from "../common/info/InfoMyPageRight";
 import useUser from "../hooks/useUser";
 import { accountApi } from "../api";
 import Header from "../common/header/Header";
-import { useUserStore } from "../config/store";
+import { useOtherUserStore, useUserStore } from "../config/store";
 import TabItem from "../common/tab/TabItem";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const MyPage = () => {
-    const [isUserMypage, setIsUserMypage] = useState<boolean>(true); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
+    const [isUserMypage, setIsUserMypage] = useState<boolean>(false); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
     const { getUserInfo } = useUser();
-    const { user } = useUserStore();
+    const { user, updateUser } = useUserStore();
+    const { setOtherUser } = useOtherUserStore();
     const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
+    const navigate = useNavigate();
 
-    //! -> 다른 사용자 클릭하면 사용자 아이디랑 자기 아이디를 같이 백엔드에 보내서 거기서 true/false로 판단하는 값 + 클릭한 아이디의 마이페이지 정보 보내주기..?
-    // 다른 유저 마이페이지 조회하기
     useEffect(() => {
         const getDataUserProfile = async () => {
             if (!userId) return;
             try {
-                // const response = await accountApi.userInfo();
-                const response = await accountApi.userInfoPublic(parseInt(userId));
+                const response = await accountApi.userInfoPublic(Number(userId));
+                if (response.data.status) {
+                    updateUser(response.data);
+                    setIsUserMypage(response.data.status);
+                } else {
+                    setOtherUser(response.data);
+                    setIsUserMypage(response.data.status);
+                }
                 console.log(response.data);
             } catch (error) {
-                console.error("Error: ", error);
+                if (error instanceof AxiosError && error.response) {
+                    console.error("실패: ", error);
+                    if (error.response.status === 404) {
+                        alert("해당 유저가 없습니다.");
+                        navigate("/");
+                    } else {
+                        console.error("실패: ", error);
+                        alert("문제가 발생했습니다.");
+                        navigate("/");
+                    }
+                }
             }
         };
         getDataUserProfile();
     }, [userId]);
-    console.log(user);
 
     //새로고침해도 store에 있는 user 유지되도록
     useEffect(() => {
+        if (userId) return;
         const refreshUserInfo = async () => {
             await getUserInfo();
             setIsUserMypage(user.status);
         };
         refreshUserInfo();
-    }, [getUserInfo, user.status]);
+    }, [getUserInfo]);
 
     return (
         <>
@@ -50,7 +67,7 @@ const MyPage = () => {
                     </div>
                     <div className="flex flex-col w-full md:w-[780px]">
                         <InfoMyPageRight isUserMypage={isUserMypage} />
-                        <TabItem />
+                        <TabItem isUserMypage={isUserMypage} />
                     </div>
                 </div>
             </div>

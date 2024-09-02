@@ -7,6 +7,7 @@ import { ModalPortal } from "../../config/ModalPortal";
 import { AiHunsu, MyComment } from "../../config/types";
 import { commenFeedback, commentSelect } from "../../api/comment";
 import { useUserStore } from "../../config/store";
+import dayjs from "dayjs";
 
 interface CommentProps {
     onClick?: () => void;
@@ -15,14 +16,28 @@ interface CommentProps {
     parent: string;
     comment: MyComment;
     ai?: AiHunsu;
+    article_user_id?: number;
+    onCommentSubmit: (newComments: MyComment) => void;
 }
-const CommentDetail = ({ className, color = "default", parent, comment, ai }: CommentProps) => {
+const CommentDetail = ({
+    className,
+    color = "default",
+    parent,
+    comment,
+    ai,
+    article_user_id,
+    onCommentSubmit,
+}: CommentProps) => {
     const { user } = useUserStore();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
+    const [userReaction, setUserReaction] = useState<"helpful" | "not_helpful" | null>(null);
     const [imageUrl, setImageUrl] = useState("");
     const [helpful, setHelpful] = useState(0);
     const [notHelpful, setNotHelpful] = useState(0);
+    console.log(user);
+
+    const content = color === "ai" ? ai?.content : comment?.content;
 
     useEffect(() => {
         setHelpful(comment.helpful_count);
@@ -40,14 +55,8 @@ const CommentDetail = ({ className, color = "default", parent, comment, ai }: Co
 
     const formatDate = (apiDate?: string) => {
         if (!apiDate) return;
-        const date = new Date(apiDate);
-
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-
-        return `${month}-${day} ${hours}:${minutes}`;
+        const formatDate = dayjs(comment.created_at).format("MM-DD HH:mm");
+        return formatDate;
     };
 
     const formatContentWithLineBreaks = (content: string) => {
@@ -55,42 +64,73 @@ const CommentDetail = ({ className, color = "default", parent, comment, ai }: Co
     };
 
     const handleSelect = async (comment_id: number) => {
+        console.log(comment_id);
         try {
-            const resp = await commentSelect(comment_id);
-            console.log(resp.data);
+            const response = await commentSelect(comment_id);
+            console.log(response.data);
+            const newComment: MyComment = response.data;
+            onCommentSubmit(newComment);
         } catch (error) {
             console.error("채택 실패", error);
         }
     };
 
-    const handleReact = async (comment_id: number, type: string) => {
-        //!이거 오바같은데
+    const handleReact = async (comment_id: number, type: "helpful" | "not_helpful") => {
+        if (type === "helpful") {
+            if (userReaction === "helpful") {
+                setHelpful(helpful - 1);
+                setUserReaction(null);
+            } else {
+                if (userReaction === "not_helpful") {
+                    setNotHelpful(notHelpful - 1);
+                }
+                setHelpful(helpful + 1);
+                setUserReaction("helpful");
+            }
+        } else if (type === "not_helpful") {
+            if (userReaction === "not_helpful") {
+                setNotHelpful(notHelpful - 1);
+                setUserReaction(null);
+            } else {
+                if (userReaction === "helpful") {
+                    setHelpful(helpful - 1);
+                }
+                setNotHelpful(notHelpful + 1);
+                setUserReaction("not_helpful");
+            }
+        }
         try {
             const response = await commenFeedback(comment_id, type);
             console.log(response.data.detail);
-            switch (response.data.detail) {
-                case "helpful reaction added.":
-                    setHelpful(helpful + 1);
-                    break;
-                case "helpful reaction removed.":
-                    setHelpful(helpful - 1);
-                    break;
-                case "not_helpful reaction added.":
-                    setNotHelpful(notHelpful + 1);
-                    break;
-                case "not_helpful reaction removed.":
-                    setNotHelpful(notHelpful - 1);
-                    break;
-                case "Reaction changed to not_helpful.":
-                    setNotHelpful(notHelpful + 1);
-                    setHelpful(helpful - 1);
-                    break;
-                case "Reaction changed to helpful.":
-                    setNotHelpful(notHelpful - 1);
-                    setHelpful(helpful + 1);
-            }
+            // switch (response.data.detail) {
+            //     case "helpful reaction added.":
+            //         setHelpful(helpful + 1);
+            //         break;
+            //     case "helpful reaction removed.":
+            //         setHelpful(helpful - 1);
+            //         break;
+            //     case "not_helpful reaction added.":
+            //         setNotHelpful(notHelpful + 1);
+            //         break;
+            //     case "not_helpful reaction removed.":
+            //         setNotHelpful(notHelpful - 1);
+            //         break;
+            //     case "Reaction changed to not_helpful.":
+            //         setNotHelpful(notHelpful + 1);
+            //         setHelpful(helpful - 1);
+            //         break;
+            //     case "Reaction changed to helpful.":
+            //         setNotHelpful(notHelpful - 1);
+            //         setHelpful(helpful + 1);
+            // }
         } catch (error) {
             console.error("피드백 실패", error);
+            if (type === "helpful") {
+                setHelpful(userReaction === "helpful" ? helpful + 1 : helpful - 1);
+            } else {
+                setNotHelpful(userReaction === "not_helpful" ? notHelpful + 1 : notHelpful - 1);
+            }
+            setUserReaction(type === "helpful" ? "not_helpful" : "helpful");
         }
     };
 
@@ -117,7 +157,7 @@ const CommentDetail = ({ className, color = "default", parent, comment, ai }: Co
             >
                 AI
             </div>
-            <div className="flex flex-col gap-1">
+            <div className={tw("flex flex-col gap-3", color === "writer" && "gap-0")}>
                 {comment.images.length > 0 && (
                     <div className="flex gap-2 mb-1">
                         {comment.images.map((img) => (
@@ -131,14 +171,10 @@ const CommentDetail = ({ className, color = "default", parent, comment, ai }: Co
                         ))}
                     </div>
                 )}
-                {color === "ai" ? (
-                    <div
-                        className="ml-2 mr-28"
-                        dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(ai?.content || "") }}
-                    />
-                ) : (
-                    <div className={tw("my-2 text-base px-1", color !== "default" && "mb-0")}>{comment?.content}</div>
-                )}
+                <div
+                    className="ml-1 mr-28"
+                    dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(content || "") }}
+                />
 
                 <div
                     className={tw(
@@ -184,7 +220,7 @@ const CommentDetail = ({ className, color = "default", parent, comment, ai }: Co
                         {comment.is_selected ? (
                             <p className="font-normal text-literal-highlight text-lg">채택됨</p>
                         ) : (
-                            user.user_id === comment.user && (
+                            user.user_id === article_user_id && (
                                 <button
                                     onClick={() => handleSelect(comment?.id)}
                                     className="w-[80px] h-[30px] bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]"

@@ -94,6 +94,18 @@ export interface UserUpdateData {
     selected_tags?: number[];
 }
 
+
+export interface UserRegisterData {
+    username: string; // 유저 아이디
+    nickname: string;
+    email: string;
+    password: string;
+}
+
+export interface UserLoginData {
+    username: string;
+    password: string;
+
 export interface CommentFormData {
     content: string;
     images: FileList | null;

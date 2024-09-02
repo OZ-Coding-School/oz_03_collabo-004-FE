@@ -2,7 +2,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Header from "../common/header/Header";
 import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userRegister } from "../api/auth";
+import { useState } from "react";
+import { AxiosError } from "axios";
 
 interface RegisterData {
     id: string;
@@ -28,10 +31,32 @@ const RegisterPage = () => {
             confirmPassword: "",
         },
     });
+    const [isSubmit, setIsSubmit] = useState(false);
+    const navigate = useNavigate();
 
-    const onSubmit: SubmitHandler<RegisterData> = (data) => {
-        reset();
-        console.log(data);
+    const onSubmit: SubmitHandler<RegisterData> = async (data) => {
+        setIsSubmit(true);
+        const { id, nickname, email, password } = data;
+        try {
+            const response = await userRegister({ username: id, nickname: nickname, password: password, email: email });
+            console.log(response);
+            if (response.status === 200) setIsSubmit(false);
+            reset();
+            navigate("/tag");
+        } catch (error) {
+            setIsSubmit(false);
+            if (error instanceof AxiosError && error.response) {
+                console.log("회원가입 실패", error);
+                switch (error.response.status) {
+                    case 400:
+                        alert("회원가입에 실패하였습니다.");
+                        break;
+                    case 409:
+                        alert("아이디, 이메일 또는 닉네임이 중복되면 안됩니다.");
+                        break;
+                }
+            }
+        }
     };
     return (
         <>
@@ -66,11 +91,11 @@ const RegisterPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.id && errors.id.message}
                         </p>
 
-                        <label className="text-sm font-medium px-1">별명</label>
+                        <label className="text-sm font-medium px-1">별명 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -79,12 +104,19 @@ const RegisterPage = () => {
                             type="text"
                             placeholder="ex) 나는 훈수왕이 될 거야"
                             {...register("nickname", {
-                                minLength: 2,
-                                maxLength: 20,
+                                required: "필수 항목입니다.",
+                                minLength: {
+                                    value: 2,
+                                    message: "별명은 최소 2글자 이상이어야 합니다.",
+                                },
+                                maxLength: {
+                                    value: 20,
+                                    message: "별명은 최대 20글자 이하이어야 합니다.",
+                                },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
-                            {errors.nickname && "2~20글자 사이로 작성해주세요."}
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
+                            {errors.nickname && errors.nickname.message}
                         </p>
 
                         <label className="text-sm font-medium px-1">이메일 *</label>
@@ -103,7 +135,7 @@ const RegisterPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.email && errors.email.message}
                         </p>
 
@@ -124,7 +156,7 @@ const RegisterPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.password && errors.password.message}
                         </p>
 
@@ -146,11 +178,11 @@ const RegisterPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.confirmPassword && errors.confirmPassword.message}
                         </p>
-                        <Button className="mt-4 py-3" type="submit" color="primary">
-                            회원가입
+                        <Button className="mt-4 py-3" type="submit" color="primary" disabled={isSubmit}>
+                            {isSubmit ? "회원가입 중.." : "회원가입"}
                         </Button>
                         <Link to={"/login"}>
                             <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 duration-200 cursor-pointer">

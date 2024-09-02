@@ -1,3 +1,4 @@
+import { UserLoginData, UserRegisterData } from "../config/types";
 import { axiosInstance } from "./axios";
 
 export const userGoogleAccessTokenReceiver = (token: string) => {
@@ -20,4 +21,12 @@ export const userTokenRefresh = () => {
 
 export const userRoleStatus = () => {
     return axiosInstance.get(`/auth/status/`);
+};
+
+export const userRegister = (registerData: UserRegisterData) => {
+    return axiosInstance.post("/auth/register/", registerData);
+};
+
+export const userLogin = (loginData: UserLoginData) => {
+    return axiosInstance.post("/auth/login/", loginData);
 };

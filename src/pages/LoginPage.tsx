@@ -2,7 +2,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Header from "../common/header/Header";
 import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userLogin } from "../api/auth";
+import { useState } from "react";
+import { AxiosError } from "axios";
 
 interface LoginData {
     id: string;
@@ -21,10 +24,27 @@ const LoginPage = () => {
             password: "",
         },
     });
+    const [isSubmit, setIsSubmit] = useState(false);
+    const navigate = useNavigate();
 
-    const onSubmit: SubmitHandler<LoginData> = (data) => {
-        reset();
-        console.log(data);
+    const onSubmit: SubmitHandler<LoginData> = async (data) => {
+        const { id, password } = data;
+        setIsSubmit(true);
+        try {
+            const response = await userLogin({ username: id, password: password });
+            console.log(response);
+            if (response.status === 200) {
+                setIsSubmit(false);
+                navigate("/");
+            }
+            reset();
+        } catch (error) {
+            setIsSubmit(false);
+            if (error instanceof AxiosError && error.response) {
+                console.log("로그인 실패", error);
+                if (error.response.status === 400) alert("로그인에 실패하였습니다.");
+            }
+        }
     };
     return (
         <>
@@ -59,7 +79,7 @@ const LoginPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.id && errors.id.message}
                         </p>
                         <label className="text-sm font-medium px-1">비밀번호 *</label>
@@ -78,11 +98,11 @@ const LoginPage = () => {
                                 },
                             })}
                         />
-                        <p className="px-2 text-xs text-literal-highlight min-h-[20px]">
+                        <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.password && errors.password.message}
                         </p>
-                        <Button className="mt-4 py-3" type="submit" color="primary">
-                            로그인
+                        <Button className="mt-4 py-3" type="submit" color="primary" disabled={isSubmit}>
+                            {isSubmit ? "로그인 중.." : "로그인"}
                         </Button>
                         <Link to={"/register"}>
                             <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 duration-200 cursor-pointer">

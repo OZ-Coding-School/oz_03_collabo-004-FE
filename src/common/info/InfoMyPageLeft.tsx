@@ -87,39 +87,36 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     {isUserMypage ? (
                         isEdit ? (
                             <>
-                                <div className="relative w-[80px] h-[80px]">
-                                    <input
-                                        type="file"
-                                        id="profileImage"
-                                        className="hidden"
-                                        onChange={handleImageChange}
-                                    />
-                                    <label
-                                        htmlFor="profileImage"
-                                        className="cursor-pointer rounded-full absolute top-0 left-0 w-full h-full"
-                                    >
-                                        <div className="relative rounded-full w-full h-full">
-                                            {user.profile_image === null ? (
-                                                <ProfileImage />
-                                            ) : (
-                                                <img
-                                                    src={user.profile_image}
-                                                    alt="user_image"
-                                                    className="rounded-full w-full h-full object-cover"
-                                                />
-                                            )}
-                                            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
-                                        </div>
-                                    </label>
-                                    {user.profile_image !== null && (
-                                        <button
-                                            onClick={handleImageDelete}
-                                            className="absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800 z-10"
-                                        >
-                                            삭제
-                                        </button>
-                                    )}
-                                </div>
+                                <input type="file" id="profileImage" className="hidden" onChange={handleImageChange} />
+                                <label
+                                    htmlFor="profileImage"
+                                    className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
+                                >
+                                    <div className="relative rounded-full w-[80px] h-[80px]">
+                                        {user.profile_image === null ? (
+                                            <ProfileImage />
+                                        ) : (
+                                            <img
+                                                src={user.profile_image}
+                                                alt="user_image"
+                                                className="rounded-full w-[80px] h-[80px] object-cover"
+                                            />
+                                        )}
+                                        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
+                                        {user.profile_image !== null && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    handleImageDelete();
+                                                }}
+                                                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"
+                                            >
+                                                삭제
+                                            </button>
+                                        )}
+                                    </div>
+                                </label>
                             </>
                         ) : user.profile_image === null ? (
                             <ProfileImage />

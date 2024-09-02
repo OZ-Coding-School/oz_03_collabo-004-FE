@@ -9,6 +9,9 @@ import ModalEditor from "../common/modal/ModalEditor";
 import Content from "../common/content/Content";
 import ContentFooter from "../common/content/ContentFooter";
 import { Article, ArticleList } from "../api/article";
+import { ModalPortal } from "../config/ModalPortal";
+import ModalDetail from "../common/modal/ModalDetail";
+import useUser from "../hooks/useUser";
 
 const HomePage = () => {
     const [isHidden, setIsHidden] = useState(false);
@@ -43,13 +46,34 @@ const HomePage = () => {
         fetchArticles();
     }, []);
 
+    //모달관련
+    const [selectedArticleId, setSelectedArticleId] = useState<number>();
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+    const openDetailModal = (article_id: number) => {
+        setSelectedArticleId(article_id);
+        setIsDetailModalOpen(true);
+    };
+
+    const closeDetailModal = () => {
+        setIsDetailModalOpen(false);
+    };
+
+    const { getUserInfo } = useUser();
+    useEffect(() => {
+        const refreshUserInfo = async () => {
+            await getUserInfo();
+        };
+        refreshUserInfo();
+    }, [getUserInfo]);
+
     return (
         <>
             <div className="relative min-h-screen font-default">
                 <div className="fixed top-0 left-0 z-10 w-full bg-white shadow-md">
                     <Header />
                 </div>
-                <div className="flex flex-col px-4 mt-[50px] md:flex-row max-w-[1280px] mx-auto  bg-gray-100">
+                <div className="flex flex-col px-4 mt-[50px] md:flex-row max-w-[1280px] mx-auto  bg-gray-100 content-parent">
                     <div className={`flex flex-col mt-4 items-center  ${isHidden ? "hidden" : "md:w-[226px]"}`}>
                         <Topic />
                     </div>
@@ -60,7 +84,11 @@ const HomePage = () => {
                         </div>
 
                         {articles.map((article) => (
-                            <div key={article.article_id} className="mb-8">
+                            <div
+                                key={article.article_id}
+                                className="mb-8"
+                                onClick={() => openDetailModal(article.article_id)}
+                            >
                                 <ProfileStatus userName={article.user.nickname} />
                                 <Content article={article} />
                                 <ContentFooter
@@ -77,6 +105,16 @@ const HomePage = () => {
                         <TrendingComment />
                     </div>
                 </div>
+                <ModalPortal>
+                    {isDetailModalOpen && selectedArticleId && (
+                        <ModalDetail
+                            isOpen={isDetailModalOpen}
+                            parent="content-parent"
+                            onClose={closeDetailModal}
+                            articleId={selectedArticleId}
+                        />
+                    )}
+                </ModalPortal>
             </div>
         </>
     );

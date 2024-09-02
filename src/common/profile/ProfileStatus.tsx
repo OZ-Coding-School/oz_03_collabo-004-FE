@@ -13,20 +13,21 @@ const mockData = {
 
 const ProfileStatus = ({ userName, userId }: ProfileStatusProps) => {
     return (
-        <div className="flex gap-[5px] text-literal-normal mb-[5px]">
-            <div className="w-[40px] h-[40px] my-auto">
-                <ProfileImage />
-            </div>
-            <div className="flex flex-col">
-                <Link to={`/my/${userId}`}>
+        <Link to={`/my/${userId}`}>
+            <div className="flex gap-[5px] text-literal-normal mb-[5px]">
+                <div className="w-[40px] h-[40px] my-auto">
+                    <ProfileImage />
+                </div>
+                <div className="flex flex-col">
                     <div className="font-semibold">{userName}</div>
-                </Link>
-                <div className="flex gap-1">
-                    <div className="font-point">lv{mockData.level}</div>
-                    <div className="font-point text-primary-second-dark">{useLevelTitle(mockData.level)}</div>
+
+                    <div className="flex gap-1">
+                        <div className="font-point">lv{mockData.level}</div>
+                        <div className="font-point text-primary-second-dark">{useLevelTitle(mockData.level)}</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

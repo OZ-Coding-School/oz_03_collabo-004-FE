@@ -1,3 +1,4 @@
+
 export interface ModalProps {
     onClose: () => void;
     isOpen: boolean;
@@ -27,27 +28,32 @@ export interface UserData {
     status: boolean;
 }
 
-export interface Tag {
-    tag_id: number;
-    name: string;
-}
-
 export interface User {
     user_id: number;
     nickname: string;
 }
 
+export interface Tag {
+    tag_id: number;
+    name: string;
+}
+
 export interface Article {
     article_id: number;
-    comments_count: number;
-    content: string;
-    created_at: string;
-    like_count: number;
-    tags: Tag[];
-    thumbnail_image: string | null;
     title: string;
-    updated_at: string;
+    content: string;
     user: User;
+    tags: Tag[];
+    view_count: number;
+    like_count: number;
+    comments_count: number;
+    created_at: string;
+    updated_at: string;
+    thumbnail_image: string | null;
+}
+
+export interface ViewResponse {
+    article_id: number;
     view_count: number;
     is_closed: boolean;
 }

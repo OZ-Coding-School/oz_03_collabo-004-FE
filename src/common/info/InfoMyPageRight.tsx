@@ -3,9 +3,10 @@ import Button from "../button/Button";
 import { useEffect, useState } from "react";
 import TagSkill from "../tag/TagSkill";
 import { DUMMY_TAGS } from "../../config/const";
-import { useToastStore, useUserStore } from "../../config/store";
+import { useOtherUserStore, useToastStore, useUserStore } from "../../config/store";
 import Toast from "../../common/toast/Toast";
 import { userInfoUpdate } from "../../api/account";
+import useLevelTitle from "../../hooks/useLevelTitle";
 
 type InfoMyPageLeftProps = {
     isUserMypage: boolean;
@@ -14,11 +15,14 @@ type InfoMyPageLeftProps = {
 const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const { toast, setToast } = useToastStore();
     const { user } = useUserStore();
+    const { otherUser } = useOtherUserStore();
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
     const len = selectedTags.length;
-    const progress = 95;
+    const progress = user.hunsoo_level;
+    const userLevel = isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level;
+    const levelTitle = useLevelTitle(userLevel);
 
     useEffect(() => {
         setSelectedTags(user.selected_tags);
@@ -28,7 +32,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
         setToast(true, "최대 3개의 태그만 선택할 수 있습니다.");
     };
 
-    const handleTagClick = async (index: number) => {
+    const handleTagClick = (index: number) => {
         if (selectedTags.includes(index)) {
             // 선택된 태그를 클릭하면 선택 해제
             setSelectedTags(selectedTags.filter((tagIndex) => tagIndex !== index));
@@ -49,11 +53,15 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
             {toast.status && <Toast />}
             <div className="flex mb-6">
                 <div className="font-point font-bold text-lg text-literal-normal">
-                    훈수 레벨 : LV {user.hunsoo_level}
+                    훈수 레벨 : LV {isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level}
                 </div>
                 <div className="flex flex-col items-end font-default text-xs ml-auto">
-                    <p className="text-literal-normal">채택된 훈수 {user.selected_comment_count}개</p>
-                    <p className="text-literal-highlight">받은 경고 {user.warning_count}건</p>
+                    <p className="text-literal-normal">
+                        채택된 훈수 {isUserMypage ? user.selected_comment_count : otherUser.selected_comment_count}개
+                    </p>
+                    <p className="text-literal-highlight">
+                        받은 경고 {isUserMypage ? user.warning_count : otherUser.warning_count}건
+                    </p>
                 </div>
             </div>
             <div className="w-full h-11 relative">
@@ -62,7 +70,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     style={{ left: `${progress}%`, transform: "translateX(-50%)", bottom: "20px" }}
                 >
                     <p className="font-default text-sm font-medium text-primary-second-dark min-w-24 text-center">
-                        풋내기 훈수꾼
+                        {levelTitle}
                     </p>
                     <IoMdArrowDropdown className="text-primary-second-dark" />
                 </div>
@@ -75,13 +83,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
             </div>
             <div className="flex mt-9 mb-5 justify-between">
                 <p className="font-point text-base text-literal-normal">
-                    {isUserMypage ? (
-                        "나의 전문 훈수는"
-                    ) : (
-                        <>
-                            <span className="font-default font-medium">' {user.nickname} '</span> 님의 전문 훈수는
-                        </>
-                    )}
+                    {isUserMypage ? "나의 전문 훈수는" : <>' {otherUser.nickname} ' 님의 전문 훈수</>}
                 </p>
                 {isUserMypage && (
                     <Button
@@ -93,28 +95,45 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                 )}
             </div>
             <div className="flex flex-wrap gap-1 md:gap-3">
-                {isEdit ? (
-                    DUMMY_TAGS.filter((tag) => tag.id !== 6).map((tag) => (
-                        <TagSkill
-                            key={tag.id}
-                            tagIcon={tag.icon}
-                            tagText={tag.text}
-                            isEdit={isEdit}
-                            isClicked={selectedTags.includes(tag.id)}
-                            onClick={() => handleTagClick(tag.id)}
-                        />
-                    ))
-                ) : len <= 0 ? (
-                    <div className="font-default text-sm text-center w-full my-2">나만의 훈수 태그를 골라보세요!</div>
+                {isUserMypage ? (
+                    isEdit ? (
+                        DUMMY_TAGS.filter((tag) => tag.id !== 6).map((tag) => (
+                            <TagSkill
+                                key={tag.id}
+                                tagIcon={tag.icon}
+                                tagText={tag.text}
+                                isEdit={true}
+                                isClicked={selectedTags.includes(tag.id)}
+                                onClick={() => handleTagClick(tag.id)}
+                            />
+                        ))
+                    ) : len <= 0 ? (
+                        <div className="font-default text-sm text-center w-full my-2">
+                            나만의 훈수 태그를 골라보세요!
+                        </div>
+                    ) : (
+                        DUMMY_TAGS.filter((tag) => tag.id !== 6)
+                            .filter((tag) => selectedTags.includes(tag.id))
+                            .map((tag) => (
+                                <TagSkill
+                                    key={tag.id}
+                                    tagIcon={tag.icon}
+                                    tagText={tag.text}
+                                    isEdit={false}
+                                    isClicked={true}
+                                    onClick={() => handleTagClick(tag.id)}
+                                />
+                            ))
+                    )
                 ) : (
                     DUMMY_TAGS.filter((tag) => tag.id !== 6)
-                        .filter((tag) => selectedTags.includes(tag.id))
+                        .filter((tag) => otherUser.selected_tags.includes(tag.id))
                         .map((tag) => (
                             <TagSkill
                                 key={tag.id}
                                 tagIcon={tag.icon}
                                 tagText={tag.text}
-                                isEdit={isEdit}
+                                isEdit={false}
                                 isClicked={true}
                                 onClick={() => handleTagClick(tag.id)}
                             />

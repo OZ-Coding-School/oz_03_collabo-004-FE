@@ -27,6 +27,7 @@ export const useUserStore = create<UserStore>((set) => ({
         bio: null,
         comments: [],
         hunsoo_level: 1,
+        user_id: 0,
         nickname: null,
         profile_image: null,
         selected_comment_count: 0,
@@ -38,5 +39,32 @@ export const useUserStore = create<UserStore>((set) => ({
     updateUser: (updatedUser) =>
         set((state) => ({
             user: { ...state.user, ...updatedUser },
+        })),
+}));
+
+interface OtherUserStore {
+    otherUser: UserData;
+    setOtherUser: (Form: UserData) => void;
+    updateUser: (user: Partial<UserData>) => void;
+}
+
+export const useOtherUserStore = create<OtherUserStore>((set) => ({
+    otherUser: {
+        articles: [],
+        bio: null,
+        comments: [],
+        hunsoo_level: 1,
+        user_id: 0,
+        nickname: null,
+        profile_image: null,
+        selected_comment_count: 0,
+        selected_tags: [],
+        warning_count: 0,
+        status: false,
+    },
+    setOtherUser: (form: UserData) => set(() => ({ otherUser: form })),
+    updateUser: (updatedUser) =>
+        set((state) => ({
+            otherUser: { ...state.otherUser, ...updatedUser },
         })),
 }));

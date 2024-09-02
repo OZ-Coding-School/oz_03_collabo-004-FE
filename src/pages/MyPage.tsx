@@ -29,7 +29,6 @@ const MyPage = () => {
                     setOtherUser(response.data);
                     setIsUserMypage(response.data.status);
                 }
-                console.log(response.data);
             } catch (error) {
                 if (error instanceof AxiosError && error.response) {
                     console.error("실패: ", error);
@@ -45,7 +44,7 @@ const MyPage = () => {
             }
         };
         getDataUserProfile();
-    }, [userId]);
+    }, [userId, navigate, setOtherUser, updateUser]);
 
     //새로고침해도 store에 있는 user 유지되도록
     useEffect(() => {
@@ -55,7 +54,7 @@ const MyPage = () => {
             setIsUserMypage(user.status);
         };
         refreshUserInfo();
-    }, [getUserInfo]);
+    }, [getUserInfo, user.status, userId]);
 
     return (
         <>

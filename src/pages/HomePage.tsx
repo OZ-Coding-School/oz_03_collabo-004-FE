@@ -5,18 +5,30 @@ import TrendingContent from "./../common/trending/TrendingContent";
 import ProfileStatus from "./../common/profile/ProfileStatus";
 import TrendingComment from "./../common/trending/TrendingComment";
 import ProfileImage from "./../common/profile/ProfileImage";
-import ModalEditor from "../common/modal/ModalEditor";
+import EditorInput from "../common/input/EditorInput";
 import Content from "../common/content/Content";
 import ContentFooter from "../common/content/ContentFooter";
 import { Article, Tag } from "../config/types";
-import { axiosInstance } from "../api/axios";
 import SkeletonContent from "../common/skeleton/SkeletonContent";
+import { ModalPortal } from "../config/ModalPortal";
+import ModalEditor from "../common/modal/ModalEditor";
+import { articleApi } from "../api";
+import { useUserStore } from "../config/store";
 
 const HomePage = () => {
     const [isHidden, setIsHidden] = useState(false);
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
+    const [editorModal, setEditorModal] = useState(false);
+    const { user } = useUserStore();
+
+    const openEditorModal = () => {
+        setEditorModal(true);
+    };
+    const closeEditorModal = () => {
+        setEditorModal(false);
+    };
 
     const checkScreenSize = () => {
         const screenWidth = window.innerWidth;
@@ -34,7 +46,7 @@ const HomePage = () => {
     const fetchArticles = async (tag: string | null = null) => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get<Article[]>("/article/", { withCredentials: true });
+            const response = await articleApi.ArticleList();
             if (!Array.isArray(response.data)) {
                 throw new Error("Expected an array of articles");
             }
@@ -68,10 +80,10 @@ const HomePage = () => {
                 </div>
                 <div className="flex flex-col items-center flex-1 md:w-[658px]">
                     <div className="flex items-center mt-4 mb-4 space-x-4">
-                        <div className="w-[40px] h-[40px]">
-                            <ProfileImage />
+                        <div className="w-[40px] h-[40px] relative">
+                            <ProfileImage src={user.profile_image as string} />
                         </div>
-                        <ModalEditor />
+                        <EditorInput onClick={openEditorModal} />
                     </div>
                     {loading ? (
                         <>
@@ -89,7 +101,7 @@ const HomePage = () => {
                     ) : (
                         articles.map((article) => (
                             <div key={article.article_id} className="mb-8">
-                                <ProfileStatus userId={article.user.user_id} userName={article.user.nickname} />
+                                <ProfileStatus {...article.user} />
                                 <Content {...article} />
                                 <ContentFooter
                                     articleId={Number(article.article_id)}
@@ -106,6 +118,9 @@ const HomePage = () => {
                     <TrendingComment />
                 </div>
             </div>
+            <ModalPortal>
+                {editorModal && <ModalEditor onClose={closeEditorModal} parent={"home-parent"} isOpen={editorModal} />}
+            </ModalPortal>
         </div>
     );
 };

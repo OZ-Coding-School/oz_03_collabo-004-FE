@@ -93,8 +93,8 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                     className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
                                 >
                                     <div className="relative rounded-full w-[80px] h-[80px]">
-                                        {user.profile_image === null ? (
-                                            <ProfileImage />
+                                        {user.profile_image === "/img/profile_placeholder.png" ? (
+                                            <ProfileImage src="/img/profile_placeholder.png" />
                                         ) : (
                                             <img
                                                 src={user.profile_image}
@@ -103,7 +103,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                             />
                                         )}
                                         <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
-                                        {user.profile_image !== null && (
+                                        {user.profile_image !== "/img/profile_placeholder.png" && (
                                             <button
                                                 onClick={(e) => {
                                                     e.preventDefault();
@@ -118,8 +118,8 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                     </div>
                                 </label>
                             </>
-                        ) : user.profile_image === null ? (
-                            <ProfileImage />
+                        ) : user.profile_image === "/img/profile_placeholder.png" ? (
+                            <ProfileImage src="/img/profile_placeholder.png" />
                         ) : (
                             <img
                                 src={user.profile_image}
@@ -127,8 +127,8 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                 className="rounded-full w-[80px] h-[80px] object-cover"
                             />
                         )
-                    ) : otherUser.profile_image === null ? (
-                        <ProfileImage />
+                    ) : otherUser.profile_image === "/img/profile_placeholder.png" ? (
+                        <ProfileImage src="/img/profile_placeholder.png" />
                     ) : (
                         <img
                             src={otherUser.profile_image}

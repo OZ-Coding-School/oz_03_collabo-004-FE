@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import HeaderInfo from "./HeaderInfo";
 import HeaderInfoLogged from "./HeaderInfoLogged";
 import HeaderSearch from "./HeaderSearch";
+import useUser from "../../hooks/useUser";
+import { useEffect } from "react";
 
 interface HeaderProps {
     isAdmin?: boolean;
@@ -10,6 +12,15 @@ interface HeaderProps {
 const Header = ({ isAdmin = false }: HeaderProps) => {
     const isLogin = false;
     const nav = useNavigate();
+    const { getUserInfo } = useUser();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getUserInfo();
+        };
+        fetchData();
+    }, [getUserInfo]);
+
     return (
         <div className="fixed header z-40 w-full h-[52px] bg-primary flex justify-center items-center">
             <div className="w-[1280px] h-full flex justify-center items-center px-4">

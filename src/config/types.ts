@@ -20,7 +20,7 @@ export interface UserData {
     hunsoo_level: number;
     user_id: number;
     nickname: string | null;
-    profile_image: string | null;
+    profile_image: string;
     selected_comment_count: number;
     selected_tags: number[];
     warning_count: number;
@@ -30,6 +30,8 @@ export interface UserData {
 export interface User {
     user_id: number;
     nickname: string;
+    profile_image: string;
+    hunsoo_level: number;
 }
 
 export interface Tag {

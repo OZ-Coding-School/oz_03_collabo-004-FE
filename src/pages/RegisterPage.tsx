@@ -95,7 +95,7 @@ const RegisterPage = () => {
                             {errors.id && errors.id.message}
                         </p>
 
-                        <label className="text-sm font-medium px-1">별명</label>
+                        <label className="text-sm font-medium px-1">별명 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -104,12 +104,19 @@ const RegisterPage = () => {
                             type="text"
                             placeholder="ex) 나는 훈수왕이 될 거야"
                             {...register("nickname", {
-                                minLength: 2,
-                                maxLength: 20,
+                                required: "필수 항목입니다.",
+                                minLength: {
+                                    value: 2,
+                                    message: "별명은 최소 2글자 이상이어야 합니다.",
+                                },
+                                maxLength: {
+                                    value: 20,
+                                    message: "별명은 최대 20글자 이하이어야 합니다.",
+                                },
                             })}
                         />
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
-                            {errors.nickname && "2~20글자 사이로 작성해주세요."}
+                            {errors.nickname && errors.nickname.message}
                         </p>
 
                         <label className="text-sm font-medium px-1">이메일 *</label>

@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Header from "../common/header/Header";
 import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../api/auth";
 import { useState } from "react";
 import { AxiosError } from "axios";
@@ -25,6 +25,7 @@ const LoginPage = () => {
         },
     });
     const [isSubmit, setIsSubmit] = useState(false);
+    const navigate = useNavigate();
 
     const onSubmit: SubmitHandler<LoginData> = async (data) => {
         const { id, password } = data;
@@ -32,7 +33,10 @@ const LoginPage = () => {
         try {
             const response = await userLogin({ username: id, password: password });
             console.log(response);
-            if (response.status === 200) setIsSubmit(false);
+            if (response.status === 200) {
+                setIsSubmit(false);
+                navigate("/");
+            }
             reset();
         } catch (error) {
             setIsSubmit(false);

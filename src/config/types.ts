@@ -1,21 +1,6 @@
-export interface ModalProps {
-    onClose: () => void;
-    isOpen: boolean;
-    parent: string;
-    articleData?: MyArticle;
-}
-
-export interface UserData {
-    articles: MyArticle[];
-    bio: string | null;
-    comments: MyComment[];
-    hunsoo_level: number;
-    nickname: string | null;
-    profile_image: string | null;
-    selected_comment_count: number;
-    selected_tags: number[];
-    warning_count: number;
-    status: boolean;
+export interface User {
+    user_id: number;
+    nickname: string;
 }
 
 export interface Tag {
@@ -23,22 +8,22 @@ export interface Tag {
     name: string;
 }
 
-export interface User {
-    user_id: number;
-    nickname: string;
-}
-
 export interface Article {
     article_id: number;
-    comments_count: number;
-    content: string;
-    created_at: string;
-    like_count: number;
-    tags: Tag[];
-    thumbnail_image: string | null;
     title: string;
-    updated_at: string;
+    content: string;
     user: User;
+    tags: Tag[];
+    view_count: number;
+    like_count: number;
+    comments_count: number;
+    created_at: string;
+    updated_at: string;
+    thumbnail_image: string | null;
+}
+
+export interface ViewResponse {
+    article_id: number;
     view_count: number;
 }
 
@@ -60,8 +45,8 @@ export interface MyArticle extends Article {
 }
 
 export interface MyComment extends Comment {
-    article_tags?: Tag[]; // 댓글이 달린 게시글 태그
-    article_title?: string; // 댓글이 달린 게시글 제목
+    article_tags?: Tag[];
+    article_title?: string;
     article_user_id?: number;
     article_user_nickname?: string;
     article_id?: string;
@@ -71,4 +56,24 @@ export interface UserUpdateData {
     nickname?: string;
     bio?: string;
     selected_tags?: number[];
+}
+
+export interface ModalProps {
+    onClose: () => void;
+    isOpen: boolean;
+    parent: string;
+    articleData?: MyArticle;
+}
+
+export interface UserData {
+    articles: MyArticle[];
+    bio: string | null;
+    comments: MyComment[];
+    hunsoo_level: number;
+    nickname: string | null;
+    profile_image: string | null;
+    selected_comment_count: number;
+    selected_tags: number[];
+    warning_count: number;
+    status: boolean;
 }

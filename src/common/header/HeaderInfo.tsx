@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import Button from "../button/Button";
 import ProfileImage from "../profile/ProfileImage";
 import { HiMenu, HiX } from "react-icons/hi";
-import { authApi } from "../../api";
-import { useGoogleLogin } from "@react-oauth/google";
+import { ModalPortal } from "../../config/ModalPortal";
+import ModalLogin from "../modal/ModalLogin";
+import ModalRegister from "../modal/ModalRegister";
+import { useNavigate } from "react-router-dom";
 
 const menuVariants = {
     closed: { opacity: 0, x: 50 },
@@ -12,36 +14,37 @@ const menuVariants = {
 };
 
 const HeaderInfo = () => {
+    const nav = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-    const googleLoginRequest = async (token: string) => {
-        try {
-            await authApi.userGoogleAccessTokenReceiver(token);
-        } catch (error) {
-            console.error("login failed", error);
-        }
+    const loginModalCloseHandler = () => {
+        setIsMenuOpen(false);
+        setIsLoginOpen(false);
     };
-    const googleLoginHandler = useGoogleLogin({
-        onSuccess: (res) => {
-            googleLoginRequest(res.access_token);
-        },
-
-        onError: () => {
-            console.error("Unexpected Login Request Error");
-        },
-    });
+    const loginModalOpenHandler = () => {
+        setIsLoginOpen(true);
+    };
+    const registerModalCloseHandler = () => {
+        setIsMenuOpen(false);
+        setIsRegisterOpen(false);
+    };
+    const registerModalOpenHandler = () => {
+        setIsRegisterOpen(true);
+    };
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     return (
         <div className="flex justify-center items-center relative">
-            <div className="w-[36px] h-[36px]">
+            <div onClick={() => nav("/my")} className="w-[36px] h-[36px] cursor-pointer">
                 <ProfileImage />
             </div>
             <div className="h-[36px] w-[1px] bg-slate-200 mx-3 hidden md:flex"></div>
             <div className="gap-[10px] hidden md:flex">
-                <Button onClick={googleLoginHandler}>로그인</Button>
-                <Button>회원가입</Button>
+                <Button onClick={loginModalOpenHandler}>로그인</Button>
+                <Button onClick={registerModalOpenHandler}>회원가입</Button>
             </div>
             <motion.div className="md:hidden" initial={false} animate={isMenuOpen ? "open" : "closed"}>
                 <motion.button
@@ -62,13 +65,21 @@ const HeaderInfo = () => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
                             <div className="flex flex-col p-2 gap-2 w-[120px]">
-                                <Button>로그인</Button>
-                                <Button>회원가입</Button>
+                                <Button onClick={loginModalOpenHandler}>로그인</Button>
+                                <Button onClick={registerModalOpenHandler}>회원가입</Button>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </motion.div>
+            <ModalPortal>
+                {isLoginOpen && (
+                    <ModalLogin onClose={loginModalCloseHandler} isOpen={isLoginOpen} parent="home-parent" />
+                )}
+                {isRegisterOpen && (
+                    <ModalRegister onClose={registerModalCloseHandler} isOpen={isRegisterOpen} parent="home-parent" />
+                )}
+            </ModalPortal>
         </div>
     );
 };

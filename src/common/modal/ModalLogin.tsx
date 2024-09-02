@@ -4,10 +4,13 @@ import BadgeDesc from "../badge/BadgeDesc";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import ButtonLogin from "../button/ButtonLogin";
+import { authApi } from "../../api";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
-
+    const nav = useNavigate();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -25,6 +28,29 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
             headerElement?.classList.remove("blur-[2px]");
         };
     }, [isOpen, parent]);
+
+    const googleLoginRequest = async (token: string) => {
+        try {
+            await authApi.userGoogleAccessTokenReceiver(token);
+            nav("/");
+            onClose();
+        } catch (error) {
+            console.error("login failed", error);
+        }
+    };
+    const googleLoginHandler = useGoogleLogin({
+        onSuccess: (res) => {
+            googleLoginRequest(res.access_token);
+        },
+
+        onError: () => {
+            console.error("Unexpected Login Request Error");
+        },
+    });
+
+    const normalLoginHandler = () => {
+        nav("/login");
+    };
 
     return (
         <>
@@ -58,8 +84,8 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                             <BadgeDesc />
                         </div>
                         <div className="flex flex-col justify-center items-center mt-16 gap-[13px]">
-                            <ButtonLogin type="social" />
-                            <ButtonLogin type="normal" />
+                            <ButtonLogin type="social" onClick={googleLoginHandler} />
+                            <ButtonLogin type="normal" onClick={normalLoginHandler} />
                         </div>
                     </div>
                     <IoClose

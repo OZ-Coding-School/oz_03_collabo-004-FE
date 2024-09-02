@@ -49,8 +49,8 @@ const LoginPage = () => {
     return (
         <>
             <Header />
-            <div className="flex w-screen justify-center items-center min-h-screen font-default sm:bg-transparent bg-white ">
-                <div className="w-[520px] sm:bg-white sm:rounded-[40px] sm:border-2 sm:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
+            <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white ">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>

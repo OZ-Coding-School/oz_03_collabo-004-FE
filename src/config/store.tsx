@@ -29,7 +29,7 @@ export const useUserStore = create<UserStore>((set) => ({
         hunsoo_level: 1,
         user_id: 0,
         nickname: null,
-        profile_image: null,
+        profile_image: "/img/profile_placeholder.png",
         selected_comment_count: 0,
         selected_tags: [],
         warning_count: 0,

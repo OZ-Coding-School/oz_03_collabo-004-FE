@@ -24,5 +24,5 @@ export const userInfoPublic = (userId: number) => {
 };
 
 export const userInfoImageDelete = () => {
-    return axiosInstance.delete("/account/profle/image/delete", { withCredentials: true });
+    return axiosInstance.delete("/account/profile/image/delete/", { withCredentials: true });
 };

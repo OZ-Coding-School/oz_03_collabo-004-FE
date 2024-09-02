@@ -68,7 +68,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
 
     const titleValue = watch("content");
     useEffect(() => {
-        const textarea = document.querySelector<HTMLTextAreaElement>("textarea[name='text']");
+        const textarea = document.querySelector<HTMLTextAreaElement>("textarea[name='content']");
         if (textarea) {
             textarea.style.height = "auto";
             textarea.style.height = `${textarea.scrollHeight}px`;

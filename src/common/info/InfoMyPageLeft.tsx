@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import ProfileImage from "../profile/ProfileImage";
-import { useUserStore } from "../../config/store";
+import { useOtherUserStore, useUserStore } from "../../config/store";
 import { userInfoImageUpdate, userInfoUpdate, userInfoImageDelete } from "../../api/account";
 
 type InfoMyPageLeftProps = {
@@ -16,6 +16,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const { user, updateUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
+    const { otherUser } = useOtherUserStore();
 
     useEffect(() => {
         if (user.nickname) setNicknameText(user.nickname);
@@ -31,8 +32,6 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
             await userInfoUpdate({ nickname: nicknameText, bio: bioText });
             if (profileImage) {
                 await userInfoImageUpdate(profileImage);
-                // 이미지 업로드 후 사용자 스토어 업데이트
-                // updateUser({ profile_image: response.data });
             }
         } catch (error) {
             console.error("프로필 업데이트에 실패했습니다.", error);
@@ -69,41 +68,51 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         >
             <div className="flex flex-col flex-grow gap-8">
                 <div className="flex gap-5 items-center">
-                    {isEdit ? (
-                        <>
-                            <input type="file" id="profileImage" className="hidden" onChange={handleImageChange} />
-                            <label
-                                htmlFor="profileImage"
-                                className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
-                            >
-                                <div className="relative rounded-full w-[80px] h-[80px]">
-                                    {user.profile_image === null ? (
-                                        <ProfileImage />
-                                    ) : (
-                                        <img
-                                            src={user.profile_image}
-                                            alt="user_image"
-                                            className="rounded-full w-[80px] h-[80px] object-cover"
-                                        />
-                                    )}
-                                    <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
-                                    {user.profile_image !== null && (
-                                        <button
-                                            onClick={handleImageDelete}
-                                            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"
-                                        >
-                                            삭제
-                                        </button>
-                                    )}
-                                </div>
-                            </label>
-                        </>
-                    ) : user.profile_image === null ? (
+                    {isUserMypage ? (
+                        isEdit ? (
+                            <>
+                                <input type="file" id="profileImage" className="hidden" onChange={handleImageChange} />
+                                <label
+                                    htmlFor="profileImage"
+                                    className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
+                                >
+                                    <div className="relative rounded-full w-[80px] h-[80px]">
+                                        {user.profile_image === null ? (
+                                            <ProfileImage />
+                                        ) : (
+                                            <img
+                                                src={user.profile_image}
+                                                alt="user_image"
+                                                className="rounded-full w-[80px] h-[80px] object-cover"
+                                            />
+                                        )}
+                                        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
+                                        {user.profile_image !== null && (
+                                            <button
+                                                onClick={handleImageDelete}
+                                                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"
+                                            >
+                                                삭제
+                                            </button>
+                                        )}
+                                    </div>
+                                </label>
+                            </>
+                        ) : user.profile_image === null ? (
+                            <ProfileImage />
+                        ) : (
+                            <img
+                                src={user.profile_image}
+                                alt="user_image"
+                                className="rounded-full w-[80px] h-[80px] object-cover"
+                            />
+                        )
+                    ) : otherUser.profile_image === null ? (
                         <ProfileImage />
                     ) : (
                         <img
-                            src={user.profile_image}
-                            alt="user_image"
+                            src={otherUser.profile_image}
+                            alt="other_user_image"
                             className="rounded-full w-[80px] h-[80px] object-cover"
                         />
                     )}
@@ -120,7 +129,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             />
                         ) : (
                             <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
-                                {nicknameText}
+                                {isUserMypage ? nicknameText : otherUser.nickname}
                             </div>
                         )}
                     </div>
@@ -136,7 +145,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                         />
                     ) : (
                         <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
-                            {bioText}
+                            {isUserMypage ? bioText : otherUser.bio}
                         </div>
                     )}
                 </div>

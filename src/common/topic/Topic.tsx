@@ -23,13 +23,26 @@ const dropdownVariants: Variants = {
     },
 };
 
-const Topic = () => {
+interface TopicProps {
+    onSelectTag: (tag: string | null) => void;
+    selectedTag: string | null;
+}
+
+const Topic = ({ onSelectTag, selectedTag }: TopicProps) => {
     const [isDailyOpen, setIsDailyOpen] = useState(true);
     const [isGameOpen, setIsGameOpen] = useState(true);
     const [isEduOpen, setIsEduOpen] = useState(true);
 
+    const handleTagClick = (tag: string) => {
+        if (selectedTag === tag) {
+            onSelectTag(null); // 이미 선택된 태그를 클릭하면 선택 해제
+        } else {
+            onSelectTag(tag); // 태그 선택
+        }
+    };
+
     return (
-        <div className="w-[226px] bg-white h-auto p-2 rounded-md font-default ">
+        <div className="w-[226px] bg-white h-auto p-2 rounded-md font-default">
             <p className="px-1 py-2 text-lg font-medium text-primary-second-dark">카테고리</p>
             <div className="w-full mb-2">
                 <button
@@ -61,7 +74,11 @@ const Topic = () => {
                     {DUMMY_TAGS.slice(0, 6).map((i) => (
                         <li
                             key={i.id}
-                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
+                            className={tw(
+                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                                selectedTag === i.text && "text-primary-second-dark"
+                            )}
                         >
                             {i.icon} {i.text}
                         </li>
@@ -98,7 +115,11 @@ const Topic = () => {
                     {DUMMY_TAGS.slice(6, 9).map((i) => (
                         <li
                             key={i.id}
-                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
+                            className={tw(
+                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                                selectedTag === i.text && "text-primary-second-dark"
+                            )}
                         >
                             {i.icon} {i.text}
                         </li>
@@ -135,7 +156,11 @@ const Topic = () => {
                     {DUMMY_TAGS.slice(9, 10).map((i) => (
                         <li
                             key={i.id}
-                            className="flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer"
+                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
+                            className={tw(
+                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                                selectedTag === i.text && "text-primary-second-dark"
+                            )}
                         >
                             {i.icon} {i.text}
                         </li>

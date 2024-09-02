@@ -4,7 +4,7 @@ import { PiCursorClickFill } from "react-icons/pi";
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import { motion } from "framer-motion";
-import { ArticleAddView, ArticleAddLike } from "../../api/article";
+import { axiosInstance } from "../../api/axios";
 
 interface ContentFooterProps {
     articleId: number;
@@ -28,8 +28,13 @@ const ContentFooter = ({ articleId, likeCount, viewCount, commentsCount }: Conte
 
     const handleAddView = async () => {
         try {
-            await ArticleAddView(Number(articleId));
-            setCurrentViewCount(currentViewCount + 1);
+            const response = await axiosInstance.get(`/article/${articleId}/view/`, { withCredentials: true });
+
+            if (response.status === 200) {
+                setCurrentViewCount(currentViewCount + 1);
+            } else {
+                throw new Error(`Unexpected response status: ${response.status}`);
+            }
         } catch (error) {
             console.error("Failed to add view:", error);
         }
@@ -37,12 +42,18 @@ const ContentFooter = ({ articleId, likeCount, viewCount, commentsCount }: Conte
 
     const handleAddLike = async () => {
         try {
-            const response = await ArticleAddLike(Number(articleId));
+            const response = await axiosInstance.post(`/article/${articleId}/like/`, {}, { withCredentials: true });
 
-            if (response.message === "Like added") {
-                setCurrentLikeCount(currentLikeCount + 1);
-            } else if (response.message === "Like removed") {
-                setCurrentLikeCount(currentLikeCount - 1);
+            if (response.status === 200) {
+                const { like_count, message } = response.data;
+
+                if (message === "Like added") {
+                    setCurrentLikeCount(like_count);
+                } else if (message === "Like removed") {
+                    setCurrentLikeCount(like_count);
+                }
+            } else {
+                throw new Error(`Unexpected response status: ${response.status}`);
             }
         } catch (error) {
             console.error("Failed to toggle like:", error);

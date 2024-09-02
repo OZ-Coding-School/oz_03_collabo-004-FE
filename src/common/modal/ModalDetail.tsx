@@ -4,7 +4,6 @@ import { IoClose } from "react-icons/io5";
 import { AiHunsu, DetailModalProps } from "../../config/types";
 import Badge from "../badge/Badge";
 import Comment from "../comment/Comment";
-import useFormatDate from "../../hooks/useFormatDate";
 import { useUserStore } from "../../config/store";
 import CommentInput from "../comment/CommentInput";
 import { twMerge as tw } from "tailwind-merge";
@@ -12,6 +11,7 @@ import { aiHunsuDetail } from "../../api/ai";
 import ProfileStatus from "../profile/ProfileStatus";
 import { MyComment, MyArticle } from "../../config/types";
 import { articleDetail } from "../../api/article";
+import dayjs from "dayjs";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
@@ -21,7 +21,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
     const [hideInput, setHideInput] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const formattedDate = useFormatDate(articleData?.created_at);
+    const formattedDate = dayjs(articleData?.created_at).format("YYYY년 MM월 DD일");
 
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
@@ -40,36 +40,58 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
         };
     }, [isOpen, parent]);
 
+    // useEffect(() => {
+    //     const getArticleDetail = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const response = await articleDetail(articleId);
+    //             console.log(response.data);
+    //             setArticleData(response.data);
+    //             setComments(response.data.comments || []);
+    //         } catch (error) {
+    //             console.log("게시글 불러오기 실패", error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     getArticleDetail();
+    // }, [articleId]);
+
+    // useEffect(() => {
+    //     const getAiHunsuDetail = async () => {
+    //         try {
+    //             const response = await aiHunsuDetail(articleData?.article_id);
+    //             console.log(response.data);
+    //             if (response.status) setAiData(response.data);
+    //         } catch (error) {
+    //             //! 에러메세지로 보내는 거 말고 다른 방법..
+    //             console.error("ai 훈수 가져오기 실패", error);
+    //         }
+    //     };
+    //     if (articleData?.article_id) getAiHunsuDetail();
+    // }, [articleData?.article_id]);
+
     useEffect(() => {
-        const getArticleDetail = async () => {
+        const getDetails = async () => {
             setIsLoading(true);
             try {
-                const response = await articleDetail(articleId);
-                console.log(response.data);
-                setArticleData(response.data);
-                setComments(response.data.comments || []);
+                const articleResponse = await articleDetail(articleId);
+                console.log(articleResponse.data);
+                setArticleData(articleResponse.data);
+                setComments(articleResponse.data.comments || []);
+
+                // AI 바로 가져옴
+                const aiResponse = await aiHunsuDetail(articleId);
+                console.log(aiResponse.data);
+                if (aiResponse.status) setAiData(aiResponse.data);
             } catch (error) {
-                console.log("게시글 불러오기 실패", error);
+                console.log("데이터 불러오기 실패", error);
             } finally {
                 setIsLoading(false);
             }
         };
-        getArticleDetail();
+        getDetails();
     }, [articleId]);
-
-    useEffect(() => {
-        const getAiHunsuDetail = async () => {
-            try {
-                const response = await aiHunsuDetail(articleData?.article_id);
-                console.log(response.data);
-                if (response.status === 200) setAiData(response.data);
-            } catch (error) {
-                //! 에러메세지로 보내는 거 말고 다른 방법..
-                console.error("ai 훈수 가져오기 실패", error);
-            }
-        };
-        if (articleData?.article_id) getAiHunsuDetail();
-    }, [articleData?.article_id]);
 
     const handleCommentSubmit = (newComment: MyComment) => {
         setComments((prevComments) => [...prevComments, newComment]);
@@ -114,10 +136,14 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                 </div>
                                 {user.user_id === articleData?.user.user_id && (
                                     <div className="text-sm text-gray-400 flex gap-1">
-                                        <span className="cursor-pointer duration-150 hover:text-literal-normal">
-                                            수정
-                                        </span>
-                                        /
+                                        {!articleData.is_closed && (
+                                            <>
+                                                <span className="cursor-pointer duration-150 hover:text-literal-normal">
+                                                    수정
+                                                </span>
+                                                <span>/</span>
+                                            </>
+                                        )}
                                         <span className="cursor-pointer duration-150 hover:text-literal-normal">
                                             삭제
                                         </span>
@@ -130,7 +156,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                             </div>
                             <div className="text-xl my-2">{articleData?.title}</div>
                             <div className="pt-3 pb-20 mb-3 border-b border-b-gray-100">{articleData?.content}</div>
-                            {user.user_id !== articleData?.user.user_id && !hideInput && (
+                            {user.user_id !== articleData?.user.user_id && !hideInput && !articleData?.is_closed && (
                                 <div className="my-5">
                                     <CommentInput
                                         onClose={onClose}
@@ -153,6 +179,8 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                               color={comment.user === user.user_id ? "writer" : "default"}
                                               parent="comment-parent"
                                               comment={comment}
+                                              article_user_id={articleData?.user.user_id}
+                                              onCommentSubmit={handleCommentSubmit}
                                           />
                                           {/* ai 있을때 */}
                                           {comment.is_selected && aiData && (
@@ -162,6 +190,8 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                                   parent="comment-parent"
                                                   comment={comment}
                                                   ai={aiData}
+                                                  article_user_id={articleData?.user.user_id}
+                                                  onCommentSubmit={handleCommentSubmit}
                                               />
                                           )}
                                       </div>

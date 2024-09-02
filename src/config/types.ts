@@ -49,6 +49,7 @@ export interface Article {
     created_at: string;
     updated_at: string;
     thumbnail_image: string;
+    is_closed: boolean;
 }
 
 export interface ViewResponse {

@@ -35,7 +35,6 @@ const HomePage = () => {
         setLoading(true);
         try {
             const response = await axiosInstance.get<Article[]>("/article/", { withCredentials: true });
-
             if (!Array.isArray(response.data)) {
                 throw new Error("Expected an array of articles");
             }
@@ -74,15 +73,22 @@ const HomePage = () => {
                     </div>
                     {loading ? (
                         <>
+                            <div className="mt-1"></div>
                             <SkeletonContent type={1} />
+                            <div className="mt-10"></div>
                             <SkeletonContent type={2} />
+                            <div className="mt-10"></div>
+                            <SkeletonContent type={1} />
+                            <div className="mt-10"></div>
+                            <SkeletonContent type={2} />
+                            <div className="mt-10"></div>
                             <SkeletonContent type={1} />
                         </>
                     ) : (
                         articles.map((article) => (
                             <div key={article.article_id} className="mb-8">
                                 <ProfileStatus userName={article.user.nickname} />
-                                <Content articleId={article.article_id} />
+                                <Content {...article} />
                                 <ContentFooter
                                     articleId={Number(article.article_id)}
                                     likeCount={article.like_count}
@@ -97,16 +103,6 @@ const HomePage = () => {
                     <TrendingContent />
                     <TrendingComment />
                 </div>
-                <ModalPortal>
-                    {isDetailModalOpen && selectedArticleId && (
-                        <ModalDetail
-                            isOpen={isDetailModalOpen}
-                            parent="content-parent"
-                            onClose={closeDetailModal}
-                            articleId={selectedArticleId}
-                        />
-                    )}
-                </ModalPortal>
             </div>
         </div>
     );

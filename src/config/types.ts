@@ -1,4 +1,3 @@
-
 export interface ModalProps {
     onClose: () => void;
     isOpen: boolean;
@@ -49,7 +48,7 @@ export interface Article {
     comments_count: number;
     created_at: string;
     updated_at: string;
-    thumbnail_image: string | null;
+    thumbnail_image: string;
 }
 
 export interface ViewResponse {
@@ -94,7 +93,6 @@ export interface UserUpdateData {
     selected_tags?: number[];
 }
 
-
 export interface UserRegisterData {
     username: string; // 유저 아이디
     nickname: string;
@@ -105,7 +103,7 @@ export interface UserRegisterData {
 export interface UserLoginData {
     username: string;
     password: string;
-
+}
 export interface CommentFormData {
     content: string;
     images: FileList | null;

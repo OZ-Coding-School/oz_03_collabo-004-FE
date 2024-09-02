@@ -62,13 +62,15 @@ const HomePage = () => {
             <div className="fixed top-0 left-0 z-10 w-full bg-white shadow-md">
                 <Header />
             </div>
-            <div className="flex flex-col px-4 mt-[50px] md:flex-row max-w-[1280px] mx-auto">
+            <div className="home-parent flex flex-col px-4 mt-[50px] md:flex-row max-w-[1280px] mx-auto">
                 <div className={`flex flex-col mt-4 items-center ${isHidden ? "hidden" : "md:w-[226px]"}`}>
                     <Topic onSelectTag={setSelectedTag} selectedTag={selectedTag} />
                 </div>
                 <div className="flex flex-col items-center flex-1 md:w-[658px]">
                     <div className="flex items-center mt-4 mb-4 space-x-4">
-                        <ProfileImage />
+                        <div className="w-[40px] h-[40px]">
+                            <ProfileImage />
+                        </div>
                         <ModalEditor />
                     </div>
                     {loading ? (
@@ -87,7 +89,7 @@ const HomePage = () => {
                     ) : (
                         articles.map((article) => (
                             <div key={article.article_id} className="mb-8">
-                                <ProfileStatus userName={article.user.nickname} />
+                                <ProfileStatus userId={article.user.user_id} userName={article.user.nickname} />
                                 <Content {...article} />
                                 <ContentFooter
                                     articleId={Number(article.article_id)}

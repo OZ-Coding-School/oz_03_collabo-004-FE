@@ -71,6 +71,8 @@ export interface Comment {
     images: CommentImage[];
     user: number;
     user_nickname: string;
+    user_profile_image: string;
+    reaction: string;
 }
 
 export interface CommentImage {

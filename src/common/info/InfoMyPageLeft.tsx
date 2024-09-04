@@ -3,7 +3,7 @@ import Button from "../button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import ProfileImage from "../profile/ProfileImage";
 import { useOtherUserStore, useUserStore } from "../../config/store";
-import { userInfoImageUpdate, userInfoUpdate, userInfoImageDelete } from "../../api/account";
+import { userInfoImageUpdate, userInfoUpdate } from "../../api/account";
 import { AxiosError } from "axios";
 
 type InfoMyPageLeftProps = {
@@ -15,7 +15,6 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [bioText, setBioText] = useState("");
     const [nicknameText, setNicknameText] = useState("");
     const [profileImage, setProfileImage] = useState<File | null>(null);
-    const [deleteImage, setDeleteImage] = useState<boolean>(false);
     const { user, updateUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
     const { otherUser } = useOtherUserStore();
@@ -32,10 +31,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         }
         try {
             await userInfoUpdate({ nickname: nicknameText, bio: bioText });
-            if (deleteImage) {
-                await userInfoImageDelete();
-                updateUser({ profile_image: null });
-            } else if (profileImage) {
+            if (profileImage) {
                 await userInfoImageUpdate(profileImage);
             }
             setIsEdit(false);
@@ -56,24 +52,9 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         if (file) {
             setProfileImage(file);
             const imageUrl = URL.createObjectURL(file);
-            updateUser({ profile_image: imageUrl }); // 미리보기 업데이트
+            updateUser({ profile_image: imageUrl });
         }
     };
-
-    //이미지삭제진행중..
-    const handleImageDelete = () => {
-        setProfileImage(null);
-        updateUser({ profile_image: null }); // 미리보기에서 이미지 제거
-        setDeleteImage(true); // 삭제 상태로 변경
-    };
-    // const handleImageDelete = async () => {
-    //     try {
-    //         await userInfoImageDelete();
-    //         setProfileImage(null);
-    //     } catch (error) {
-    //         console.log("이미지 삭제 실패 ", error);
-    //     }
-    // };
 
     return (
         <form
@@ -93,48 +74,41 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                     className="cursor-pointer w-[80px] h-[80px] flex-shrink-0 rounded-full"
                                 >
                                     <div className="relative rounded-full w-[80px] h-[80px]">
-                                        {user.profile_image === "/img/profile_placeholder.png" ? (
-                                            <ProfileImage src="/img/profile_placeholder.png" />
-                                        ) : (
-                                            <img
-                                                src={user.profile_image}
-                                                alt="user_image"
-                                                className="rounded-full w-[80px] h-[80px] object-cover"
-                                            />
-                                        )}
+                                        <ProfileImage
+                                            src={
+                                                user.profile_image === "/img/profile_placeholder.png" ||
+                                                user.profile_image === null
+                                                    ? ""
+                                                    : user.profile_image
+                                            }
+                                        />
                                         <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
-                                        {user.profile_image !== "/img/profile_placeholder.png" && (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    handleImageDelete();
-                                                }}
-                                                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-slate-500 duration-150 text-white text-xs font-default font-normal rounded-md w-[60%] hover:bg-slate-800"
-                                            >
-                                                삭제
-                                            </button>
-                                        )}
                                     </div>
                                 </label>
                             </>
-                        ) : user.profile_image === "/img/profile_placeholder.png" ? (
-                            <ProfileImage src="/img/profile_placeholder.png" />
                         ) : (
-                            <img
-                                src={user.profile_image}
-                                alt="user_image"
-                                className="rounded-full w-[80px] h-[80px] object-cover"
-                            />
+                            <div className="relative rounded-full w-[80px] h-[80px]">
+                                <ProfileImage
+                                    src={
+                                        user.profile_image === "/img/profile_placeholder.png" ||
+                                        user.profile_image === null
+                                            ? ""
+                                            : user.profile_image
+                                    }
+                                />
+                            </div>
                         )
-                    ) : otherUser.profile_image === "/img/profile_placeholder.png" ? (
-                        <ProfileImage src="/img/profile_placeholder.png" />
                     ) : (
-                        <img
-                            src={otherUser.profile_image}
-                            alt="other_user_image"
-                            className="rounded-full w-[80px] h-[80px] object-cover"
-                        />
+                        <div className="relative rounded-full w-[80px] h-[80px]">
+                            <ProfileImage
+                                src={
+                                    otherUser.profile_image === "/img/profile_placeholder.png" ||
+                                    otherUser.profile_image === null
+                                        ? ""
+                                        : otherUser.profile_image
+                                }
+                            />
+                        </div>
                     )}
 
                     <div className="flex flex-col gap-1 flex-grow">

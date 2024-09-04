@@ -3,7 +3,7 @@ const ProfileImage = ({ src }: { src: string }) => {
         <div>
             <img
                 className="rounded-full absolute object-cover w-full h-full"
-                src={src === "" ? "/img/profile_placeholder.png" : src}
+                src={src === "" || src === null ? "/img/profile_placeholder.png" : src}
                 alt="Profile Image"
             ></img>
         </div>

@@ -13,7 +13,6 @@ import { MyComment, MyArticle } from "../../config/types";
 import { articleDetail } from "../../api/article";
 import { commentSelect } from "../../api/comment";
 import dayjs from "dayjs";
-import "./scroll.css";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();

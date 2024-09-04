@@ -8,15 +8,15 @@ import { axiosInstance } from "../../api/axios";
 
 interface ContentFooterProps {
     articleId: number;
-    likeCount: number;
-    viewCount: number;
+    like_count: number;
+    view_count: number;
     commentsCount: number;
 }
 
-const ContentFooter = ({ articleId, likeCount, viewCount, commentsCount }: ContentFooterProps) => {
+const ContentFooter = ({ articleId, like_count, view_count, commentsCount }: ContentFooterProps) => {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-    const [currentLikeCount, setCurrentLikeCount] = useState<number>(likeCount);
-    const [currentViewCount, setCurrentViewCount] = useState<number>(viewCount);
+    const [currentLikeCount, setCurrentLikeCount] = useState<number>(like_count);
+    const [currentViewCount, setCurrentViewCount] = useState<number>(view_count);
 
     const handleMouseEnter = (i: number) => {
         setHoverIndex(i);

@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
-import { RiEmotionUnhappyFill, RiEmotionHappyFill, RiAlarmWarningFill } from "react-icons/ri";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import { ImNeutral2, ImHappy2 } from "react-icons/im";
 import { twMerge as tw } from "tailwind-merge";
 import ModalReport from "../modal/ModalReport";
 import ModalPicture from "../modal/ModalPicture";
 import { ModalPortal } from "../../config/ModalPortal";
 import { AiHunsu, MyComment } from "../../config/types";
-import { commenFeedback, commentSelect } from "../../api/comment";
+import { commentFeedback } from "../../api/comment";
 import { useUserStore } from "../../config/store";
 import dayjs from "dayjs";
 
 interface CommentProps {
     onClick?: () => void;
+    onSelect?: (comment_id: number) => void;
     className?: string;
     color?: "default" | "writer" | "ai";
     parent: string;
     comment: MyComment;
     ai?: AiHunsu;
     article_user_id?: number;
-    onCommentSubmit: (newComments: MyComment) => void;
 }
 const CommentDetail = ({
     className,
@@ -26,17 +27,15 @@ const CommentDetail = ({
     comment,
     ai,
     article_user_id,
-    onCommentSubmit,
+    onSelect,
 }: CommentProps) => {
     const { user } = useUserStore();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
-    const [userReaction, setUserReaction] = useState<"helpful" | "not_helpful" | null>(null);
+    const [userReaction, setUserReaction] = useState(comment.reaction || "none");
     const [imageUrl, setImageUrl] = useState("");
     const [helpful, setHelpful] = useState(0);
     const [notHelpful, setNotHelpful] = useState(0);
-    console.log(user);
-
     const content = color === "ai" ? ai?.content : comment?.content;
 
     useEffect(() => {
@@ -46,7 +45,6 @@ const CommentDetail = ({
 
     const handleReportClick = () => setIsReportModalOpen(true);
     const closeReportModal = () => setIsReportModalOpen(false);
-
     const handlePictureClick = (imgUrl: string) => {
         setIsPictureModalOpen(true);
         setImageUrl(imgUrl);
@@ -55,23 +53,16 @@ const CommentDetail = ({
 
     const formatDate = (apiDate?: string) => {
         if (!apiDate) return;
-        const formatDate = dayjs(comment.created_at).format("MM-DD HH:mm");
-        return formatDate;
+        return dayjs(apiDate).format("MM-DD HH:mm");
     };
 
     const formatContentWithLineBreaks = (content: string) => {
         return content.replace(/(?:\r\n|\r|\n)/g, "<br/>");
     };
 
-    const handleSelect = async (comment_id: number) => {
-        console.log(comment_id);
-        try {
-            const response = await commentSelect(comment_id);
-            console.log(response.data);
-            const newComment: MyComment = response.data;
-            onCommentSubmit(newComment);
-        } catch (error) {
-            console.error("채택 실패", error);
+    const handleSelect = () => {
+        if (onSelect) {
+            onSelect(comment.id);
         }
     };
 
@@ -79,7 +70,7 @@ const CommentDetail = ({
         if (type === "helpful") {
             if (userReaction === "helpful") {
                 setHelpful(helpful - 1);
-                setUserReaction(null);
+                setUserReaction("none");
             } else {
                 if (userReaction === "not_helpful") {
                     setNotHelpful(notHelpful - 1);
@@ -90,7 +81,7 @@ const CommentDetail = ({
         } else if (type === "not_helpful") {
             if (userReaction === "not_helpful") {
                 setNotHelpful(notHelpful - 1);
-                setUserReaction(null);
+                setUserReaction("none");
             } else {
                 if (userReaction === "helpful") {
                     setHelpful(helpful - 1);
@@ -100,29 +91,8 @@ const CommentDetail = ({
             }
         }
         try {
-            const response = await commenFeedback(comment_id, type);
+            const response = await commentFeedback(comment_id, type);
             console.log(response.data.detail);
-            // switch (response.data.detail) {
-            //     case "helpful reaction added.":
-            //         setHelpful(helpful + 1);
-            //         break;
-            //     case "helpful reaction removed.":
-            //         setHelpful(helpful - 1);
-            //         break;
-            //     case "not_helpful reaction added.":
-            //         setNotHelpful(notHelpful + 1);
-            //         break;
-            //     case "not_helpful reaction removed.":
-            //         setNotHelpful(notHelpful - 1);
-            //         break;
-            //     case "Reaction changed to not_helpful.":
-            //         setNotHelpful(notHelpful + 1);
-            //         setHelpful(helpful - 1);
-            //         break;
-            //     case "Reaction changed to helpful.":
-            //         setNotHelpful(notHelpful - 1);
-            //         setHelpful(helpful + 1);
-            // }
         } catch (error) {
             console.error("피드백 실패", error);
             if (type === "helpful") {
@@ -137,7 +107,7 @@ const CommentDetail = ({
     return (
         <div
             className={tw(
-                "relative w-[90%] h-full rounded-[15px] p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
+                "relative w-[90%] h-full rounded-2xl p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
                 color === "default" && "bg-gray-100 ",
                 color === "writer" && "bg-primary-second bg-opacity-60",
                 color === "ai" && "bg-slate-800 text-white w-full",
@@ -145,21 +115,21 @@ const CommentDetail = ({
             )}
         >
             <div className={tw("absolute top-3 right-5 text-sm font-normal", color !== "ai" && "text-literal-info")}>
-                {color === "ai" ? formatDate(ai?.created_at) : formatDate(comment?.created_at)}
+                {color === "ai" ? formatDate(ai?.updated_at) : formatDate(comment?.created_at)}
             </div>
 
             <div
                 className={tw(
-                    "absolute top-10 right-5 text-literal-highlight text-lg",
+                    "absolute top-10 right-5 text-literal-highlight text-lg font-medium",
                     color === "default" && "hidden",
                     color === "writer" && "hidden"
                 )}
             >
                 AI
             </div>
-            <div className={tw("flex flex-col gap-3", color === "writer" && "gap-0")}>
-                {comment.images.length > 0 && (
-                    <div className="flex gap-2 mb-1">
+            <div className={tw("flex flex-col gap-0", color === "default" && "gap-3")}>
+                {color !== "ai" && comment.images.length > 0 && (
+                    <div className="flex gap-2 mb-3">
                         {comment.images.map((img) => (
                             <img
                                 key={img.id}
@@ -196,33 +166,39 @@ const CommentDetail = ({
 
                     <div
                         className={tw(
-                            "flex items-center bottom-4 right-4 gap-3",
+                            "flex items-center bottom-4 right-4 gap-5",
                             color === "ai" && "hidden",
                             color === "writer" && "hidden"
                         )}
                     >
                         <div className="flex gap-3 items-center mt-auto">
                             <div className="flex gap-1">
-                                <RiEmotionHappyFill
+                                <ImHappy2
                                     onClick={() => handleReact(comment.id, "helpful")}
-                                    className="text-primary-second-dark my-auto size-5 cursor-pointer duration-150 hover:scale-110 hover:text-[#ff5f1a]"
+                                    className={tw(
+                                        "text-primary-second my-auto size-5 cursor-pointer duration-150 hover:scale-110",
+                                        userReaction === "helpful" && "text-[#FF8800]"
+                                    )}
                                 />
-                                <span className="text-sm">{helpful}</span>
+                                <span className="text-sm font-normal">{helpful}</span>
                             </div>
                             <div className="flex gap-1">
-                                <RiEmotionUnhappyFill
+                                <ImNeutral2
                                     onClick={() => handleReact(comment.id, "not_helpful")}
-                                    className="text-primary-second-dark my-auto size-5 cursor-pointer duration-150 hover:scale-110 hover:text-[#ff5f1a]"
+                                    className={tw(
+                                        "text-red-300 my-auto size-5 cursor-pointer duration-150 hover:scale-110",
+                                        userReaction === "not_helpful" && "text-red-500"
+                                    )}
                                 />
-                                <span className="text-sm">{notHelpful}</span>
+                                <span className="text-sm font-normal">{notHelpful}</span>
                             </div>
                         </div>
                         {comment.is_selected ? (
-                            <p className="font-normal text-literal-highlight text-lg">채택됨</p>
+                            <p className="font-medium text-literal-highlight text-lg">채택됨</p>
                         ) : (
                             user.user_id === article_user_id && (
                                 <button
-                                    onClick={() => handleSelect(comment?.id)}
+                                    onClick={handleSelect}
                                     className="w-[80px] h-[30px] bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]"
                                 >
                                     채택하기

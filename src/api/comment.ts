@@ -13,6 +13,6 @@ export const commentSelect = (comment_id: number) => {
 };
 
 //훈수 도움돼요 안돼요
-export const commenFeedback = (comment_id: number, type: string) => {
+export const commentFeedback = (comment_id: number, type: string) => {
     return axiosInstance.post(`/comment/${comment_id}/react/`, { reaction_type: type }, { withCredentials: true });
 };

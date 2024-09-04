@@ -16,6 +16,7 @@ interface CommentInputProps {
 
 const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: CommentInputProps) => {
     const [preview, setPreview] = useState<string[]>([]);
+    const [files, setFiles] = useState<File[]>([]); // 실제 파일 상태
     const { user } = useUserStore();
     const { register, handleSubmit, reset, setFocus, watch } = useForm<CommentFormData>({
         defaultValues: {
@@ -38,11 +39,11 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
     const onSubmit = async (data: CommentFormData) => {
         const formData = new FormData();
         formData.append("content", data.content);
-        if (data.images) {
-            Array.from(data.images).forEach((file) => {
-                formData.append("images", file);
-            });
-        }
+
+        files.forEach((file) => {
+            formData.append("images", file);
+        });
+
         try {
             const response = await commentCreate(articleId, formData);
             const newComment: MyComment = response.data;
@@ -52,18 +53,21 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
         }
         reset();
         setPreview([]);
+        setFiles([]);
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (files && files.length <= 3) {
-            const previews = Array.from(files).map((file) => URL.createObjectURL(file));
-            setPreview((prevPreviews) => [...prevPreviews, ...previews]);
+        const selectedFiles = e.target.files;
+        if (selectedFiles && selectedFiles.length <= 3) {
+            const newPreviews = Array.from(selectedFiles).map((file) => URL.createObjectURL(file));
+            setPreview((prevPreviews) => [...prevPreviews, ...newPreviews]);
+            setFiles((prevFiles) => [...prevFiles, ...Array.from(selectedFiles)]);
         }
     };
 
     const handleRemoveImage = (index: number) => {
         setPreview((img) => img.filter((_, i) => i !== index));
+        setFiles((file) => file.filter((_, i) => i !== index));
     };
 
     const titleValue = watch("content");
@@ -86,7 +90,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
                             className="rounded-full w-full h-full object-cover"
                         />
                     ) : (
-                        <ProfileImage />
+                        <ProfileImage src={user.profile_image} />
                     )}
                 </div>
             </div>

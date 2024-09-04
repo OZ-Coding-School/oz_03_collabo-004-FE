@@ -30,8 +30,8 @@ const TrendingComment = ({ articleId }: TrendingCommentProps) => {
     }, [articleId]);
 
     return (
-        <div className="w-[226px]">
-            <div className="flex items-center gap-1">
+        <div className="w-full sticky top-[370px] min-w-[170px]">
+            <div className="flex items-center gap-0">
                 <FaFireAlt className="ml-1 text-literal-highlight" />
                 <p className="font-default text-md text-literal-highlight">인기 훈수</p>
             </div>

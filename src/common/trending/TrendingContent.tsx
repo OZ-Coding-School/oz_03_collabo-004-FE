@@ -23,7 +23,7 @@ const TrendingContent = () => {
     }, []);
 
     return (
-        <div className="w-[226px]">
+        <div className="w-full sticky top-20 min-w-[170px]">
             <div className="flex items-center gap-1">
                 <FaFireAlt className="ml-1 text-literal-highlight" />
                 <p className="font-default text-md text-literal-highlight">인기 게시글</p>

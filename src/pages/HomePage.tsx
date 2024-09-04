@@ -8,7 +8,7 @@ import ProfileImage from "./../common/profile/ProfileImage";
 import EditorInput from "../common/input/EditorInput";
 import Content from "../common/content/Content";
 import ContentFooter from "../common/content/ContentFooter";
-import { Article, Tag } from "../config/types";
+import { Article } from "../config/types";
 import SkeletonContent from "../common/skeleton/SkeletonContent";
 import { ModalPortal } from "../config/ModalPortal";
 import ModalEditor from "../common/modal/ModalEditor";
@@ -52,7 +52,7 @@ const HomePage = () => {
             }
 
             setArticles(
-                tag ? response.data.filter((article) => article.tags.some((t: Tag) => t.name === tag)) : response.data
+                tag ? response.data.filter((article) => article.tags.some((t) => t.name === tag)) : response.data
             );
         } catch (error) {
             console.error("Error fetching articles:", error);
@@ -74,50 +74,56 @@ const HomePage = () => {
             <div className="fixed top-0 left-0 z-10 w-full bg-white shadow-md">
                 <Header />
             </div>
-            <div className="home-parent flex flex-col px-4 mt-[50px] md:flex-row max-w-[1280px] mx-auto">
-                <div className={`flex flex-col mt-4 items-center ${isHidden ? "hidden" : "md:w-[226px]"}`}>
-                    <Topic onSelectTag={setSelectedTag} selectedTag={selectedTag} />
-                </div>
-                <div className="flex flex-col items-center flex-1 md:w-[658px]">
-                    <div className="flex items-center mt-4 mb-4 space-x-4">
-                        <div className="w-[40px] h-[40px] relative">
-                            <ProfileImage src={user.profile_image as string} />
-                        </div>
-                        <EditorInput onClick={openEditorModal} />
+
+            <div className="home-parent max-w-[1280px] mx-auto">
+                <div className="flex justify-between mt-16 md:flex-row">
+                    <div className={`md:w-[230px] ${isHidden && "hidden"}`}>
+                        <Topic onSelectTag={setSelectedTag} selectedTag={selectedTag} />
                     </div>
-                    {loading ? (
-                        <>
-                            <div className="mt-1"></div>
-                            <SkeletonContent type={1} />
-                            <div className="mt-10"></div>
-                            <SkeletonContent type={2} />
-                            <div className="mt-10"></div>
-                            <SkeletonContent type={1} />
-                            <div className="mt-10"></div>
-                            <SkeletonContent type={2} />
-                            <div className="mt-10"></div>
-                            <SkeletonContent type={1} />
-                        </>
-                    ) : (
-                        articles.map((article) => (
-                            <div key={article.article_id} className="mb-8">
-                                <ProfileStatus {...article.user} />
-                                <Content {...article} />
-                                <ContentFooter
-                                    articleId={Number(article.article_id)}
-                                    likeCount={article.like_count}
-                                    viewCount={article.view_count}
-                                    commentsCount={article.comments_count}
-                                />
+
+                    <div className="flex flex-col items-center flex-1 md:max-w-[640px]">
+                        <div className="flex items-center mt-4 mb-4 space-x-4">
+                            <div className="w-[40px] h-[40px] relative">
+                                <ProfileImage src={user.profile_image as string} />
                             </div>
-                        ))
-                    )}
-                </div>
-                <div className={`flex flex-col mt-4 ${isHidden ? "hidden" : "md:w-[226px]"} space-y-4`}>
-                    <TrendingContent />
-                    <TrendingComment />
+                            <EditorInput onClick={openEditorModal} />
+                        </div>
+
+                        {loading ? (
+                            <>
+                                <SkeletonContent type={1} />
+                                <div className="mt-10"></div>
+                                <SkeletonContent type={2} />
+                                <div className="mt-10"></div>
+                                <SkeletonContent type={1} />
+                                <div className="mt-10"></div>
+                                <SkeletonContent type={2} />
+                                <div className="mt-10"></div>
+                                <SkeletonContent type={1} />
+                            </>
+                        ) : (
+                            articles.map((article) => (
+                                <div key={article.article_id} className="mb-8">
+                                    <ProfileStatus {...article.user} />
+                                    <Content {...article} />
+                                    <ContentFooter
+                                        articleId={Number(article.article_id)}
+                                        like_count={article.like_count}
+                                        view_count={article.view_count}
+                                        commentsCount={article.comments_count}
+                                    />
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    <div className={`md:w-[250px] ${isHidden && "hidden"}`}>
+                        <TrendingContent />
+                        {articles.length > 0 && <TrendingComment articleId={articles[0].article_id} />}
+                    </div>
                 </div>
             </div>
+
             <ModalPortal>
                 {editorModal && <ModalEditor onClose={closeEditorModal} parent={"home-parent"} isOpen={editorModal} />}
             </ModalPortal>

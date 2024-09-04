@@ -14,6 +14,7 @@ import { ModalPortal } from "../config/ModalPortal";
 import ModalEditor from "../common/modal/ModalEditor";
 import { articleApi } from "../api";
 import { useUserStore } from "../config/store";
+import ModalDetail from "../common/modal/ModalDetail";
 
 const HomePage = () => {
     const [isHidden, setIsHidden] = useState(false);
@@ -22,6 +23,8 @@ const HomePage = () => {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
     const [editorModal, setEditorModal] = useState(false);
     const { user } = useUserStore();
+    const [selectedArticleId, setSelectedArticleId] = useState<number>();
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
     const openEditorModal = () => {
         setEditorModal(true);
@@ -69,6 +72,15 @@ const HomePage = () => {
         fetchArticles(selectedTag);
     }, [selectedTag]);
 
+    const openDetailModal = (article_id: number) => {
+        setSelectedArticleId(article_id);
+        setIsDetailModalOpen(true);
+    };
+
+    const closeDetailModal = () => {
+        setIsDetailModalOpen(false);
+    };
+
     return (
         <div className="relative min-h-screen font-default">
             <div className="fixed top-0 left-0 z-10 w-full bg-white shadow-md">
@@ -103,7 +115,11 @@ const HomePage = () => {
                             </>
                         ) : (
                             articles.map((article) => (
-                                <div key={article.article_id} className="mb-8">
+                                <div
+                                    key={article.article_id}
+                                    className="mb-8 cursor-pointer"
+                                    onClick={() => openDetailModal(article.article_id)}
+                                >
                                     <ProfileStatus {...article.user} />
                                     <Content {...article} />
                                     <ContentFooter
@@ -126,6 +142,16 @@ const HomePage = () => {
 
             <ModalPortal>
                 {editorModal && <ModalEditor onClose={closeEditorModal} parent={"home-parent"} isOpen={editorModal} />}
+            </ModalPortal>
+            <ModalPortal>
+                {isDetailModalOpen && selectedArticleId && (
+                    <ModalDetail
+                        isOpen={isDetailModalOpen}
+                        parent={"home-parent"}
+                        onClose={closeDetailModal}
+                        articleId={selectedArticleId}
+                    />
+                )}
             </ModalPortal>
         </div>
     );

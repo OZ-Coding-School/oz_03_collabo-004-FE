@@ -1,30 +1,46 @@
+import { useEffect, useState } from "react";
 import { FaFireAlt } from "react-icons/fa";
+import { axiosInstance } from "../../api/axios";
+import { Article } from "../../config/types";
 
 const TrendingContent = () => {
-    const items: { rank: number; title: string }[] = [
-        { rank: 1, title: "게임 1일차 훈수 부탁요" },
-        { rank: 2, title: "노래 훈수 부탁드려요" },
-        { rank: 3, title: "25조 리버풀 팀평좀요. 훈수.." },
-        { rank: 4, title: "30세 남성 115kg 다이어트식.." },
-        { rank: 5, title: "컴퓨터 견적 훈수ㄱ" },
-    ];
+    const [trendingArticles, setTrendingArticles] = useState<Article[]>([]);
+
+    useEffect(() => {
+        const fetchTrendingArticles = async () => {
+            try {
+                const response = await axiosInstance.get<Article[]>("/article/", { withCredentials: true });
+
+                const sortedArticles = response.data.sort((a, b) => b.like_count - a.like_count).slice(0, 5);
+
+                setTrendingArticles(sortedArticles);
+            } catch (error) {
+                console.error("Failed to fetch trending articles:", error);
+            }
+        };
+
+        fetchTrendingArticles();
+    }, []);
 
     return (
-        <div className="w-[226px]">
+        <div className="w-full sticky top-20 min-w-[170px]">
             <div className="flex items-center gap-1">
-                <FaFireAlt className="text-literal-highlight ml-1" />
+                <FaFireAlt className="ml-1 text-literal-highlight" />
                 <p className="font-default text-md text-literal-highlight">인기 게시글</p>
             </div>
-            <div className="w-full h-auto bg-white rounded-md py-1 px-1 flex flex-col ">
-                {items.map((item) => (
-                    <div className="flex gap-2 items-center px-2 py-1 rounded-md cursor-pointer transition hover:bg-gray-100">
-                        <p className="font-point text-base text-slate-600">{item.rank}</p>
+            <div className="flex flex-col w-full h-auto px-1 py-1 bg-white rounded-md ">
+                {trendingArticles.map((article, index) => (
+                    <div
+                        key={article.article_id}
+                        className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100"
+                    >
+                        <p className="text-base font-point text-slate-600">{index + 1}</p>
                         <img
-                            src="https://dummyimage.com/32x32/000/fff"
+                            src={article.thumbnail_image || "https://dummyimage.com/32x32/000/fff"}
                             alt="trending-content-image"
-                            className="rounded-md"
+                            className="rounded-md w-[32px] h-[32px]"
                         />
-                        <p className="text-xs font-default font-normal text-literal-normal">{item.title}</p>
+                        <p className="text-xs font-normal font-default text-literal-normal">{article.title}</p>
                     </div>
                 ))}
             </div>

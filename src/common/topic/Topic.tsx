@@ -42,7 +42,7 @@ const Topic = ({ onSelectTag, selectedTag }: TopicProps) => {
     };
 
     return (
-        <div className="w-[226px] bg-white h-auto p-2 rounded-md font-default">
+        <div className="w-full sticky top-20 min-w-[170px] bg-white h-auto p-2 rounded-md font-default">
             <p className="px-1 py-2 text-lg font-medium text-primary-second-dark">카테고리</p>
             <div className="w-full mb-2">
                 <button

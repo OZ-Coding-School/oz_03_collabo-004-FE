@@ -43,7 +43,10 @@ const CommentDetail = ({
         setNotHelpful(comment.not_helpful_count);
     }, [comment.helpful_count, comment.not_helpful_count]);
 
-    const handleReportClick = () => setIsReportModalOpen(true);
+    const handleReportClick = () => {
+        setIsReportModalOpen(true);
+    };
+
     const closeReportModal = () => setIsReportModalOpen(false);
     const handlePictureClick = (imgUrl: string) => {
         setIsPictureModalOpen(true);
@@ -210,7 +213,12 @@ const CommentDetail = ({
             </div>
             <ModalPortal>
                 {isReportModalOpen && (
-                    <ModalReport isOpen={isReportModalOpen} parent={parent} onClose={closeReportModal} />
+                    <ModalReport
+                        isOpen={isReportModalOpen}
+                        parent={parent}
+                        onClose={closeReportModal}
+                        comment_id={comment.id}
+                    />
                 )}
                 {isPictureModalOpen && (
                     <ModalPicture

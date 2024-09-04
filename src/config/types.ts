@@ -3,6 +3,7 @@ export interface ModalProps {
     isOpen: boolean;
     parent: string;
     imageUrl?: string;
+    comment_id?: number;
 }
 
 export interface DetailModalProps {

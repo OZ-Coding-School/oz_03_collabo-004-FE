@@ -64,7 +64,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
             )}
         >
             <div className="flex flex-col flex-grow gap-8">
-                <div className="flex gap-5 items-center">
+                <div className="flex gap-2 lg:gap-5 items-center">
                     {isUserMypage ? (
                         isEdit ? (
                             <>
@@ -87,7 +87,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                 </label>
                             </>
                         ) : (
-                            <div className="relative rounded-full w-[80px] h-[80px]">
+                            <div className="relative rounded-full w-[80px] h-[80px] flex-shrink-0">
                                 <ProfileImage
                                     src={
                                         user.profile_image === "/img/profile_placeholder.png" ||
@@ -122,7 +122,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                 className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second w-full"
                             />
                         ) : (
-                            <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
+                            <div className="text-base text-literal-normal border border-transparent rounded-md pl-2 py-1">
                                 {isUserMypage ? nicknameText : otherUser.nickname}
                             </div>
                         )}
@@ -139,7 +139,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
                         />
                     ) : (
-                        <div className="text-base text-literal-normal border border-transparent rounded-md px-2 py-1">
+                        <div className="text-base text-literal-normal border border-transparent rounded-md pl-2 py-1">
                             {isUserMypage ? bioText : otherUser.bio}
                         </div>
                     )}

@@ -51,6 +51,7 @@ export interface Article {
     created_at: string;
     updated_at: string;
     thumbnail_image: string;
+    is_closed: boolean;
 }
 
 export interface ViewResponse {
@@ -70,6 +71,8 @@ export interface Comment {
     images: CommentImage[];
     user: number;
     user_nickname: string;
+    user_profile_image: string;
+    reaction: string;
 }
 
 export interface CommentImage {

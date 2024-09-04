@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
 import InfoMyPageRight from "../common/info/InfoMyPageRight";
-import useUser from "../hooks/useUser";
 import { accountApi } from "../api";
 import Header from "../common/header/Header";
 import { useOtherUserStore, useUserStore } from "../config/store";
@@ -11,7 +10,6 @@ import { AxiosError } from "axios";
 
 const MyPage = () => {
     const [isUserMypage, setIsUserMypage] = useState<boolean>(false); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
-    const { getUserInfo } = useUser();
     const { user, updateUser } = useUserStore();
     const { setOtherUser } = useOtherUserStore();
     const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
@@ -22,6 +20,7 @@ const MyPage = () => {
             if (!userId) return;
             try {
                 const response = await accountApi.userInfoPublic(Number(userId));
+                console.log(response);
                 if (response.data.status) {
                     updateUser(response.data);
                     setIsUserMypage(response.data.status);
@@ -36,7 +35,6 @@ const MyPage = () => {
                         alert("해당 유저가 없습니다.");
                         navigate("/");
                     } else {
-                        console.error("실패: ", error);
                         alert("문제가 발생했습니다.");
                         navigate("/");
                     }
@@ -46,15 +44,11 @@ const MyPage = () => {
         getDataUserProfile();
     }, [userId, navigate, setOtherUser, updateUser]);
 
-    //새로고침해도 store에 있는 user 유지되도록
     useEffect(() => {
-        if (userId) return;
-        const refreshUserInfo = async () => {
-            await getUserInfo();
+        if (!userId) {
             setIsUserMypage(user.status);
-        };
-        refreshUserInfo();
-    }, [getUserInfo, user.status, userId]);
+        }
+    }, [userId, user.status]);
 
     return (
         <>

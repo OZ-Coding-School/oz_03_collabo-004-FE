@@ -1,9 +1,9 @@
 import { MyArticle, MyComment } from "../../config/types";
-import useFormatDate from "../../hooks/useFormatDate";
 import Badge from "../badge/Badge";
 import ModalDetail from "../modal/ModalDetail";
 import { ModalPortal } from "../../config/ModalPortal";
 import { useState } from "react";
+import dayjs from "dayjs";
 
 interface ContentMyPageProps {
     activeTab: number;
@@ -16,7 +16,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
     const isCommentTab = activeTab === 1 && comment;
 
     const createdAt = isArticleTab ? article.created_at : isCommentTab ? comment.created_at : null;
-    const formattedDate = useFormatDate(createdAt);
+    const formattedDate = dayjs(createdAt).format("YYYY년 MM월 DD일");
 
     //모달관련
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -59,7 +59,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
                             isOpen={isDetailModalOpen}
-                            parent="content-parent"
+                            parent="detail-parent"
                             onClose={closeDetailModal}
                             articleId={article.article_id}
                         />

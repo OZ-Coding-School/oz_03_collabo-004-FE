@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalDelete from "./ModalDelete";
+import { useNavigate } from "react-router-dom";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
@@ -27,6 +28,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
     const [isLoading, setIsLoading] = useState(true);
     const [isSelecting, setIsSelecting] = useState(false);
     const sanitizer = DOMPurify.sanitize;
+    const nav = useNavigate();
 
     const formattedDate = dayjs(articleData && articleData.created_at).format("YYYY년 MM월 DD일");
 
@@ -88,12 +90,13 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 if (aiResponse.status) setAiData(aiResponse.data);
             } catch (error) {
                 console.log("데이터 불러오기 실패", error);
+                nav("/");
             } finally {
                 setIsLoading(false);
             }
         };
         getDetails();
-    }, [articleId]);
+    }, [articleId, nav]);
 
     const handleSelect = async (comment_id: number) => {
         setIsSelecting(true);

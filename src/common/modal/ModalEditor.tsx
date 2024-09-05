@@ -48,7 +48,6 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     };
 
     const handleSetTag = (number: number) => {
-        console.log(number);
         setTags(number);
     };
 

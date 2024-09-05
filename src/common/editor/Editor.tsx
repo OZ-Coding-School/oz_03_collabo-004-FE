@@ -302,7 +302,6 @@ const extensions = [
         lowlight: lowlight,
     }),
     Link,
-    Youtube,
 ];
 
 interface EditorProps {

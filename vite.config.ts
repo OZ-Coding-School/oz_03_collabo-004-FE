@@ -11,4 +11,14 @@ export default defineConfig({
             plugins: [tailwindcss, autoprefixer],
         },
     },
+    server: {
+        proxy: {
+            "/api": {
+                target: "https://api.hunsuking.yoyobar.xyz/api",
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/api/, ""),
+            },
+        },
+    },
 });

@@ -15,19 +15,19 @@ interface CommentProps {
     onSelect?: (comment_id: number) => void;
     className?: string;
     color?: "default" | "writer" | "ai";
-    parent: string;
     comment: MyComment;
     ai?: AiHunsu;
     article_user_id?: number;
+    toast: (text: string) => void;
 }
 const CommentDetail = ({
     className,
     color = "default",
-    parent,
     comment,
     ai,
     article_user_id,
     onSelect,
+    toast,
 }: CommentProps) => {
     const { user } = useUserStore();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -44,6 +44,10 @@ const CommentDetail = ({
     }, [comment.helpful_count, comment.not_helpful_count]);
 
     const handleReportClick = () => {
+        if (user.user_id === 0) {
+            toast("로그인 후 이용가능합니다.");
+            return;
+        }
         setIsReportModalOpen(true);
     };
 
@@ -70,6 +74,10 @@ const CommentDetail = ({
     };
 
     const handleReact = async (comment_id: number, type: "helpful" | "not_helpful") => {
+        if (user.user_id === 0) {
+            toast("로그인 후 이용가능합니다.");
+            return;
+        }
         if (type === "helpful") {
             if (userReaction === "helpful") {
                 setHelpful(helpful - 1);
@@ -213,20 +221,10 @@ const CommentDetail = ({
             </div>
             <ModalPortal>
                 {isReportModalOpen && (
-                    <ModalReport
-                        isOpen={isReportModalOpen}
-                        parent={parent}
-                        onClose={closeReportModal}
-                        comment_id={comment.id}
-                    />
+                    <ModalReport isOpen={isReportModalOpen} onClose={closeReportModal} comment_id={comment.id} />
                 )}
                 {isPictureModalOpen && (
-                    <ModalPicture
-                        isOpen={isPictureModalOpen}
-                        parent={parent}
-                        onClose={closePictureModal}
-                        imageUrl={imageUrl}
-                    />
+                    <ModalPicture isOpen={isPictureModalOpen} onClose={closePictureModal} imageUrl={imageUrl} />
                 )}
             </ModalPortal>
         </div>

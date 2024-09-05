@@ -13,6 +13,7 @@ import { MyComment, MyArticle } from "../../config/types";
 import { articleDetail } from "../../api/article";
 import { commentSelect } from "../../api/comment";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
@@ -22,6 +23,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
     const [hideInput, setHideInput] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSelecting, setIsSelecting] = useState(false);
+    const sanitizer = DOMPurify.sanitize;
 
     const formattedDate = dayjs(articleData && articleData.created_at).format("YYYY년 MM월 DD일");
 
@@ -106,7 +108,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[870px] md:max-h-[90vh] md:rounded-3xl md:mt-10 bg-white relative py-10 px-5 md:px-14 overflow-auto "
+                    className="outline-none w-full h-full md:w-[870px] md:max-h-[90vh] md:rounded-3xl md:mt-10 bg-white relative py-10 px-5 md:px-14 overflow-auto"
                 >
                     {isLoading ? (
                         <div className="flex justify-center items-center h-full"></div>
@@ -142,9 +144,13 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                 <p className="text-gray-500">{formattedDate}</p>
                             </div>
                             <div className="text-xl my-2">{articleData && articleData.title}</div>
-                            <div className="pt-3 pb-20 mb-3 border-b border-b-gray-100">
-                                {articleData && articleData.content}
-                            </div>
+                            <div
+                                className="pt-3 pb-20 mb-3 border-b border-b-gray-100"
+                                dangerouslySetInnerHTML={{
+                                    __html: sanitizer((articleData && articleData.content) || ""),
+                                }}
+                            />
+
                             {articleData &&
                                 user.user_id !== articleData.user.user_id &&
                                 !hideInput &&

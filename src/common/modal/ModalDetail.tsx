@@ -4,7 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { AiHunsu, DetailModalProps } from "../../config/types";
 import Badge from "../badge/Badge";
 import Comment from "../comment/Comment";
-import { useUserStore } from "../../config/store";
+import { useToastStore, useUserStore } from "../../config/store";
 import CommentInput from "../comment/CommentInput";
 import { twMerge as tw } from "tailwind-merge";
 import { aiHunsuDetail } from "../../api/ai";
@@ -17,12 +17,14 @@ import DOMPurify from "dompurify";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalDelete from "./ModalDelete";
 import { useNavigate } from "react-router-dom";
+import Toast from "../toast/Toast";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
     const [modalDeleteStatus, setModalDeleteStatus] = useState(false);
     const [comments, setComments] = useState<MyComment[]>([]);
     const [articleData, setArticleData] = useState<MyArticle | undefined>(undefined);
+    const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
     const [aiData, setAiData] = useState<AiHunsu>();
     const [hideInput, setHideInput] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -100,6 +102,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
 
     const handleSelect = async (comment_id: number) => {
         setIsSelecting(true);
+        setSelectedCommentId(comment_id);
         try {
             const response = await commentSelect(comment_id);
             console.log("채택 성공:", response.data);
@@ -123,6 +126,11 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
         setHideInput(result);
     }, [comments, user.user_id]);
 
+    const { toast, setToast } = useToastStore();
+    const toastHandler = (text: string) => {
+        setToast(true, text);
+    };
+
     return (
         <>
             <motion.nav
@@ -135,12 +143,13 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 onClick={onClose}
                 className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-40 "
             >
+                {toast.status && <Toast />}
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[870px] md:max-h-[90vh] md:rounded-3xl md:mt-10 bg-white relative py-10 px-5 md:px-14 overflow-auto"
+                    className="outline-none w-full h-full md:w-[870px] md:max-h-[95vh] md:rounded-3xl bg-white relative py-10 px-5 md:px-14 overflow-auto"
                 >
                     {isLoading ? (
                         <div className="flex justify-center items-center h-full"></div>
@@ -195,6 +204,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                             onClose={onClose}
                                             articleId={articleData?.article_id}
                                             onCommentSubmit={handleCommentSubmit}
+                                            toast={toastHandler}
                                         />
                                     </div>
                                 )}
@@ -220,26 +230,26 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                         <Comment
                                             key={`comment-${comment.id}-${index}`}
                                             color={comment.user === user.user_id ? "writer" : "default"}
-                                            parent="comment-parent"
                                             comment={comment}
                                             article_user_id={articleData && articleData.user.user_id}
                                             onSelect={handleSelect}
+                                            toast={toastHandler}
                                         />
-                                        {/* ai 있을때 */}
-                                        {isSelecting ? (
+
+                                        {/* 선택된 comment_id 뒤에만 스켈레톤 표시 */}
+                                        {selectedCommentId === comment.id && isSelecting && (
                                             <div className="animate-pulse w-full h-32 bg-gray-200 rounded-2xl mt-2 mb-2"></div>
-                                        ) : (
-                                            comment.is_selected &&
-                                            aiData && (
-                                                <Comment
-                                                    key={`ai-${comment.id}-${index}`}
-                                                    color="ai"
-                                                    parent="comment-parent"
-                                                    comment={comment}
-                                                    ai={aiData}
-                                                    article_user_id={articleData && articleData.user.user_id}
-                                                />
-                                            )
+                                        )}
+                                        {/* ai 있을때 */}
+                                        {comment.is_selected && aiData && (
+                                            <Comment
+                                                key={`ai-${comment.id}-${index}`}
+                                                color="ai"
+                                                comment={comment}
+                                                ai={aiData}
+                                                article_user_id={articleData && articleData.user.user_id}
+                                                toast={toastHandler}
+                                            />
                                         )}
                                     </motion.div>
                                 ))}

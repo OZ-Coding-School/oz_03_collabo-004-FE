@@ -6,4 +6,5 @@ export const axiosInstance = axios.create({
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
     },
+    withCredentials: true,
 });

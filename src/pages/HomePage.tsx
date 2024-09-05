@@ -112,7 +112,7 @@ const HomePage = () => {
                         filterArticle.map((article) => (
                             <motion.div
                                 animate={{ opacity: [0, 1], translateY: [10, 0] }}
-                                className="mb-4"
+                                className="mb-4 w-full"
                                 key={article.article_id}
                             >
                                 <ProfileStatus
@@ -121,20 +121,22 @@ const HomePage = () => {
                                     profile_image={article.user.profile_image}
                                     user_id={article.user.user_id}
                                 />
-                                <Content
-                                    onClick={handleArticleClick}
-                                    id={article.article_id}
-                                    title={article.title}
-                                    content={article.content}
-                                    thumbnail_image={article.thumbnail_image}
-                                />
-                                <ContentFooter
-                                    commentsCountClick={handleArticleClick}
-                                    commentsCount={article.comments_count}
-                                    view_count={article.view_count}
-                                    like_count={article.like_count}
-                                    articleId={article.article_id}
-                                />
+                                <div className="hover:shadow-md duration-200 hover:-translate-y-1 rounded-xl">
+                                    <Content
+                                        onClick={handleArticleClick}
+                                        id={article.article_id}
+                                        title={article.title}
+                                        content={article.content}
+                                        thumbnail_image={article.thumbnail_image}
+                                    />
+                                    <ContentFooter
+                                        commentsCountClick={handleArticleClick}
+                                        commentsCount={article.comments_count}
+                                        view_count={article.view_count}
+                                        like_count={article.like_count}
+                                        articleId={article.article_id}
+                                    />
+                                </div>
                             </motion.div>
                         ))}
                 </main>

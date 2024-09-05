@@ -1,174 +1,106 @@
-import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
-import { IoMdArrowDropup } from "react-icons/io";
 import { DUMMY_TAGS } from "../../config/const";
-import { motion, Variants } from "framer-motion";
+import { FaChevronRight } from "react-icons/fa6";
+import { useArticleStore } from "../../config/store";
 
-const dropdownVariants: Variants = {
-    open: {
-        height: "auto",
-        transition: {
-            type: "spring",
-            bounce: 0,
-            duration: 0.3,
-        },
-    },
-    closed: {
-        height: 0,
-        transition: {
-            type: "spring",
-            bounce: 0,
-            duration: 0.3,
-        },
-    },
-};
+const Topic = () => {
+    const { selectTag, setTag } = useArticleStore();
 
-interface TopicProps {
-    onSelectTag: (tag: string | null) => void;
-    selectedTag: string | null;
-}
-
-const Topic = ({ onSelectTag, selectedTag }: TopicProps) => {
-    const [isDailyOpen, setIsDailyOpen] = useState(true);
-    const [isGameOpen, setIsGameOpen] = useState(true);
-    const [isEduOpen, setIsEduOpen] = useState(true);
-
-    const handleTagClick = (tag: string) => {
-        if (selectedTag === tag) {
-            onSelectTag(null); // 이미 선택된 태그를 클릭하면 선택 해제
-        } else {
-            onSelectTag(tag); // 태그 선택
-        }
+    const handleTagClick = (id: number) => {
+        if (selectTag === id) return;
+        setTag(id);
     };
 
     return (
-        <div className="w-full sticky top-20 min-w-[170px] bg-white h-auto p-2 rounded-md font-default">
-            <p className="px-1 py-2 text-lg font-medium text-primary-second-dark">카테고리</p>
-            <div className="w-full mb-2">
-                <button
-                    onClick={() => setIsDailyOpen(!isDailyOpen)}
+        <div className="select-none w-full h-full bg-white p-2 rounded-md font-default">
+            <p
+                onClick={() => setTag(0)}
+                className={tw(
+                    "cursor-pointer hover:text-primary-second-dark transition px-1 text-lg font-medium",
+                    selectTag === 0 && "text-primary-second-dark"
+                )}
+            >
+                전체
+            </p>
+            <Line />
+            <ul className="pl-2 space-y-2 overflow-hidden text-md text-literal-normal mb-2">
+                <li
+                    key={DUMMY_TAGS[1].id}
+                    onClick={() => setTag(DUMMY_TAGS[1].id)}
                     className={tw(
-                        "w-full bg-transparent mb-1 p-2 rounded-md flex items-center justify-between text-gray-700",
-                        isDailyOpen && "bg-gray-100"
+                        "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                        selectTag === DUMMY_TAGS[1].id && "text-primary-second-dark"
                     )}
                 >
-                    일상
-                    <motion.div
-                        animate={isDailyOpen ? "open" : "closed"}
-                        variants={{
-                            open: { rotate: 180 },
-                            closed: { rotate: 0 },
-                        }}
-                        transition={{ duration: 0.2 }}
-                        style={{ originY: 0.55 }}
-                    >
-                        <IoMdArrowDropup />
-                    </motion.div>
-                </button>
-                <motion.ul
-                    initial={false}
-                    animate={isDailyOpen ? "open" : "closed"}
-                    variants={dropdownVariants}
-                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
-                >
-                    {DUMMY_TAGS.slice(0, 6).map((i) => (
+                    {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="text-sm" />
+                </li>
+            </ul>
+
+            <div className="w-full mb-2">
+                <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
+                    {DUMMY_TAGS.slice(2, 8).map((i) => (
                         <li
                             key={i.id}
-                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
+                            onClick={() => handleTagClick(i.id)}
                             className={tw(
                                 "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
-                                selectedTag === i.text && "text-primary-second-dark"
+                                selectTag === i.id && "text-primary-second-dark"
                             )}
                         >
                             {i.icon} {i.text}
                         </li>
                     ))}
-                </motion.ul>
+                </ul>
             </div>
+            <Line />
             <div className="w-full mb-2">
-                <button
-                    onClick={() => setIsGameOpen(!isGameOpen)}
-                    className={tw(
-                        "w-full bg-transparent mb-1 p-2 rounded-md flex items-center justify-between text-gray-700",
-                        isGameOpen && "bg-gray-100"
-                    )}
-                >
-                    게임
-                    <motion.div
-                        animate={isGameOpen ? "open" : "closed"}
-                        variants={{
-                            open: { rotate: 180 },
-                            closed: { rotate: 0 },
-                        }}
-                        transition={{ duration: 0.2 }}
-                        style={{ originY: 0.55 }}
+                <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
+                    <li
+                        key={DUMMY_TAGS[8].id}
+                        onClick={() => handleTagClick(DUMMY_TAGS[8].id)} // 태그 클릭 시 처리
+                        className={tw(
+                            "flex text-md items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                            selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark"
+                        )}
                     >
-                        <IoMdArrowDropup />
-                    </motion.div>
-                </button>
-                <motion.ul
-                    initial={false}
-                    animate={isGameOpen ? "open" : "closed"}
-                    variants={dropdownVariants}
-                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
-                >
-                    {DUMMY_TAGS.slice(6, 9).map((i) => (
+                        {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="text-sm" />
+                    </li>
+
+                    {DUMMY_TAGS.slice(9, 11).map((i) => (
                         <li
                             key={i.id}
-                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
+                            onClick={() => handleTagClick(i.id)} // 태그 클릭 시 처리
                             className={tw(
                                 "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
-                                selectedTag === i.text && "text-primary-second-dark"
+                                selectTag === i.id && "text-primary-second-dark"
                             )}
                         >
                             {i.icon} {i.text}
                         </li>
                     ))}
-                </motion.ul>
+                </ul>
             </div>
+            <Line />
             <div className="w-full mb-2">
-                <button
-                    onClick={() => setIsEduOpen(!isEduOpen)}
-                    className={tw(
-                        "w-full bg-transparent mb-1 p-2 rounded-md flex items-center justify-between text-gray-700",
-                        isEduOpen && "bg-gray-100"
-                    )}
-                >
-                    교육
-                    <motion.div
-                        animate={isEduOpen ? "open" : "closed"}
-                        variants={{
-                            open: { rotate: 180 },
-                            closed: { rotate: 0 },
-                        }}
-                        transition={{ duration: 0.2 }}
-                        style={{ originY: 0.55 }}
+                <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
+                    <li
+                        key={DUMMY_TAGS[11].id}
+                        onClick={() => handleTagClick(DUMMY_TAGS[11].id)} // 태그 클릭 시 처리
+                        className={tw(
+                            "flex text-md items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                            selectTag === DUMMY_TAGS[11].id && "text-primary-second-dark"
+                        )}
                     >
-                        <IoMdArrowDropup />
-                    </motion.div>
-                </button>
-                <motion.ul
-                    initial={false}
-                    animate={isEduOpen ? "open" : "closed"}
-                    variants={dropdownVariants}
-                    className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal"
-                >
-                    {DUMMY_TAGS.slice(9, 10).map((i) => (
-                        <li
-                            key={i.id}
-                            onClick={() => handleTagClick(i.text)} // 태그 클릭 시 처리
-                            className={tw(
-                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
-                                selectedTag === i.text && "text-primary-second-dark"
-                            )}
-                        >
-                            {i.icon} {i.text}
-                        </li>
-                    ))}
-                </motion.ul>
+                        {DUMMY_TAGS[11].icon} {DUMMY_TAGS[11].text}
+                    </li>
+                </ul>
             </div>
         </div>
     );
 };
 
 export default Topic;
+
+const Line = () => {
+    return <div className="w-full border-b my-2"></div>;
+};

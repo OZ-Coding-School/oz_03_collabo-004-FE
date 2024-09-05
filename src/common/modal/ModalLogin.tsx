@@ -7,10 +7,12 @@ import ButtonLogin from "../button/ButtonLogin";
 import { authApi } from "../../api";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../config/store";
 
 const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const nav = useNavigate();
+    const { setStatus } = useAuthStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -32,7 +34,7 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
     const googleLoginRequest = async (token: string) => {
         try {
             await authApi.userGoogleAccessTokenReceiver(token);
-            nav("/");
+            setStatus(true);
             onClose();
         } catch (error) {
             console.error("login failed", error);

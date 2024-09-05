@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../button/Button";
-import ProfileImage from "../profile/ProfileImage";
 import { HiMenu, HiX } from "react-icons/hi";
 import { ModalPortal } from "../../config/ModalPortal";
 import ModalLogin from "../modal/ModalLogin";
 import ModalRegister from "../modal/ModalRegister";
-import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../config/store";
 
 const menuVariants = {
     closed: { opacity: 0, x: 50 },
@@ -15,11 +12,9 @@ const menuVariants = {
 };
 
 const HeaderInfo = () => {
-    const nav = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-    const { user } = useUserStore();
 
     const loginModalCloseHandler = () => {
         setIsMenuOpen(false);
@@ -40,10 +35,6 @@ const HeaderInfo = () => {
 
     return (
         <div className="flex justify-center items-center relative">
-            <div onClick={() => nav("/my")} className="w-[40px] h-[40px] relative cursor-pointer">
-                <ProfileImage src={user.profile_image as string} />
-            </div>
-            <div className="h-[36px] w-[1px] bg-slate-200 mx-3 hidden md:flex"></div>
             <div className="gap-[10px] hidden md:flex">
                 <Button onClick={loginModalOpenHandler}>로그인</Button>
                 <Button onClick={registerModalOpenHandler}>회원가입</Button>

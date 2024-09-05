@@ -1,5 +1,15 @@
 import { create } from "zustand";
-import { UserData } from "./types";
+import { UserData, AllArticle } from "./types";
+
+interface AuthStore {
+    status: null | boolean;
+    setStatus: (bool: boolean) => void;
+}
+
+export const useAuthStore = create<AuthStore>((set) => ({
+    status: null,
+    setStatus: (bool: boolean) => set(() => ({ status: bool })),
+}));
 interface ToastStore {
     toast: {
         status: boolean;
@@ -17,8 +27,11 @@ export const useToastStore = create<ToastStore>((set) => ({
 
 interface UserStore {
     user: UserData;
+    otherUser: UserData;
     initUser: (Form: UserData) => void;
+    initOtherUser: (Form: UserData) => void;
     updateUser: (user: Partial<UserData>) => void;
+    updateOtherUser: (user: Partial<UserData>) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -35,20 +48,6 @@ export const useUserStore = create<UserStore>((set) => ({
         warning_count: 0,
         status: true,
     },
-    initUser: (form: UserData) => set(() => ({ user: form })),
-    updateUser: (updatedUser) =>
-        set((state) => ({
-            user: { ...state.user, ...updatedUser },
-        })),
-}));
-
-interface OtherUserStore {
-    otherUser: UserData;
-    setOtherUser: (Form: UserData) => void;
-    updateUser: (user: Partial<UserData>) => void;
-}
-
-export const useOtherUserStore = create<OtherUserStore>((set) => ({
     otherUser: {
         articles: [],
         bio: null,
@@ -62,9 +61,29 @@ export const useOtherUserStore = create<OtherUserStore>((set) => ({
         warning_count: 0,
         status: false,
     },
-    setOtherUser: (form: UserData) => set(() => ({ otherUser: form })),
+    initUser: (form: UserData) => set(() => ({ user: form })),
+    initOtherUser: (form: UserData) => set(() => ({ otherUser: form })),
     updateUser: (updatedUser) =>
         set((state) => ({
-            otherUser: { ...state.otherUser, ...updatedUser },
+            user: { ...state.user, ...updatedUser },
         })),
+    updateOtherUser: (updatedUser) =>
+        set((state) => ({
+            otherUser: { ...state.user, ...updatedUser },
+        })),
+}));
+
+interface ArticleStore {
+    article: AllArticle[] | null;
+    selectTag: number;
+
+    initArticle: (form: AllArticle[]) => void;
+    setTag: (tag: number) => void;
+}
+
+export const useArticleStore = create<ArticleStore>((set) => ({
+    article: null,
+    selectTag: 0,
+    initArticle: (form: AllArticle[]) => set(() => ({ article: form })),
+    setTag: (tag: number) => set(() => ({ selectTag: tag })),
 }));

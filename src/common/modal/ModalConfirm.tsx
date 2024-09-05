@@ -5,14 +5,13 @@ import Button from "../button/Button";
 import { articleApi } from "../../api";
 import { useArticleStore } from "../../config/store";
 
-interface ModalDeleteProps {
+interface ModalConfirmProps {
     onClose: () => void;
     parentOnClose: () => void;
     isOpen: boolean;
-    id: number;
 }
 
-const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) => {
+const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => {
     const modalRef = useRef<HTMLTextAreaElement>(null);
     const { initArticle } = useArticleStore();
     useEffect(() => {
@@ -21,8 +20,7 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
         }
     }, [isOpen]);
 
-    const handleDeleteArticle = async (id: number) => {
-        await articleApi.articleDelete(id);
+    const handleConfirm = async () => {
         const responseArticle = await articleApi.ArticleList();
         initArticle(responseArticle.data);
         onClose();
@@ -52,13 +50,13 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
                     className="outline-none w-full h-full md:w-[570px] md:h-[240px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
                     <div className="px-12 md:px-[110px] flex flex-col w-full h-full justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center ">훈수 삭제</div>
+                        <div className="w-full font-bold text-lg font-point text-center ">글 작성 취소</div>
                         <div className="text-literal-error mt-5 w-full text-center font-semibold">
-                            정말 게시글을 삭제하시겠습니까?
+                            작성을 취소하시겠습니까? 내용은 저장되지 않습니다.
                         </div>
                         <div className="w-full flex gap-5 mt-10">
-                            <Button onClick={() => handleDeleteArticle(id)} className="w-full" color="danger">
-                                삭제
+                            <Button onClick={handleConfirm} className="w-full">
+                                확인
                             </Button>
                             <Button onClick={onClose} className="w-full">
                                 취소
@@ -77,4 +75,4 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
     );
 };
 
-export default ModalDelete;
+export default ModalConfirm;

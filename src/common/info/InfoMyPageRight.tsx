@@ -3,7 +3,7 @@ import Button from "../button/Button";
 import { useEffect, useState } from "react";
 import TagSkill from "../tag/TagSkill";
 import { DUMMY_TAGS } from "../../config/const";
-import { useOtherUserStore, useToastStore, useUserStore } from "../../config/store";
+import { useToastStore, useUserStore } from "../../config/store";
 import Toast from "../../common/toast/Toast";
 import { userInfoUpdate } from "../../api/account";
 import useLevelTitle from "../../hooks/useLevelTitle";
@@ -14,8 +14,7 @@ type InfoMyPageLeftProps = {
 
 const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const { toast, setToast } = useToastStore();
-    const { user } = useUserStore();
-    const { otherUser } = useOtherUserStore();
+    const { user, otherUser } = useUserStore();
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
@@ -97,7 +96,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
             <div className="flex flex-wrap gap-1 md:gap-3">
                 {isUserMypage ? (
                     isEdit ? (
-                        DUMMY_TAGS.filter((tag) => tag.id !== 6).map((tag) => (
+                        DUMMY_TAGS.filter((tag) => tag.id !== 0 && tag.id !== 8).map((tag) => (
                             <TagSkill
                                 key={tag.id}
                                 tagIcon={tag.icon}

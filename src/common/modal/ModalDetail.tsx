@@ -13,9 +13,12 @@ import { MyComment, MyArticle } from "../../config/types";
 import { articleDetail } from "../../api/article";
 import { commentSelect } from "../../api/comment";
 import dayjs from "dayjs";
+import { ModalPortalModal } from "../../config/ModalPortalModal";
+import ModalDelete from "./ModalDelete";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
+    const [modalDeleteStatus, setModalDeleteStatus] = useState(false);
     const [comments, setComments] = useState<MyComment[]>([]);
     const [articleData, setArticleData] = useState<MyArticle | undefined>(undefined);
     const [aiData, setAiData] = useState<AiHunsu>();
@@ -24,6 +27,10 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
     const [isSelecting, setIsSelecting] = useState(false);
 
     const formattedDate = dayjs(articleData && articleData.created_at).format("YYYY년 MM월 DD일");
+
+    const handleModalDeleteClose = () => {
+        setModalDeleteStatus(false);
+    };
 
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
@@ -47,13 +54,11 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
             setIsLoading(true);
             try {
                 const articleResponse = await articleDetail(articleId);
-                console.log(articleResponse.data);
+
                 setArticleData(articleResponse.data);
                 setComments(articleResponse.data.comments || []);
 
-                // AI 바로 가져옴
                 const aiResponse = await aiHunsuDetail(articleId);
-                console.log(aiResponse.data);
                 if (aiResponse.status) setAiData(aiResponse.data);
             } catch (error) {
                 console.log("데이터 불러오기 실패", error);
@@ -95,7 +100,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="modal-content fixed flex justify-center items-center inset-0 bg-black w-full h-full"
             ></motion.nav>
             <div
                 onClick={onClose}
@@ -129,7 +134,10 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                                     수정
                                                 </span>
                                                 /
-                                                <span className="cursor-pointer duration-150 hover:text-literal-normal">
+                                                <span
+                                                    onClick={() => setModalDeleteStatus(true)}
+                                                    className="cursor-pointer duration-150 hover:text-literal-normal"
+                                                >
                                                     삭제
                                                 </span>
                                             </>
@@ -209,6 +217,16 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                     />
                 </motion.nav>
             </div>
+            <ModalPortalModal>
+                {modalDeleteStatus && (
+                    <ModalDelete
+                        isOpen={modalDeleteStatus}
+                        onClose={handleModalDeleteClose}
+                        parentOnClose={onClose}
+                        id={articleId}
+                    />
+                )}
+            </ModalPortalModal>
         </>
     );
 };

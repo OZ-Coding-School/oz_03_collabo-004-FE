@@ -4,6 +4,7 @@ import ModalDetail from "../modal/ModalDetail";
 import { ModalPortal } from "../../config/ModalPortal";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { DUMMY_TAGS } from "../../config/const";
 
 interface ContentMyPageProps {
     activeTab: number;

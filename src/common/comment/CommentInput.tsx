@@ -14,9 +14,10 @@ interface CommentInputProps {
     onClose?: () => void;
     articleId?: number;
     onCommentSubmit: (newComments: MyComment) => void;
+    toast: (text: string) => void;
 }
 
-const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: CommentInputProps) => {
+const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit, toast }: CommentInputProps) => {
     const [preview, setPreview] = useState<string[]>([]);
     const [files, setFiles] = useState<File[]>([]); // 실제 파일 상태
     const { user } = useUserStore();
@@ -54,7 +55,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
             if (error instanceof AxiosError && error.response) {
                 console.log("훈수작성 실패", error);
                 if (error.response.status === 401) {
-                    alert("로그인 후 이용 가능합니다.");
+                    toast("로그인 후 사용가능합니다.");
                 }
             }
         }

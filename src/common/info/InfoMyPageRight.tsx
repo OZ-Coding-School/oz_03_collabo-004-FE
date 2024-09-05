@@ -96,7 +96,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
             <div className="flex flex-wrap gap-1 md:gap-3">
                 {isUserMypage ? (
                     isEdit ? (
-                        DUMMY_TAGS.filter((tag) => tag.id !== 0 && tag.id !== 8).map((tag) => (
+                        DUMMY_TAGS.filter((tag) => tag.id > 1 && tag.id !== 8).map((tag) => (
                             <TagSkill
                                 key={tag.id}
                                 tagIcon={tag.icon}

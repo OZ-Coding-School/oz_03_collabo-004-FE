@@ -69,7 +69,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
                             isOpen={isDetailModalOpen}
-                            parent="detail-parent"
+                            parent="home-parent"
                             onClose={closeDetailModal}
                             articleId={article.article_id}
                         />
@@ -112,7 +112,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
                             isOpen={isDetailModalOpen}
-                            parent="content-parent"
+                            parent="home-parent"
                             onClose={closeDetailModal}
                             articleId={Number(comment.article_id)}
                         />

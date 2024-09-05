@@ -12,27 +12,27 @@ const Topic = () => {
     };
 
     return (
-        <div className="select-none w-full h-full bg-white p-2 rounded-md font-default">
+        <div className="select-none w-full h-full bg-white p-2 rounded-xl font-default">
             <p
                 onClick={() => setTag(0)}
                 className={tw(
-                    "cursor-pointer hover:text-primary-second-dark transition px-1 text-lg font-medium",
+                    "cursor-pointer hover:text-primary-second-dark transition font-point px-1 text-literal-normal text-lg font-medium",
                     selectTag === 0 && "text-primary-second-dark"
                 )}
             >
-                전체
+                모든 훈수
             </p>
             <Line />
-            <ul className="pl-2 space-y-2 overflow-hidden text-md text-literal-normal mb-2">
+            <ul className="pl-2 space-y-2 overflow-hidden text-md text-literal-normal mb-2 bg-gray-100 p-2 rounded-md">
                 <li
                     key={DUMMY_TAGS[1].id}
                     onClick={() => setTag(DUMMY_TAGS[1].id)}
                     className={tw(
-                        "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                        "flex items-center gap-2 duration-100 font-medium hover:text-primary-second-dark cursor-pointer",
                         selectTag === DUMMY_TAGS[1].id && "text-primary-second-dark"
                     )}
                 >
-                    {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="text-sm" />
+                    {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="text-sm ml-auto" />
                 </li>
             </ul>
 
@@ -53,23 +53,25 @@ const Topic = () => {
                 </ul>
             </div>
             <Line />
+            <ul className="pl-2 space-y-2 overflow-hidden text-md text-literal-normal mb-2 bg-gray-100 p-2 rounded-md">
+                <li
+                    key={DUMMY_TAGS[8].id}
+                    onClick={() => handleTagClick(DUMMY_TAGS[8].id)}
+                    className={tw(
+                        "flex text-md items-center gap-2 font-medium duration-100 hover:text-primary-second-dark cursor-pointer",
+                        selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark"
+                    )}
+                >
+                    {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="text-sm ml-auto" />
+                </li>
+            </ul>
+
             <div className="w-full mb-2">
                 <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
-                    <li
-                        key={DUMMY_TAGS[8].id}
-                        onClick={() => handleTagClick(DUMMY_TAGS[8].id)} // 태그 클릭 시 처리
-                        className={tw(
-                            "flex text-md items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
-                            selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark"
-                        )}
-                    >
-                        {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="text-sm" />
-                    </li>
-
                     {DUMMY_TAGS.slice(9, 11).map((i) => (
                         <li
                             key={i.id}
-                            onClick={() => handleTagClick(i.id)} // 태그 클릭 시 처리
+                            onClick={() => handleTagClick(i.id)}
                             className={tw(
                                 "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
                                 selectTag === i.id && "text-primary-second-dark"
@@ -82,12 +84,12 @@ const Topic = () => {
             </div>
             <Line />
             <div className="w-full mb-2">
-                <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
+                <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-2 rounded-md">
                     <li
                         key={DUMMY_TAGS[11].id}
                         onClick={() => handleTagClick(DUMMY_TAGS[11].id)} // 태그 클릭 시 처리
                         className={tw(
-                            "flex text-md items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
+                            "flex text-md items-center gap-2 font-medium duration-100 hover:text-primary-second-dark cursor-pointer",
                             selectTag === DUMMY_TAGS[11].id && "text-primary-second-dark"
                         )}
                     >

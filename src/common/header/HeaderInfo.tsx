@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../button/Button";
 import { HiMenu, HiX } from "react-icons/hi";
-import { ModalPortal } from "../../config/ModalPortal";
 import ModalLogin from "../modal/ModalLogin";
 import ModalRegister from "../modal/ModalRegister";
+import { ModalPortal } from "../../config/ModalPortal";
 
 const menuVariants = {
     closed: { opacity: 0, x: 50 },

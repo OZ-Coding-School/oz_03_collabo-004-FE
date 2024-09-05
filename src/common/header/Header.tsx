@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import HeaderInfo from "./HeaderInfo";
 import HeaderInfoLogged from "./HeaderInfoLogged";
 import HeaderSearch from "./HeaderSearch";
-import useUser from "../../hooks/useUser";
 import { useEffect } from "react";
 import { authApi } from "../../api";
 import { useAuthStore } from "../../config/store";

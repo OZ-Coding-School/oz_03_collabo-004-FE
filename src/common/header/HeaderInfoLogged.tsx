@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
 import Button from "../button/Button";
-import { authApi } from "../../api";
-import useUser from "../../hooks/useUser";
+import { accountApi, authApi } from "../../api";
 import { useEffect, useState } from "react";
 import { IoPencil } from "react-icons/io5";
 import { ModalPortal } from "../../config/ModalPortal";
@@ -11,8 +10,7 @@ import ModalEditor from "../modal/ModalEditor";
 import { HiMiniBellAlert } from "react-icons/hi2";
 const HeaderInfoLogged = () => {
     const nav = useNavigate();
-    const { user } = useUserStore();
-    const { getUserInfo } = useUser();
+    const { user, initUser } = useUserStore();
     const [modalEditorStatus, setModalEditorStatus] = useState(false);
 
     const modalEditorStatusClose = () => {
@@ -26,10 +24,11 @@ const HeaderInfoLogged = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getUserInfo();
+            const response = await accountApi.userInfo();
+            initUser(response.data);
         };
         fetchData();
-    }, [getUserInfo]);
+    }, [initUser]);
 
     return (
         <>

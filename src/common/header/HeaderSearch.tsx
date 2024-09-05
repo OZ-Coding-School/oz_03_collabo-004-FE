@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { twMerge as tw } from "tailwind-merge";
 import { articleApi } from "../../api";
 import { AiOutlineEnter } from "react-icons/ai";
 import { useArticleStore } from "../../config/store";
+import { useLocation, useNavigate } from "react-router-dom";
 const HeaderSearch = () => {
     const [select, setSelect] = useState(false);
     const [search, setSearch] = useState("");
     const { initArticle } = useArticleStore();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const searchFormURL = new URLSearchParams(location.search).get("search");
 
     const inputSelectHandler = () => {
         setSelect(true);
@@ -17,20 +22,37 @@ const HeaderSearch = () => {
     };
     const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (search.trim() === "") return;
+        navigate(`?search=${search}`);
         const responseSearch = await articleApi.articleSearch(search);
+
         initArticle(responseSearch.data);
     };
 
     const handleEnter = async () => {
+        if (search.trim() === "") return;
         const responseSearch = await articleApi.articleSearch(search);
+        navigate(`?search=${search}`);
         initArticle(responseSearch.data);
     };
 
     const handleEscape = async () => {
         setSearch("");
+        navigate("/");
         const responseArticle = await articleApi.ArticleList();
         initArticle(responseArticle.data);
     };
+
+    useEffect(() => {
+        const searchURL = async () => {
+            if (searchFormURL) {
+                const responseSearch = await articleApi.articleSearch(searchFormURL);
+                setSearch(searchFormURL);
+                initArticle(responseSearch.data);
+            }
+        };
+        searchURL();
+    }, [searchFormURL, initArticle]);
 
     return (
         <div className="flex-grow">

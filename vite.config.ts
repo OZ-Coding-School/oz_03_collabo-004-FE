@@ -14,10 +14,10 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: "https://api.hunsuking.yoyobar.xyz",
+                target: "https://api.hunsuking.yoyobar.xyz/api",
                 changeOrigin: true,
                 secure: false,
-                rewrite: (path) => path.replace(/^\/api/, "/api"),
+                rewrite: (path) => path.replace(/^\/api/, ""),
             },
         },
     },

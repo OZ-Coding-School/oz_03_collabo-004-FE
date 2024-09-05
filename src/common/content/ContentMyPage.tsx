@@ -5,6 +5,7 @@ import { ModalPortal } from "../../config/ModalPortal";
 import { useState } from "react";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
+import { truncateText } from "../../util/truncate";
 
 interface ContentMyPageProps {
     activeTab: number;
@@ -54,9 +55,9 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                         {article.title}
                     </p>
                     <div
-                        className="my-3 text-literal-normal font-normal text-sm max-h-5 overflow-hidden custom-code-block"
+                        className="my-3 text-literal-normal font-normal text-sm overflow-hidden custom-code-block"
                         dangerouslySetInnerHTML={{
-                            __html: sanitizer(article.content),
+                            __html: sanitizer(truncateText(article.content, 300)),
                         }}
                     />
                 </div>

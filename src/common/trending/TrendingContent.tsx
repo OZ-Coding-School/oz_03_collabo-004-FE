@@ -7,6 +7,7 @@ import ModalDetail from "../modal/ModalDetail";
 import { articleApi } from "../../api";
 import { truncateText } from "../../util/truncate";
 import { FaQuestion } from "react-icons/fa";
+import { motion } from "framer-motion";
 const TrendingContent = () => {
     const [trendingArticles, setTrendingArticles] = useState<AllArticle[]>([]);
     const [articleId, setArticleId] = useState<null | number>(null);
@@ -32,11 +33,9 @@ const TrendingContent = () => {
         setDetailModalStatus(false);
     };
 
-    console.log(trendingArticles);
-
     return (
         <>
-            <div className="w-full h-full">
+            <motion.div animate={{ opacity: [0, 1] }} transition={{ delay: 0.3 }} className="w-full h-full">
                 <div className="flex items-center gap-1">
                     <FaFireAlt className="ml-1 text-literal-highlight" />
                     <p className="font-default text-md text-literal-highlight">인기 게시글</p>
@@ -65,7 +64,7 @@ const TrendingContent = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </motion.div>
             <ModalPortal>
                 {detailModalStatus && (
                     <ModalDetail

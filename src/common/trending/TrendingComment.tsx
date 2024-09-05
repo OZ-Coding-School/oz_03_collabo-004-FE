@@ -6,6 +6,7 @@ import { commentApi } from "../../api";
 import { ModalPortal } from "../../config/ModalPortal";
 import ModalDetail from "../modal/ModalDetail";
 import { truncateText } from "../../util/truncate";
+import { motion } from "framer-motion";
 
 const TrendingComment = () => {
     const [trendingComments, setTrendingComments] = useState<Comment[]>([]);
@@ -34,7 +35,7 @@ const TrendingComment = () => {
 
     return (
         <>
-            <div className="w-full h-full">
+            <motion.div animate={{ opacity: [0, 1] }} transition={{ delay: 0.3 }} className="w-full h-full">
                 <div className="flex items-center gap-1">
                     <FaFireAlt className="ml-1 text-literal-highlight" />
                     <p className="font-default text-md text-literal-highlight">인기 훈수</p>
@@ -65,7 +66,7 @@ const TrendingComment = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </motion.div>
             <ModalPortal>
                 {detailModalStatus && (
                     <ModalDetail

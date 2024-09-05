@@ -16,6 +16,7 @@ import ModalDetail from "../common/modal/ModalDetail";
 import { AllArticle } from "../config/types";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 const HomePage = () => {
     const [editModalStatus, setEditModalStatus] = useState(false);
     const [detailModalStatus, setDetailModalStatus] = useState(false);
@@ -99,7 +100,7 @@ const HomePage = () => {
                         <EditorInput onClick={() => setEditModalStatus(true)} />
                     </div>
                     {!filterArticle && (
-                        <div>
+                        <div className="flex flex-col gap-4">
                             <SkeletonContent type={1} />
                             <SkeletonContent type={2} />
                             <SkeletonContent type={1} />
@@ -109,7 +110,11 @@ const HomePage = () => {
                     {filterArticle && filterArticle.length === 0 && <div>검색 결과가 없습니다.</div>}{" "}
                     {filterArticle &&
                         filterArticle.map((article) => (
-                            <div className="mb-4" key={article.article_id}>
+                            <motion.div
+                                animate={{ opacity: [0, 1], translateY: [10, 0] }}
+                                className="mb-4"
+                                key={article.article_id}
+                            >
                                 <ProfileStatus
                                     nickname={article.user.nickname}
                                     hunsoo_level={article.user.hunsoo_level}
@@ -130,7 +135,7 @@ const HomePage = () => {
                                     like_count={article.like_count}
                                     articleId={article.article_id}
                                 />
-                            </div>
+                            </motion.div>
                         ))}
                 </main>
                 <nav className="hidden xl:flex flex-col gap-4">

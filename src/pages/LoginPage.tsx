@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../api/auth";
 import { useState } from "react";
 import { AxiosError } from "axios";
+import Toast from "../common/toast/Toast";
+import { useToastStore } from "../config/store";
 
 interface LoginData {
     id: string;
@@ -26,6 +28,7 @@ const LoginPage = () => {
     });
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
+    const { toast, setToast } = useToastStore();
 
     const onSubmit: SubmitHandler<LoginData> = async (data) => {
         const { id, password } = data;
@@ -41,14 +44,20 @@ const LoginPage = () => {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
                 console.log("로그인 실패", error);
-                if (error.response.status === 400) alert("로그인에 실패하였습니다.");
+                if (error.response.status === 400) toastHandler("아이디 혹은 비밀번호가 맞지 않습니다.");
+                reset();
             }
         }
     };
+    const toastHandler = (text: string) => {
+        setToast(true, text);
+    };
+
     return (
         <>
             <Header />
             <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white ">
+                {toast.status && <Toast />}
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
@@ -100,7 +109,12 @@ const LoginPage = () => {
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.password && errors.password.message}
                         </p>
-                        <Button className="mt-4 py-3" type="submit" color="primary" disabled={isSubmit}>
+                        <Button
+                            className={tw("mt-4 py-3", isSubmit && "hover:bg-primary-second")}
+                            type="submit"
+                            color="primary"
+                            disabled={isSubmit}
+                        >
                             {isSubmit ? "로그인 중.." : "로그인"}
                         </Button>
                         <Link to={"/register"}>

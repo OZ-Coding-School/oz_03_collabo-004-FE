@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../api/auth";
 import { useState } from "react";
 import { AxiosError } from "axios";
+import { useToastStore } from "../config/store";
+import Toast from "../common/toast/Toast";
 
 interface RegisterData {
     id: string;
@@ -33,35 +35,55 @@ const RegisterPage = () => {
     });
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
+    const { toast, setToast } = useToastStore();
 
     const onSubmit: SubmitHandler<RegisterData> = async (data) => {
         setIsSubmit(true);
-        const { id, nickname, email, password } = data;
+        const { id, nickname, email, password } = {
+            id: data.id.trim(),
+            nickname: data.nickname.trim(),
+            email: data.email.trim(),
+            password: data.password.trim(),
+        };
+        if (!id || !nickname || !email || !password) {
+            toastHandler("모든 필드를 채워주세요.", false);
+            setIsSubmit(false);
+            return;
+        }
         try {
             const response = await userRegister({ username: id, nickname: nickname, password: password, email: email });
             console.log(response);
-            if (response.status === 200) setIsSubmit(false);
-            reset();
-            navigate("/tag");
+            if (response.status === 200) {
+                setIsSubmit(false);
+                toastHandler("회원가입이 완료되었습니다.", true);
+                reset();
+            }
         } catch (error) {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
                 console.log("회원가입 실패", error);
-                switch (error.response.status) {
-                    case 400:
-                        alert("회원가입에 실패하였습니다.");
-                        break;
-                    case 409:
-                        alert("아이디, 이메일 또는 닉네임이 중복되면 안됩니다.");
-                        break;
+                if (error.response.status === 400) {
+                    toastHandler("아이디, 이메일 또는 닉네임이 중복되었습니다.", false);
+                    reset({ id: "", nickname: "", email: "" });
                 }
             }
         }
     };
+    const toastHandler = (text: string, success: boolean) => {
+        setToast(true, text);
+        if (success) {
+            setTimeout(() => {
+                setToast(false, "");
+                navigate("/tag");
+            }, 2000);
+        }
+    };
+
     return (
         <>
             <Header />
             <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white">
+                {toast.status && <Toast />}
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
@@ -181,7 +203,12 @@ const RegisterPage = () => {
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.confirmPassword && errors.confirmPassword.message}
                         </p>
-                        <Button className="mt-4 py-3" type="submit" color="primary" disabled={isSubmit}>
+                        <Button
+                            className={tw("mt-4 py-3", isSubmit && "hover:bg-primary-second")}
+                            type="submit"
+                            color="primary"
+                            disabled={isSubmit}
+                        >
                             {isSubmit ? "회원가입 중.." : "회원가입"}
                         </Button>
                         <Link to={"/login"}>

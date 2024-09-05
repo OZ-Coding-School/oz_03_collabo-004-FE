@@ -4,7 +4,7 @@ import ModalDetail from "../modal/ModalDetail";
 import { ModalPortal } from "../../config/ModalPortal";
 import { useState } from "react";
 import dayjs from "dayjs";
-import { DUMMY_TAGS } from "../../config/const";
+import DOMPurify from "dompurify";
 
 interface ContentMyPageProps {
     activeTab: number;
@@ -18,6 +18,8 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
 
     const createdAt = isArticleTab ? article.created_at : isCommentTab ? comment.created_at : null;
     const formattedDate = dayjs(createdAt).format("YYYY년 MM월 DD일");
+
+    const sanitizer = DOMPurify.sanitize;
 
     //모달관련
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -51,9 +53,12 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     <p className="text-base sm:text-lg font-default text-literal-normal pb-3 border-b border-b-gray-100">
                         {article.title}
                     </p>
-                    <p className="my-3 text-literal-normal font-normal text-sm max-h-5 overflow-hidden">
-                        {article.content}
-                    </p>
+                    <div
+                        className="my-3 text-literal-normal font-normal text-sm max-h-5 overflow-hidden custom-code-block"
+                        dangerouslySetInnerHTML={{
+                            __html: sanitizer(article.content),
+                        }}
+                    />
                 </div>
 
                 <ModalPortal>

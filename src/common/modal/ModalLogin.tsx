@@ -1,22 +1,18 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import { useEffect, useRef } from "react";
 import BadgeDesc from "../badge/BadgeDesc";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import ButtonLogin from "../button/ButtonLogin";
+import { authApi } from "../../api";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../config/store";
 
 const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
-    const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        document.body.appendChild(modalRoot);
-        return () => {
-            document.body.removeChild(modalRoot);
-        };
-    }, [modalRoot]);
-
+    const nav = useNavigate();
+    const { setStatus } = useAuthStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -35,7 +31,30 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
         };
     }, [isOpen, parent]);
 
-    return ReactDOM.createPortal(
+    const googleLoginRequest = async (token: string) => {
+        try {
+            await authApi.userGoogleAccessTokenReceiver(token);
+            setStatus(true);
+            onClose();
+        } catch (error) {
+            console.error("login failed", error);
+        }
+    };
+    const googleLoginHandler = useGoogleLogin({
+        onSuccess: (res) => {
+            googleLoginRequest(res.access_token);
+        },
+
+        onError: () => {
+            console.error("Unexpected Login Request Error");
+        },
+    });
+
+    const normalLoginHandler = () => {
+        nav("/login");
+    };
+
+    return (
         <>
             <motion.nav
                 initial={{ opacity: 0 }}
@@ -55,10 +74,10 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none mx-2 md:mx-0 w-[570px] h-[584px] rounded-3xl bg-white relative"
+                    className="outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
                     <div className="flex flex-col justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수왕 로그인</div>
+                        <div className="w-full font-bold text-lg font-point text-center md:pt-10">훈수왕 로그인</div>
                         <div className="w-full text-center mt-5 text-gray-400">
                             훈수왕은 유머와 창의성으로 가득 찬 전문가들이 모여
                         </div>
@@ -67,8 +86,8 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                             <BadgeDesc />
                         </div>
                         <div className="flex flex-col justify-center items-center mt-16 gap-[13px]">
-                            <ButtonLogin type="social" />
-                            <ButtonLogin type="normal" />
+                            <ButtonLogin type="social" onClick={googleLoginHandler} />
+                            <ButtonLogin type="normal" onClick={normalLoginHandler} />
                         </div>
                     </div>
                     <IoClose
@@ -78,8 +97,7 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                     />
                 </motion.nav>
             </div>
-        </>,
-        modalRoot
+        </>
     );
 };
 

@@ -1,28 +1,23 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
+import { commentReport } from "../../api/report";
+import Toast from "../toast/Toast";
+import { useToastStore } from "../../config/store";
 
-const ModalReport = ({ onClose, isOpen, parent }: ModalProps) => {
+const ModalReport = ({ onClose, isOpen, parent, comment_id }: ModalProps) => {
     const [text, setText] = useState("");
     const length = text.length < 100 ? 100 - text.length : 0;
-    const [modalRoot] = useState(() => document.createElement("div"));
     const modalRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-        document.body.appendChild(modalRoot);
-        return () => {
-            document.body.removeChild(modalRoot);
-        };
-    }, [modalRoot]);
-
+    const { toast, setToast } = useToastStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
 
         if (isOpen) {
+            setToast(false, "");
             document.body.style.overflowY = "hidden";
             parentElement?.classList.add("blur-[2px]");
             headerElement?.classList.add("blur-[2px]");
@@ -34,9 +29,26 @@ const ModalReport = ({ onClose, isOpen, parent }: ModalProps) => {
             parentElement?.classList.remove("blur-[2px]");
             headerElement?.classList.remove("blur-[2px]");
         };
-    }, [isOpen, parent]);
+    }, [isOpen, parent, setToast]);
 
-    return ReactDOM.createPortal(
+    const handleReport = async () => {
+        if (!comment_id) return;
+        try {
+            const response = await commentReport(comment_id, text);
+            console.log(response);
+            if (response.status === 201) toastHandler();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const toastHandler = () => {
+        setToast(true, "댓글 신고가 완료되었습니다.");
+        setTimeout(() => {
+            onClose();
+        }, 2000);
+    };
+    return (
         <>
             <motion.nav
                 initial={{ opacity: 0 }}
@@ -53,9 +65,10 @@ const ModalReport = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none mx-2 md:mx-0 w-[570px] h-[584px] rounded-3xl bg-white relative"
+                    className="outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
-                    <form className="px-[80px] flex flex-col justify-center items-center">
+                    {toast.status && <Toast />}
+                    <form className="md:px-[80px] flex flex-col justify-center items-center">
                         <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 신고</div>
                         <div className="w-full font-default text-center mt-5 text-literal-error">
                             부적절한 신고는 다른 사용자에게 불필요한 피해를 줄 수 있습니다.
@@ -75,7 +88,7 @@ const ModalReport = ({ onClose, isOpen, parent }: ModalProps) => {
                             />
                             <div className="absolute bottom-2 right-2 text-gray-600">{length}자</div>
                         </div>
-                        <Button className="w-full mt-10" color="danger">
+                        <Button onClick={handleReport} className="w-full mt-10" color="danger">
                             신고하기
                         </Button>
                     </form>
@@ -86,8 +99,7 @@ const ModalReport = ({ onClose, isOpen, parent }: ModalProps) => {
                     />
                 </motion.nav>
             </div>
-        </>,
-        modalRoot
+        </>
     );
 };
 

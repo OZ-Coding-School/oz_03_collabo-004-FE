@@ -8,6 +8,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background: #f5f5f7;
 }
 
 @font-face {
@@ -47,4 +48,39 @@ body {
 *::-webkit-scrollbar-thumb {
     background-color: #dad0ea;
     border-radius: 10px;
+}
+
+.ql-container.ql-snow {
+    border: 1px solid transparent;
+    border-top: 1px solid #ccc;
+}
+
+.ql-toolbar.ql-snow {
+    border: 1px solid transparent;
+    border-radius: 0.125rem;
+    box-sizing: border-box;
+}
+.custom-code-block pre {
+    background-color: #23241f;
+    padding: 0.5em;
+    margin: 0.5em 0;
+    overflow: auto;
+    border-radius: 0.3em;
+}
+
+.custom-code-block pre code {
+    background: none;
+    color: #f8f8f2;
+    padding: 0;
+}
+
+.custom-code-block code {
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-size: 1em;
+    line-height: 1.2;
+}
+
+.custom-code-block blockquote {
+    border-left: 3px solid #ddd;
+    padding-left: 5px;
 }

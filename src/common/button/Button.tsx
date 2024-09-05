@@ -6,9 +6,10 @@ interface ButtonProps extends PropsWithChildren {
     onClick?: () => void;
     type?: "submit" | "reset" | "button";
     color?: "default" | "danger" | "info" | "confirm" | "primary";
+    disabled?: boolean;
 }
 
-const Button = ({ color = "default", className, onClick, type = "button", children }: ButtonProps) => {
+const Button = ({ color = "default", className, onClick, type = "button", children, disabled }: ButtonProps) => {
     return (
         <button
             className={tw(
@@ -23,6 +24,7 @@ const Button = ({ color = "default", className, onClick, type = "button", childr
             )}
             onClick={onClick}
             type={type}
+            disabled={disabled}
         >
             {children}
         </button>

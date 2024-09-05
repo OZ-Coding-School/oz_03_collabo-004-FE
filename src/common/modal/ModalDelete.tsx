@@ -1,50 +1,45 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
-import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
+import { articleApi } from "../../api";
+import { useArticleStore } from "../../config/store";
 
-const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
-    const [modalRoot] = useState(() => document.createElement("div"));
+interface ModalDeleteProps {
+    onClose: () => void;
+    parentOnClose: () => void;
+    isOpen: boolean;
+    id: number;
+}
+
+const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) => {
     const modalRef = useRef<HTMLTextAreaElement>(null);
-
+    const { initArticle } = useArticleStore();
     useEffect(() => {
-        document.body.appendChild(modalRoot);
-        return () => {
-            document.body.removeChild(modalRoot);
-        };
-    }, [modalRoot]);
-
-    useEffect(() => {
-        const parentElement = document.querySelector("." + parent);
-        const headerElement = document.querySelector(".header");
-
         if (isOpen) {
-            document.body.style.overflow = "hidden";
-            parentElement?.classList.add("blur-[2px]");
-            headerElement?.classList.add("blur-[2px]");
             modalRef.current?.focus();
         }
+    }, [isOpen]);
 
-        return () => {
-            document.body.style.overflowY = "scroll";
-            parentElement?.classList.remove("blur-[2px]");
-            headerElement?.classList.remove("blur-[2px]");
-        };
-    }, [isOpen, parent]);
+    const handleDeleteArticle = async (id: number) => {
+        await articleApi.articleDelete(id);
+        const responseArticle = await articleApi.ArticleList();
+        initArticle(responseArticle.data);
+        onClose();
+        parentOnClose();
+    };
 
-    return ReactDOM.createPortal(
+    return (
         <>
             <motion.nav
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="fixed flex justify-center items-center inset-0 z-50 bg-black w-full h-full"
             ></motion.nav>
             <div
                 onClick={onClose}
-                className="text-literal-normal inset-0 font-default z-40 fixed flex items-center justify-center"
+                className="text-literal-normal inset-0 font-default z-[60] fixed flex items-center justify-center"
             >
                 <motion.nav
                     tabIndex={-1}
@@ -54,15 +49,15 @@ const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="px-[110px] outline-none mx-2 md:mx-0 w-[570px] h-[240px] rounded-3xl bg-white relative"
+                    className="outline-none w-full h-full md:w-[570px] md:h-[240px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
-                    <div className="flex flex-col">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 삭제</div>
+                    <div className="px-12 md:px-[110px] flex flex-col w-full h-full justify-center items-center">
+                        <div className="w-full font-bold text-lg font-point text-center ">훈수 삭제</div>
                         <div className="text-literal-error mt-5 w-full text-center font-semibold">
                             정말 게시글을 삭제하시겠습니까?
                         </div>
                         <div className="w-full flex gap-5 mt-10">
-                            <Button className="w-full" color="danger">
+                            <Button onClick={() => handleDeleteArticle(id)} className="w-full" color="danger">
                                 삭제
                             </Button>
                             <Button onClick={onClose} className="w-full">
@@ -78,8 +73,7 @@ const ModalDelete = ({ onClose, isOpen, parent }: ModalProps) => {
                     />
                 </motion.nav>
             </div>
-        </>,
-        modalRoot
+        </>
     );
 };
 

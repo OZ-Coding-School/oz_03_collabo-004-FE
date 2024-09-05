@@ -18,7 +18,7 @@ const ButtonLogin = ({ onClick, type }: ButtonProps) => {
             )}
             onClick={onClick}
         >
-            {type === "normal" && "이메일 계정으로 로그인"}
+            {type === "normal" && "아이디 / 비밀번호로 로그인"}
             {type === "social" && (
                 <>
                     <FcGoogle className="w-[20px] h-[20px] mr-1" />

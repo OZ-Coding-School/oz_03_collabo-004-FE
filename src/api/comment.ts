@@ -9,7 +9,7 @@ export const commentCreate = (article_id: number | undefined, formData: FormData
 };
 
 export const commentSelect = (comment_id: number) => {
-    return axiosInstance.patch(`/comment/${comment_id}/select/`, { withCredentials: true });
+    return axiosInstance.patch(`/comment/${comment_id}/select/`);
 };
 
 //훈수 도움돼요 안돼요

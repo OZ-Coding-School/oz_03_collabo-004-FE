@@ -40,6 +40,7 @@ export default {
                 },
                 gray: {
                     100: "#eeeeee",
+                    150: "#dedede",
                     200: "#cecece",
                     300: "#bfbfbf",
                     400: "#b0b0b0",
@@ -55,5 +56,6 @@ export default {
             },
         },
     },
-    plugins: [],
+
+    plugins: [require("@tailwindcss/typography")],
 };

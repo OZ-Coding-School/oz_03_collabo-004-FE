@@ -17,6 +17,7 @@ import { AllArticle } from "../config/types";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
 const HomePage = () => {
     const [editModalStatus, setEditModalStatus] = useState(false);
     const [detailModalStatus, setDetailModalStatus] = useState(false);
@@ -25,7 +26,7 @@ const HomePage = () => {
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
     const [filterArticle, setFilterArticle] = useState<AllArticle[] | null>(null);
     const initArticles = useCallback(async () => {
-        const articleResponse = await articleApi.ArticleList();
+        const articleResponse = await articleApi.articleList();
         initArticle(articleResponse.data);
     }, [initArticle]);
     const navigate = useNavigate();

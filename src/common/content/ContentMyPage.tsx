@@ -6,6 +6,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { truncateText } from "../../util/truncate";
+import useHighlight from "../../hooks/useHighlight";
 
 interface ContentMyPageProps {
     activeTab: number;
@@ -34,6 +35,8 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
         setIsDetailModalOpen(false);
     };
 
+    useHighlight();
+
     if (isArticleTab) {
         return (
             <div className="max-w-[780px] min-w-[300px] my-5 content-parent">
@@ -55,7 +58,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                         {article.title}
                     </p>
                     <div
-                        className="my-3 text-literal-normal font-normal text-sm overflow-hidden custom-code-block"
+                        className="my-3 text-literal-normal font-normal text-sm overflow-hidden custom-code-block tiptab prose ProseMirror"
                         dangerouslySetInnerHTML={{
                             __html: sanitizer(truncateText(article.content, 300)),
                         }}

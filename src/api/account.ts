@@ -13,7 +13,6 @@ export const userInfoImageUpdate = (image: File) => {
     const formData = new FormData();
     formData.append("profile_image", image);
     return axiosInstance.put("/account/profile/image/", formData, {
-        withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
     });
 };
@@ -24,5 +23,5 @@ export const userInfoPublic = (userId: number) => {
 };
 
 export const userInfoImageDelete = () => {
-    return axiosInstance.delete("/account/profile/image/delete/", { withCredentials: true });
+    return axiosInstance.delete("/account/profile/image/delete/");
 };

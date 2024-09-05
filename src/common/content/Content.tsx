@@ -1,7 +1,6 @@
 import DOMPurify from "dompurify";
-import "highlight.js/styles/atom-one-dark.css";
 import { truncateText } from "../../util/truncate";
-
+import useHighlight from "../../hooks/useHighlight";
 interface ContentProps {
     thumbnail_image: string;
     title: string;
@@ -17,6 +16,7 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
 
     const sanitizer = DOMPurify.sanitize;
 
+    useHighlight();
     return (
         <>
             <div
@@ -35,8 +35,10 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
                 <div className="flex flex-col p-4 w-full">
                     <h2 className="mb-2 text-lg text-black fontsize-xl break-words">{title}</h2>
                     <div
-                        dangerouslySetInnerHTML={{ __html: sanitizer(truncateText(content, 300)) }}
-                        className="custom-code-block text-sm text-black break-words"
+                        dangerouslySetInnerHTML={{
+                            __html: sanitizer(truncateText(content, 300)),
+                        }}
+                        className="tiptap prose ProseMirror text-[16px] text-black break-words"
                     />
                 </div>
             </div>

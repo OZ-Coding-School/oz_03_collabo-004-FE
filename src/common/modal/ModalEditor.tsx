@@ -1,32 +1,13 @@
 import { motion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ModalProps } from "../../config/types";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import ReactModule from "./ModalEditorModule";
-import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css";
 import Button from "../button/Button";
 import ModalEditorSelect from "./ModalEditorSelect";
 import { articleApi } from "../../api";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalConfirm from "./ModalConfirm";
 import { useArticleStore } from "../../config/store";
-
-const placeholderStyle = `
-.quill > .ql-container > .ql-editor.ql-blank::before {
-color: #999;
-font-style: normal;  
-font-size: 14px;  
-font-weight: normal; 
-font-family: Pretendard Variable;  
-content: attr(data-placeholder);
-position: absolute;
-left: 15px;
-right: 15px;
-pointer-events: none;
-}
-`;
+import TipTapEditor from "../editor/Editor";
 
 const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
@@ -42,7 +23,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
 
     const handleSubmit = async () => {
         await articleApi.articleCreate(title, content, tags);
-        const responseArticle = await articleApi.ArticleList();
+        const responseArticle = await articleApi.articleList();
         initArticle(responseArticle.data);
         onClose();
     };
@@ -92,41 +73,6 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
         };
     }, [isOpen, parent]);
 
-    const formats: string[] = [
-        "header",
-        "size",
-        "font",
-        "bold",
-        "italic",
-        "underline",
-        "strike",
-        "blockquote",
-        "list",
-        "bullet",
-        "indent",
-        "link",
-        "image",
-        "color",
-        "background",
-        "align",
-        "script",
-        "code-block",
-        "clean",
-    ];
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    const modules: {} = useMemo(
-        () => ({
-            toolbar: {
-                container: "#toolBar",
-            },
-            syntax: {
-                highlight: (text: string) => hljs.highlightAuto(text).value,
-            },
-        }),
-        []
-    );
-
     return (
         <>
             <motion.nav
@@ -135,46 +81,32 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                 exit={{ opacity: 0 }}
                 className="fixed flex justify-center inset-0 bg-black w-full h-full"
             ></motion.nav>
-            <div className="inset-0 select-none z-40 fixed flex items-center justify-center">
+            <div className="inset-0 select-none z-40 fixed flex items-center justify-center p-4">
                 <motion.nav
                     tabIndex={-1}
                     ref={modalRef}
                     onKeyDown={(e) => e.key === "Escape" && onClose()}
-                    initial={{ opacity: 0, translateY: 20 }}
-                    animate={{ opacity: [1], translateY: 0 }}
-                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full md:w-[870px] h-full md:h-[900px] relative"
+                    className="outline-none w-full max-w-4xl h-full max-h-[90vh] bg-white rounded-lg shadow-xl flex flex-col"
                 >
-                    <div className="w-full h-full bg-white rounded-sm">
-                        <div id="toolBar">
-                            <ReactModule />
-                        </div>
-                        <input
-                            className="outline-none font-default w-full px-4 py-2 text-sm placeholder:text-[#999]"
-                            required
-                            placeholder="제목"
-                            onChange={(e) => setTitle(e.target.value)}
-                        ></input>
-
-                        <style>{placeholderStyle}</style>
-                        <ReactQuill
-                            modules={modules}
-                            formats={formats}
-                            placeholder="내용"
-                            className="w-full h-[85%] md:h-[770px] font-default"
-                            theme="snow"
-                            onChange={setContent}
+                    <div className="flex-grow overflow-hidden p-4">
+                        <TipTapEditor
+                            onTitleChange={(title) => setTitle(title)}
+                            onContentChange={(content) => setContent(content)}
                         />
-                        <div className="flex gap-2 absolute bottom-2 right-4">
-                            <ModalEditorSelect onChange={handleSetTag} />
-                            <Button onClick={handleSubmit} color="confirm">
-                                작성
-                            </Button>
-                            <Button onClick={() => setModalConfirmStatus(true)} color="danger">
-                                취소
-                            </Button>
-                        </div>
+                    </div>
+
+                    <div className="flex justify-end items-center gap-2 p-4">
+                        <ModalEditorSelect onChange={handleSetTag} />
+                        <Button onClick={handleSubmit} color="confirm">
+                            작성
+                        </Button>
+                        <Button onClick={() => setModalConfirmStatus(true)} color="danger">
+                            취소
+                        </Button>
                     </div>
                 </motion.nav>
             </div>

@@ -21,7 +21,7 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
     }, [isOpen]);
 
     const handleConfirm = async () => {
-        const responseArticle = await articleApi.ArticleList();
+        const responseArticle = await articleApi.articleList();
         initArticle(responseArticle.data);
         onClose();
         parentOnClose();

@@ -23,7 +23,7 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
 
     const handleDeleteArticle = async (id: number) => {
         await articleApi.articleDelete(id);
-        const responseArticle = await articleApi.ArticleList();
+        const responseArticle = await articleApi.articleList();
         initArticle(responseArticle.data);
         onClose();
         parentOnClose();

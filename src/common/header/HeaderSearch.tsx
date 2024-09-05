@@ -39,7 +39,7 @@ const HeaderSearch = () => {
     const handleEscape = async () => {
         setSearch("");
         navigate("/");
-        const responseArticle = await articleApi.ArticleList();
+        const responseArticle = await articleApi.articleList();
         initArticle(responseArticle.data);
     };
 

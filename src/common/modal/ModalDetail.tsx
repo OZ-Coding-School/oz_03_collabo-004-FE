@@ -17,6 +17,7 @@ import DOMPurify from "dompurify";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalDelete from "./ModalDelete";
 import { useNavigate } from "react-router-dom";
+import hljs from "highlight.js";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
@@ -87,6 +88,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 setComments(articleResponse.data.comments || []);
 
                 const aiResponse = await aiHunsuDetail(articleId);
+
                 if (aiResponse.status) setAiData(aiResponse.data);
             } catch (error) {
                 console.log("데이터 불러오기 실패", error);
@@ -122,6 +124,19 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
         const result = comments.some((comment) => comment.user === user.user_id);
         setHideInput(result);
     }, [comments, user.user_id]);
+
+    useEffect(() => {
+        const codeTags = document.getElementsByTagName("code");
+
+        for (let i = 0; i < codeTags.length; i++) {
+            const element = codeTags[i];
+            const code = element.textContent || "";
+
+            const result = hljs.highlightAuto(code);
+
+            element.innerHTML = result.value;
+        }
+    }, [isLoading]);
 
     return (
         <>
@@ -180,10 +195,10 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                             </div>
                             <div className="text-xl my-2">{articleData && articleData.title}</div>
                             <div
-                                className="pt-3 pb-20 mb-3 border-b border-b-gray-100 custom-code-block"
                                 dangerouslySetInnerHTML={{
-                                    __html: sanitizer((articleData && articleData.content) || ""),
+                                    __html: sanitizer((articleData && articleData.content) as string),
                                 }}
+                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-b-gray-100 tiptap prose ProseMirror"
                             />
 
                             {articleData &&

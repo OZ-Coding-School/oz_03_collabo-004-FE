@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { twMerge as tw } from "tailwind-merge";
 import { commentCreate } from "../../api/comment";
 import { CommentFormData, MyComment } from "../../config/types";
+import { AxiosError } from "axios";
 
 interface CommentInputProps {
     onClose?: () => void;
@@ -49,7 +50,12 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
             const newComment: MyComment = response.data;
             onCommentSubmit(newComment);
         } catch (error) {
-            console.error("훈수작성 실패", error);
+            if (error instanceof AxiosError && error.response) {
+                console.log("훈수작성 실패", error);
+                if (error.response.status === 401) {
+                    alert("로그인 후 이용 가능합니다.");
+                }
+            }
         }
         reset();
         setPreview([]);
@@ -82,7 +88,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
     return (
         <div className="flex gap-2">
             <div className="w-12 self-start">
-                <div className="size-12">
+                <div className="size-12 relative">
                     {user.profile_image ? (
                         <img
                             src={user.profile_image}

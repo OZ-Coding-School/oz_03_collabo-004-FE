@@ -198,9 +198,12 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                         />
                                     </div>
                                 )}
+
                             {comments.length !== 0 &&
                                 comments.map((comment, index) => (
-                                    <div
+                                    <motion.div
+                                        animate={{ opacity: [0, 1] }}
+                                        transition={{ delay: 0.3 }}
                                         key={`${comment.id}-${index}`}
                                         className={tw("flex flex-col", comment.user === user.user_id && "items-end")}
                                     >
@@ -238,7 +241,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                                 />
                                             )
                                         )}
-                                    </div>
+                                    </motion.div>
                                 ))}
                         </div>
                     )}

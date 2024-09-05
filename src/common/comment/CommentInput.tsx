@@ -8,6 +8,7 @@ import { twMerge as tw } from "tailwind-merge";
 import { commentCreate } from "../../api/comment";
 import { CommentFormData, MyComment } from "../../config/types";
 import { AxiosError } from "axios";
+import { motion } from "framer-motion";
 
 interface CommentInputProps {
     onClose?: () => void;
@@ -86,7 +87,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
     }, [titleValue]);
 
     return (
-        <div className="flex gap-2">
+        <motion.div animate={{ opacity: [0, 1] }} transition={{ delay: 0.3 }} className="flex gap-2">
             <div className="w-12 self-start">
                 <div className="size-12 relative">
                     {user.profile_image ? (
@@ -141,7 +142,7 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit }: Commen
                     />
                 </div>
             </form>
-        </div>
+        </motion.div>
     );
 };
 

@@ -18,6 +18,7 @@ function App() {
             <Route path="/tag" element={<TagPage />}></Route>
             <Route path="/admin" element={<AdminRoute element={AdminPage} />}></Route>
             <Route index element={<HomePage />}></Route>
+
             <Route path="/my/:userId?" element={<PrivateRoute element={MyPage} />}></Route>
             <Route path="*" element={<ErrorPage />}></Route>
         </Routes>

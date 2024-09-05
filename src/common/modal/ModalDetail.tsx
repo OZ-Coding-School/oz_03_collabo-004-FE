@@ -38,16 +38,40 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
 
+        let scrollY = 0;
+
         if (isOpen) {
+            //? 현재 스크롤 위치 저장
+            scrollY = window.scrollY;
+
+            //? 스크롤을 0으로 설정 (모달이 열릴 때)
+            window.scrollTo(0, 0);
+
+            //? 스크롤을 고정하고 화면을 고정
             document.body.style.overflowY = "hidden";
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = "100%";
+
+            //? 부모 및 헤더에 blur 효과 추가
             parentElement?.classList.add("blur-[2px]");
             headerElement?.classList.add("blur-[2px]");
         }
 
         return () => {
-            document.body.style.overflowY = "scroll";
+            //? 모달이 닫힐 때 블러 제거
             parentElement?.classList.remove("blur-[2px]");
             headerElement?.classList.remove("blur-[2px]");
+
+            //? 저장된 스크롤 위치로 복원
+            const storedScrollY = parseInt(document.body.style.top || "0") * -1;
+
+            //? 스크롤 및 위치 복원
+            document.body.style.overflowY = "scroll";
+            document.body.style.top = "";
+            document.body.style.width = "";
+
+            //? 저장된 스크롤 위치로 이동
+            window.scrollTo(0, storedScrollY);
         };
     }, [isOpen, parent]);
 
@@ -102,11 +126,11 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="modal-content fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="modal-content z-40 fixed flex justify-center items-center inset-0 bg-black w-full h-full"
             ></motion.nav>
             <div
                 onClick={onClose}
-                className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-[40] md:z-auto "
+                className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-40 "
             >
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}

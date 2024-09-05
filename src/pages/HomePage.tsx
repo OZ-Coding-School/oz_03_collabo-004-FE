@@ -15,6 +15,7 @@ import ModalEditor from "../common/modal/ModalEditor";
 import ModalDetail from "../common/modal/ModalDetail";
 import { AllArticle } from "../config/types";
 import ProfileStatus from "../common/profile/ProfileStatus";
+import { useLocation, useNavigate } from "react-router-dom";
 const HomePage = () => {
     const [editModalStatus, setEditModalStatus] = useState(false);
     const [detailModalStatus, setDetailModalStatus] = useState(false);
@@ -22,28 +23,46 @@ const HomePage = () => {
     const { article, initArticle, selectTag } = useArticleStore();
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
     const [filterArticle, setFilterArticle] = useState<AllArticle[] | null>(null);
-
     const initArticles = useCallback(async () => {
         const articleResponse = await articleApi.ArticleList();
         initArticle(articleResponse.data);
     }, [initArticle]);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const articleIdFromURL = new URLSearchParams(location.search).get("article");
+    const searchFormURL = new URLSearchParams(location.search).get("search");
 
     const editModalCloseHandler = () => {
         setEditModalStatus(false);
     };
     const detailModalCloseHandler = () => {
         setDetailModalStatus(false);
+        navigate("/");
     };
     const handleArticleClick = async (id: number) => {
         await articleApi.articleView(id);
         setSelectedArticleId(id);
+        navigate(`?article=${id}`);
         setDetailModalStatus(true);
     };
 
+    // URL에 있는 articleId에 따라 모달 열기/닫기 제어
+    useEffect(() => {
+        if (articleIdFromURL) {
+            setSelectedArticleId(Number(articleIdFromURL));
+            setDetailModalStatus(true);
+        } else {
+            setDetailModalStatus(false);
+        }
+    }, [articleIdFromURL]);
+
     // article 초기화를 위한 useEffect
     useEffect(() => {
-        initArticles();
-    }, [initArticles]);
+        if (!searchFormURL) {
+            initArticles();
+        }
+    }, [initArticles, searchFormURL]);
 
     // 필터링을 위한 useMemo
     const filteredArticles = useMemo(() => {

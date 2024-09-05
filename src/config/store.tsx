@@ -75,15 +75,19 @@ export const useUserStore = create<UserStore>((set) => ({
 
 interface ArticleStore {
     article: AllArticle[] | null;
+    search: AllArticle[] | null;
     selectTag: number;
 
     initArticle: (form: AllArticle[]) => void;
+    initSearch: (form: AllArticle[]) => void;
     setTag: (tag: number) => void;
 }
 
 export const useArticleStore = create<ArticleStore>((set) => ({
     article: null,
+    search: null,
     selectTag: 0,
     initArticle: (form: AllArticle[]) => set(() => ({ article: form })),
+    initSearch: (form: AllArticle[]) => set(() => ({ search: form })),
     setTag: (tag: number) => set(() => ({ selectTag: tag })),
 }));

@@ -16,3 +16,7 @@ export const commentSelect = (comment_id: number) => {
 export const commentFeedback = (comment_id: number, type: string) => {
     return axiosInstance.post(`/comment/${comment_id}/react/`, { reaction_type: type }, { withCredentials: true });
 };
+
+export const commentTopList = () => {
+    return axiosInstance.get("/comment/top/");
+};

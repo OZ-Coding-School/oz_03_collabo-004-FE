@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import ProfileImage from "../profile/ProfileImage";
-import { useOtherUserStore, useUserStore } from "../../config/store";
+import { useUserStore } from "../../config/store";
 import { userInfoImageUpdate, userInfoUpdate } from "../../api/account";
 import { AxiosError } from "axios";
 
@@ -15,9 +15,8 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [bioText, setBioText] = useState("");
     const [nicknameText, setNicknameText] = useState("");
     const [profileImage, setProfileImage] = useState<File | null>(null);
-    const { user, updateUser } = useUserStore();
+    const { user, updateUser, otherUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
-    const { otherUser } = useOtherUserStore();
 
     useEffect(() => {
         if (user.nickname) setNicknameText(user.nickname);

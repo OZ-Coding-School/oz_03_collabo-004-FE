@@ -4,22 +4,24 @@ import HeaderInfoLogged from "./HeaderInfoLogged";
 import HeaderSearch from "./HeaderSearch";
 import useUser from "../../hooks/useUser";
 import { useEffect } from "react";
+import { authApi } from "../../api";
+import { useAuthStore } from "../../config/store";
 
 interface HeaderProps {
     isAdmin?: boolean;
 }
 
 const Header = ({ isAdmin = false }: HeaderProps) => {
-    const isLogin = false;
     const nav = useNavigate();
-    const { getUserInfo } = useUser();
+    const { setStatus, status } = useAuthStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            await getUserInfo();
+        const loginStatusCheck = async () => {
+            const responseStatus = await authApi.userLoginStatus();
+            setStatus(responseStatus.data.login);
         };
-        fetchData();
-    }, [getUserInfo]);
+        loginStatusCheck();
+    }, [setStatus]);
 
     return (
         <div className="fixed header z-40 w-full h-[52px] bg-primary flex justify-center items-center">
@@ -29,7 +31,8 @@ const Header = ({ isAdmin = false }: HeaderProps) => {
                     {!isAdmin && (
                         <>
                             <HeaderSearch />
-                            {isLogin ? <HeaderInfoLogged /> : <HeaderInfo />}
+                            {status === true && <HeaderInfoLogged />}
+                            {status === false && <HeaderInfo />}
                         </>
                     )}
                 </div>

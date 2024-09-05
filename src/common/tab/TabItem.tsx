@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { twMerge as tw } from "tailwind-merge";
 import ContentMyPage from "../content/ContentMyPage";
-import { useOtherUserStore, useUserStore } from "../../config/store";
+import { useUserStore } from "../../config/store";
 
 type TabItemProps = {
     isUserMypage: boolean;
@@ -9,8 +9,7 @@ type TabItemProps = {
 
 const TabItem = ({ isUserMypage }: TabItemProps) => {
     const [activeTab, setActiveTab] = useState(0);
-    const { user } = useUserStore();
-    const { otherUser } = useOtherUserStore();
+    const { user, otherUser } = useUserStore();
     const activeTabStyle = "border-b-primary-second-dark text-primary-second-dark";
     const defaultTabStyle =
         "w-[50%] text-center mt-3 py-5 border-b text-gray-400 cursor-pointer transition-colors duration-300 text-sm font-medium";

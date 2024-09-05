@@ -3,15 +3,14 @@ import InfoMyPageLeft from "../common/info/InfoMyPageLeft";
 import InfoMyPageRight from "../common/info/InfoMyPageRight";
 import { accountApi } from "../api";
 import Header from "../common/header/Header";
-import { useOtherUserStore, useUserStore } from "../config/store";
+import { useUserStore } from "../config/store";
 import TabItem from "../common/tab/TabItem";
 import { useNavigate, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const MyPage = () => {
     const [isUserMypage, setIsUserMypage] = useState<boolean>(false); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
-    const { user, updateUser } = useUserStore();
-    const { setOtherUser } = useOtherUserStore();
+    const { user, updateUser, initOtherUser } = useUserStore();
     const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
     const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ const MyPage = () => {
                     updateUser(response.data);
                     setIsUserMypage(response.data.status);
                 } else {
-                    setOtherUser(response.data);
+                    initOtherUser(response.data);
                     setIsUserMypage(response.data.status);
                 }
             } catch (error) {
@@ -42,7 +41,7 @@ const MyPage = () => {
             }
         };
         getDataUserProfile();
-    }, [userId, navigate, setOtherUser, updateUser]);
+    }, [userId, navigate, updateUser, initOtherUser]);
 
     useEffect(() => {
         if (!userId) {

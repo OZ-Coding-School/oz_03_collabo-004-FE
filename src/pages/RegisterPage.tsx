@@ -46,7 +46,7 @@ const RegisterPage = () => {
             password: data.password.trim(),
         };
         if (!id || !nickname || !email || !password) {
-            alert("모든 필드를 채워주세요.");
+            toastHandler("모든 필드를 채워주세요.", false);
             setIsSubmit(false);
             return;
         }

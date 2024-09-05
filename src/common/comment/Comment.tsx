@@ -145,7 +145,7 @@ const CommentDetail = ({
                     </div>
                 )}
                 <div
-                    className="ml-1 mr-28"
+                    className="ml-1 mr-28 custom-code-block"
                     dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(content || "") }}
                 />
 
@@ -169,7 +169,7 @@ const CommentDetail = ({
 
                     <div
                         className={tw(
-                            "flex items-center bottom-4 right-4 gap-5",
+                            "flex bottom-4 right-4 gap-5",
                             color === "ai" && "hidden",
                             color === "writer" && "hidden"
                         )}

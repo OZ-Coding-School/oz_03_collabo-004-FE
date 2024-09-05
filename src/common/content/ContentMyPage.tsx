@@ -54,7 +54,7 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                         {article.title}
                     </p>
                     <div
-                        className="my-3 text-literal-normal font-normal text-sm max-h-5 overflow-hidden"
+                        className="my-3 text-literal-normal font-normal text-sm max-h-5 overflow-hidden custom-code-block"
                         dangerouslySetInnerHTML={{
                             __html: sanitizer(article.content),
                         }}

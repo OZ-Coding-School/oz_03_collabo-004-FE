@@ -145,7 +145,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                             </div>
                             <div className="text-xl my-2">{articleData && articleData.title}</div>
                             <div
-                                className="pt-3 pb-20 mb-3 border-b border-b-gray-100"
+                                className="pt-3 pb-20 mb-3 border-b border-b-gray-100 custom-code-block"
                                 dangerouslySetInnerHTML={{
                                     __html: sanitizer((articleData && articleData.content) || ""),
                                 }}

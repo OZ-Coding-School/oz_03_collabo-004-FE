@@ -51,15 +51,17 @@ const MyPage = () => {
 
     return (
         <>
-            <Header />
-            <div className="max-w-[1280px] mx-auto py-10 px-3 detail-parent">
-                <div className="flex flex-col gap-3 md:flex-row md:justify-evenly">
-                    <div className="md:mr-3 md:w-[387px] mt-7">
-                        <InfoMyPageLeft isUserMypage={isUserMypage} />
-                    </div>
-                    <div className="flex flex-col w-full md:w-[780px]">
-                        <InfoMyPageRight isUserMypage={isUserMypage} />
-                        <TabItem isUserMypage={isUserMypage} />
+            <div className="home-parent">
+                <Header />
+                <div className="max-w-[1280px] mx-auto py-10 px-3 detail-parent">
+                    <div className="flex flex-col gap-3 md:flex-row md:justify-evenly">
+                        <div className="md:mr-3 md:w-[387px] mt-7">
+                            <InfoMyPageLeft isUserMypage={isUserMypage} />
+                        </div>
+                        <div className="flex flex-col w-full md:w-[780px]">
+                            <InfoMyPageRight isUserMypage={isUserMypage} />
+                            <TabItem isUserMypage={isUserMypage} />
+                        </div>
                     </div>
                 </div>
             </div>

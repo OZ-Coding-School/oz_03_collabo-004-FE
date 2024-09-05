@@ -1,35 +1,29 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
 import { commentReport } from "../../api/report";
 import Toast from "../toast/Toast";
 import { useToastStore } from "../../config/store";
 
-const ModalReport = ({ onClose, isOpen, parent, comment_id }: ModalProps) => {
+interface ModalReportProps {
+    onClose: () => void;
+    comment_id: number;
+    isOpen: boolean;
+}
+
+const ModalReport = ({ onClose, isOpen, comment_id }: ModalReportProps) => {
     const [text, setText] = useState("");
     const length = text.length < 100 ? 100 - text.length : 0;
     const modalRef = useRef<HTMLTextAreaElement>(null);
     const { toast, setToast } = useToastStore();
-    useEffect(() => {
-        const parentElement = document.querySelector("." + parent);
-        const headerElement = document.querySelector(".header");
 
+    useEffect(() => {
         if (isOpen) {
             setToast(false, "");
-            document.body.style.overflowY = "hidden";
-            parentElement?.classList.add("blur-[2px]");
-            headerElement?.classList.add("blur-[2px]");
             modalRef.current?.focus();
         }
-
-        return () => {
-            document.body.style.overflowY = "scroll";
-            parentElement?.classList.remove("blur-[2px]");
-            headerElement?.classList.remove("blur-[2px]");
-        };
-    }, [isOpen, parent, setToast]);
+    }, [isOpen, setToast]);
 
     const handleReport = async () => {
         if (!comment_id) return;
@@ -54,11 +48,11 @@ const ModalReport = ({ onClose, isOpen, parent, comment_id }: ModalProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
-                className="fixed flex justify-center items-center inset-0 bg-black w-full h-full"
+                className="fixed flex justify-center items-center inset-0 z-50 bg-black w-full h-full"
             ></motion.nav>
             <div
                 onClick={onClose}
-                className="text-literal-normal inset-0 font-default z-40 fixed flex items-center justify-center"
+                className="text-literal-normal inset-0 font-default z-[60] fixed flex items-center justify-center"
             >
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}

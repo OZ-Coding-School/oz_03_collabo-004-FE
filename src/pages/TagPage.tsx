@@ -60,7 +60,7 @@ const TagPage = () => {
                     </p>
                     <div className="flex flex-col gap-14">
                         <div className="grid grid-cols-3 gap-3 md:gap-5">
-                            {DUMMY_TAGS.filter((tag) => tag.id !== 6).map((tag) => (
+                            {DUMMY_TAGS.filter((tag) => tag.id > 1 && tag.id !== 8).map((tag) => (
                                 <TagSkill
                                     key={tag.id}
                                     tagIcon={tag.icon}

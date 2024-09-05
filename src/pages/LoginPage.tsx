@@ -32,7 +32,6 @@ const LoginPage = () => {
         setIsSubmit(true);
         try {
             const response = await userLogin({ username: id, password: password });
-            console.log(response);
             if (response.status === 200) {
                 setIsSubmit(false);
                 navigate("/");

@@ -63,6 +63,7 @@ export interface ViewResponse {
 
 export interface Comment {
     id: number;
+    article_id: number;
     content: string;
     created_at: string;
     updated_at: string;
@@ -90,7 +91,6 @@ export interface MyComment extends Comment {
     article_title: string;
     article_user_id: number;
     article_user_nickname: string;
-    article_id: string;
 }
 
 export interface UserUpdateData {
@@ -120,4 +120,33 @@ export interface AiHunsu {
     content: string;
     created_at: string;
     updated_at: string;
+}
+
+export interface AllImages {
+    id: number;
+    image_url: string;
+    is_thumbnail: boolean;
+}
+export interface AllTags {
+    tag_id: number;
+    name: string;
+}
+export interface AllArticle {
+    article_id: number;
+    comments_count: number;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    images: AllImages[];
+    like_count: number;
+    tags: AllTags[];
+    thumbnail_image: string;
+    title: string;
+    view_count: number;
+    user: {
+        hunsoo_level: number;
+        nickname: string;
+        profile_image: string;
+        user_id: number;
+    };
 }

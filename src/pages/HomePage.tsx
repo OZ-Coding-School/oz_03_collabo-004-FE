@@ -73,11 +73,11 @@ const HomePage = () => {
         if (selectTag === 0) {
             return article;
         } else if (selectTag === 1) {
-            return article.filter((item) => [2, 3, 4, 5, 6, 7].includes(item.tags[0].tag_id));
+            return article.filter((item) => [2, 3, 4, 5, 6, 7].includes(item.tags[0]?.tag_id));
         } else if (selectTag === 8) {
-            return article.filter((item) => [9, 10].includes(item.tags[0].tag_id));
+            return article.filter((item) => [9, 10].includes(item.tags[0]?.tag_id));
         } else {
-            return article.filter((item) => item.tags[0].tag_id === selectTag);
+            return article.filter((item) => item.tags[0]?.tag_id === selectTag);
         }
     }, [article, selectTag]);
 

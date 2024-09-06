@@ -3,6 +3,17 @@ export default {
     content: ["./src/**/*.{tsx,ts,js,jsx}"],
     theme: {
         extend: {
+            keyframes: {
+                ring: {
+                    "0%": { rotate: "5deg" },
+                    "50%": { rotate: "-5deg" },
+                    "100%": { rotate: "5deg" },
+                },
+            },
+            animation: {
+                ring: "ring 0.3s ease infinite",
+            },
+
             fontFamily: {
                 default: ["pretendard Variable"],
                 point: ["Elice Digital Baeum"],

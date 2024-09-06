@@ -14,7 +14,21 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
         onClick(id);
     };
 
-    const sanitizer = DOMPurify.sanitize;
+    const removeImagesFromHtml = (html: string) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const images = doc.getElementsByTagName("img");
+
+        while (images.length > 0) {
+            images[0].parentNode!.removeChild(images[0]);
+        }
+
+        return doc.body.innerHTML;
+    };
+
+    const sanitizeAndRemoveImages = (html: string) => {
+        const sanitized = DOMPurify.sanitize(html);
+        return removeImagesFromHtml(sanitized);
+    };
 
     useHighlight();
     return (
@@ -36,7 +50,7 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
                     <h2 className="mb-2 text-lg text-black fontsize-xl break-words">{title}</h2>
                     <div
                         dangerouslySetInnerHTML={{
-                            __html: sanitizer(truncateText(content, 300)),
+                            __html: sanitizeAndRemoveImages(truncateText(content, 300)),
                         }}
                         className="tiptap prose ProseMirror text-[16px] text-black break-words"
                     />

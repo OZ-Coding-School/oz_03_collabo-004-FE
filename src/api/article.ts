@@ -23,11 +23,8 @@ export const articleCreate = (title: string, content: string, tags: number, imag
         tag_id: tags,
         temp_image_ids: image,
     };
-    return axiosInstance.post(`/article/create/`, requestForm, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    console.log(requestForm);
+    return axiosInstance.post(`/article/create/`, requestForm);
 };
 
 export const articleView = (article_id: number) => {

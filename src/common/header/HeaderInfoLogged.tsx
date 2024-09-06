@@ -102,7 +102,7 @@ const HeaderInfoLogged = () => {
                     <IoNotifications
                         className={tw(
                             "text-gray-200 cursor-pointer transition size-6 text-lg",
-                            notificationData && notificationData.length > 0 && "text-yellow-500"
+                            notificationData && notificationData.length > 0 && "text-yellow-500 animate-ring"
                         )}
                     />
                     {notificationData && notificationData.length > 0 && (

@@ -25,15 +25,27 @@ const HomePage = () => {
     const { article, initArticle, selectTag } = useArticleStore();
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
     const [filterArticle, setFilterArticle] = useState<AllArticle[] | null>(null);
-    const initArticles = useCallback(async () => {
-        const articleResponse = await articleApi.articleList();
-        initArticle(articleResponse.data);
-    }, [initArticle]);
     const navigate = useNavigate();
     const location = useLocation();
 
     const articleIdFromURL = new URLSearchParams(location.search).get("article");
     const searchFormURL = new URLSearchParams(location.search).get("search");
+    const editorFormURL = new URLSearchParams(location.search).get("editor");
+
+    const initArticles = useCallback(async () => {
+        const articleResponse = await articleApi.articleList();
+        initArticle(articleResponse.data);
+    }, [initArticle]);
+
+    const editModalSelectHandler = (id: string) => {
+        navigate(`?editor=${id}`);
+        setEditModalStatus(true);
+    };
+
+    const editModalOpenHandler = () => {
+        navigate(`?editor=new`);
+        setEditModalStatus(true);
+    };
 
     const editModalCloseHandler = () => {
         setEditModalStatus(false);
@@ -48,6 +60,14 @@ const HomePage = () => {
         navigate(`?article=${id}`);
         setDetailModalStatus(true);
     };
+
+    useEffect(() => {
+        if (editorFormURL) {
+            setEditModalStatus(true);
+        } else {
+            setEditModalStatus(false);
+        }
+    }, [editorFormURL]);
 
     // URL에 있는 articleId에 따라 모달 열기/닫기 제어
     useEffect(() => {
@@ -98,7 +118,7 @@ const HomePage = () => {
                         <div className="w-[40px] h-[40px] relative ">
                             <ProfileImage src={user.profile_image} />
                         </div>
-                        <EditorInput onClick={() => setEditModalStatus(true)} />
+                        <EditorInput onClick={() => editModalOpenHandler()} />
                     </div>
                     {!filterArticle && (
                         <div className="flex flex-col gap-4">
@@ -159,6 +179,7 @@ const HomePage = () => {
                         isOpen={detailModalStatus}
                         parent={"home-parent"}
                         onClose={detailModalCloseHandler}
+                        onSelect={editModalSelectHandler}
                         articleId={selectedArticleId as number}
                     />
                 )}

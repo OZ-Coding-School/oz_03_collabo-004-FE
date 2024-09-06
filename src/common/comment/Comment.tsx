@@ -45,7 +45,7 @@ const CommentDetail = ({
 
     const handleReportClick = () => {
         if (user.user_id === 0) {
-            toast("로그인 후 이용가능합니다.");
+            toast("로그인 후 이용 가능합니다.");
             return;
         }
         setIsReportModalOpen(true);
@@ -167,7 +167,7 @@ const CommentDetail = ({
                 ></div>
                 <div className="flex-wrap justify-between sm:flex">
                     {color === "default" && (
-                        <div className="flex items-center gap-1 mt-auto cursor-pointer duration-200 rounded-md px-1">
+                        <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
                             <RiAlarmWarningFill className="text-literal-highlight" />
                             <p className="text-literal-highlight font-medium text-sm" onClick={handleReportClick}>
                                 신고하기

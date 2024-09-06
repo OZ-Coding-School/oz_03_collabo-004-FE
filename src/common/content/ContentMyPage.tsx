@@ -2,11 +2,13 @@ import { MyArticle, MyComment } from "../../config/types";
 import Badge from "../badge/Badge";
 import ModalDetail from "../modal/ModalDetail";
 import { ModalPortal } from "../../config/ModalPortal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { truncateText } from "../../util/truncate";
 import useHighlight from "../../hooks/useHighlight";
+import { useLocation, useNavigate } from "react-router-dom";
+import ModalEditor from "../modal/ModalEditor";
 
 interface ContentMyPageProps {
     activeTab: number;
@@ -17,15 +19,33 @@ interface ContentMyPageProps {
 const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
     const isArticleTab = activeTab === 0 && article;
     const isCommentTab = activeTab === 1 && comment;
+    const nav = useNavigate();
+    const location = useLocation();
 
     const createdAt = isArticleTab ? article.created_at : isCommentTab ? comment.created_at : null;
     const formattedDate = dayjs(createdAt).format("YYYY년 MM월 DD일");
-
-    const sanitizer = DOMPurify.sanitize;
+    const editorFormURL = new URLSearchParams(location.search).get("editor");
 
     //모달관련
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number>();
+    const [editModalStatus, setEditModalStatus] = useState(false);
+
+    useEffect(() => {
+        if (editorFormURL) {
+            setEditModalStatus(true);
+        }
+    }, [editorFormURL]);
+
+    const editModalSelectHandler = (id: string) => {
+        nav(`?editor=${id}`);
+    };
+
+    const editModalCloseHandler = () => {
+        setEditModalStatus(false);
+        nav("/my");
+    };
+
     const openDetailModal = (article_id: number) => {
         setSelectedArticleId(article_id);
         setIsDetailModalOpen(true);
@@ -36,6 +56,22 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
     };
 
     useHighlight();
+
+    const removeImagesFromHtml = (html: string) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const images = doc.getElementsByTagName("img");
+
+        while (images.length > 0) {
+            images[0].parentNode!.removeChild(images[0]);
+        }
+
+        return doc.body.innerHTML;
+    };
+
+    const sanitizeAndRemoveImages = (html: string) => {
+        const sanitized = DOMPurify.sanitize(html);
+        return removeImagesFromHtml(sanitized);
+    };
 
     if (isArticleTab) {
         return (
@@ -58,9 +94,20 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                         {article.title}
                     </p>
                     <div
+                        className={`flex justify-center mt-[20px] mb-[10px] ${article.thumbnail_image ? "" : "hidden"}`}
+                    >
+                        {article.thumbnail_image && (
+                            <img
+                                src={article.thumbnail_image}
+                                alt={article.title}
+                                className="object-cover w-[426px] h-[200px] rounded-[5px]"
+                            />
+                        )}
+                    </div>
+                    <div
                         className="my-3 text-literal-normal font-normal text-sm overflow-hidden custom-code-block tiptab prose ProseMirror"
                         dangerouslySetInnerHTML={{
-                            __html: sanitizer(truncateText(article.content, 300)),
+                            __html: sanitizeAndRemoveImages(truncateText(article.content, 300)),
                         }}
                     />
                 </div>
@@ -68,11 +115,15 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                 <ModalPortal>
                     {isDetailModalOpen && selectedArticleId && (
                         <ModalDetail
+                            onSelect={editModalSelectHandler}
                             isOpen={isDetailModalOpen}
                             parent="home-parent"
                             onClose={closeDetailModal}
                             articleId={article.article_id}
                         />
+                    )}
+                    {editModalStatus && selectedArticleId && (
+                        <ModalEditor parent="home-parent" isOpen={editModalStatus} onClose={editModalCloseHandler} />
                     )}
                 </ModalPortal>
             </div>
@@ -109,8 +160,9 @@ const ContentMyPage = ({ activeTab, article, comment }: ContentMyPageProps) => {
                     </div>
                 </div>
                 <ModalPortal>
-                    {isDetailModalOpen && selectedArticleId && (
+                    {isDetailModalOpen && (
                         <ModalDetail
+                            onSelect={editModalSelectHandler}
                             isOpen={isDetailModalOpen}
                             parent="home-parent"
                             onClose={closeDetailModal}

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
 import Button from "../button/Button";
@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { twMerge as tw } from "tailwind-merge";
 import ModalDetail from "../modal/ModalDetail";
 import { HiXCircle } from "react-icons/hi";
+import { MdAdminPanelSettings } from "react-icons/md";
 const HeaderInfoLogged = () => {
     const nav = useNavigate();
     const { user, initUser } = useUserStore();
@@ -21,14 +22,25 @@ const HeaderInfoLogged = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number>();
     const [notificationData, setNotificationData] = useState<notification[]>([]);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const location = useLocation();
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
+
         setIsDetailModalOpen(true);
         handleNotificationRead(notification_id);
     };
+
     const closeDetailModal = () => {
         setIsDetailModalOpen(false);
+    };
+
+    const editModalNewHandler = () => {
+        nav(`?editor=new`);
+    };
+    const editModalSelectHandler = (id: string) => {
+        nav(`?editor=${id}`);
     };
 
     const modalEditorStatusClose = () => {
@@ -43,7 +55,9 @@ const HeaderInfoLogged = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await accountApi.userInfo();
+            const roleResponse = await authApi.userRoleStatus();
             initUser(response.data);
+            setIsAdmin(roleResponse.data.status);
         };
         fetchData();
     }, [initUser]);
@@ -113,9 +127,9 @@ const HeaderInfoLogged = () => {
 
                     <div
                         className="min-w-80 max-h-80 overflow-y-auto absolute top-12 right-0 text-sm text-literal-normal font-normal bg-white p-1 rounded-xl shadow-lg
-                       invisible group-hover:visible opacity-0 group-hover:opacity-100 duration-300 translate-x-[10%]"
+                        invisible group-hover:visible opacity-0 group-hover:opacity-100 duration-300 translate-x-[10%]"
                     >
-                        <div className="w-full h-full px-1 py-2 flex flex-col gap-2">
+                        <div className="w-full h-full px-1 py-1 flex flex-col gap-2">
                             {notificationData && notificationData.length > 0 ? (
                                 notificationData.map((notifi) => (
                                     <div
@@ -145,13 +159,17 @@ const HeaderInfoLogged = () => {
                         </div>
                     </div>
                 </div>
-                <Button
-                    onClick={() => setModalEditorStatus(true)}
-                    color="confirm"
-                    className="px-2 py-0 flex gap-1 justify-center items-center"
-                >
-                    <PiPencilCircleDuotone className="size-5" /> <div className="text-sm font-normal">새 포스트</div>
-                </Button>
+                {location.pathname === "/" && (
+                    <Button
+                        color="confirm"
+                        onClick={editModalNewHandler}
+                        className=" px-2 py-0 flex gap-1 justify-center items-center"
+                    >
+                        <PiPencilCircleDuotone className="size-5" />{" "}
+                        <div className="text-sm font-normal">훈수 요청</div>
+                    </Button>
+                )}
+
                 <div className="flex justify-center items-center relative">
                     <div className="w-[36px] h-[36px] cursor-pointer relative group">
                         <ProfileImage src={user.profile_image} />
@@ -166,6 +184,15 @@ const HeaderInfoLogged = () => {
                                 >
                                     <CgProfile className="size-4" /> 마이페이지
                                 </div>
+                                {isAdmin ? (
+                                    <div
+                                        onClick={() => nav("/admin")}
+                                        className="font-normal px-1 py-1 flex gap-2 items-center text-gray-400 duration-200 hover:text-gray-700"
+                                    >
+                                        <MdAdminPanelSettings className="size-4" /> Admin
+                                    </div>
+                                ) : null}
+
                                 <Button onClick={handleLogout} color="danger" className="px-2 py-1 text-sm font-normal">
                                     로그아웃
                                 </Button>
@@ -180,6 +207,7 @@ const HeaderInfoLogged = () => {
                 )}
                 {isDetailModalOpen && selectedArticleId && (
                     <ModalDetail
+                        onSelect={editModalSelectHandler}
                         isOpen={isDetailModalOpen}
                         parent="home-parent"
                         onClose={closeDetailModal}

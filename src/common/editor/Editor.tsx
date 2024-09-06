@@ -46,6 +46,16 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
 
     const handleImageUpload = async (files: FileList | null) => {
         if (files === null) return;
+
+        const allowedExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+
+        const validFiles = Array.from(files).filter((file) => allowedExtensions.test(file.name));
+
+        if (validFiles.length === 0) {
+            setToast(true, "유효한 이미지 파일을 선택해주세요.");
+            return;
+        }
+
         const file = files[0];
         const formData = new FormData();
         formData.append("images", file);
@@ -54,12 +64,11 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
             const imgURL = imgResponse.data.image_url;
             const imgID = imgResponse.data.id;
 
-            editor?.chain().focus().setImage({ src: imgURL, id: imgID }).run();
+            editor?.chain().focus().setImage({ src: imgURL, id: imgID, alt: imgID }).run();
 
             onImageUpload(imgID, imgURL);
-            setToast(true, "이미지가 성공적으로 업로드되었습니다.");
         } catch (error) {
-            setToast(true, `이미지 업로드에 실패했습니다. ${error}`);
+            setToast(true, `${error}`);
         }
     };
 
@@ -72,7 +81,6 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
             linkInputRef.current?.focus();
         } else {
             setIsLinkInputVisible(false);
-            setToast(true, "글자를 드래그 하고 링크를 사용하세요");
         }
     };
 
@@ -278,6 +286,8 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
                     ref={fileInputRef}
                     tabIndex={-1}
                     type="file"
+                    name="img"
+                    accept="image/*"
                     className="hidden"
                     id="file-upload"
                 ></input>
@@ -315,21 +325,24 @@ const extensions = [
 
 interface EditorProps {
     initialContent?: string | JSONContent;
-    onTitleChange?: (title: string) => void;
+    initialTitle?: string;
+    onTitleChange: (title: string) => void;
     onContentChange?: (content: string) => void;
 }
 
-const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChange, onContentChange }) => {
-    const [title, setTitle] = useState("");
+const TipTapEditor: React.FC<EditorProps> = ({
+    initialTitle = "",
+    initialContent = "",
+    onTitleChange,
+    onContentChange,
+}) => {
     const { image, addImage, removeImage } = useImageStore(); // 이미지 스토어에서 상태와 함수 가져오기
-    const { setToast } = useToastStore();
+    const [title, setTitle] = useState(initialTitle);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
         setTitle(newTitle);
-        if (onTitleChange) {
-            onTitleChange(newTitle);
-        }
+        onTitleChange(newTitle);
     };
 
     const handleImageUpload = (id: string, url: string) => {
@@ -342,9 +355,8 @@ const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChang
             try {
                 await articleApi.articleDeleteImage(imgId);
                 removeImage(url, imgId); // 스토어에서 이미지 삭제
-                setToast(true, "이미지가 성공적으로 삭제되었습니다.");
             } catch (error) {
-                setToast(true, `이미지 삭제에 실패했습니다. ${error}`);
+                console.warn(error);
             }
         }
     };
@@ -373,6 +385,13 @@ const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChang
             });
         },
     });
+
+    useEffect(() => {
+        if (editor) {
+            editor.commands.setContent(initialContent, true);
+            setTitle(initialTitle);
+        }
+    }, [editor, initialContent, initialTitle]);
 
     return (
         <div className="w-full h-full flex flex-col font-default">

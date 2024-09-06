@@ -5,12 +5,14 @@ import { IoClose } from "react-icons/io5";
 import ButtonRegister from "../button/ButtonRegister";
 import { ModalProps } from "../../config/types";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../../api";
+import { accountApi, authApi } from "../../api";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useUserStore } from "../../config/store";
 
 const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const nav = useNavigate();
+    const { initUser } = useUserStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -55,6 +57,8 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
     const googleLoginRequest = async (token: string) => {
         try {
             await authApi.userGoogleAccessTokenReceiver(token);
+            const accountResponse = await accountApi.userInfo();
+            initUser(accountResponse.data);
             nav("/");
             onClose();
         } catch (error) {

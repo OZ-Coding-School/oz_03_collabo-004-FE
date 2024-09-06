@@ -134,7 +134,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                 <motion.nav
                     tabIndex={-1}
                     ref={modalRef}
-                    onKeyDown={(e) => e.key === "Escape" && onClose()}
+                    onKeyDown={(e) => e.key === "Escape" && setModalConfirmStatus(true)}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}

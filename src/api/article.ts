@@ -23,7 +23,6 @@ export const articleCreate = (title: string, content: string, tags: number, imag
         tag_id: tags,
         temp_image_ids: image,
     };
-    console.log(requestForm);
     return axiosInstance.post(`/article/create/`, requestForm);
 };
 
@@ -55,4 +54,20 @@ export const articleUploadImage = (image: File) => {
 };
 export const articleDeleteImage = (image_id: string) => {
     return axiosInstance.delete(`/article/images/${image_id}/`);
+};
+
+export const articleRePost = (
+    title: string,
+    content: string,
+    tags: number,
+    image: string[] | null,
+    article_id: number
+) => {
+    const requestForm = {
+        title: title,
+        content: content,
+        tag_id: tags,
+        temp_image_ids: image,
+    };
+    return axiosInstance.patch(`/article/update/${article_id}/`, requestForm);
 };

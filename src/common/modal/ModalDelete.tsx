@@ -29,6 +29,10 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
         parentOnClose();
     };
 
+    const handleArticleCancel = () => {
+        onClose();
+    };
+
     return (
         <>
             <motion.nav
@@ -60,7 +64,7 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
                             <Button onClick={() => handleDeleteArticle(id)} className="w-full" color="danger">
                                 삭제
                             </Button>
-                            <Button onClick={onClose} className="w-full">
+                            <Button onClick={handleArticleCancel} className="w-full">
                                 취소
                             </Button>
                         </div>

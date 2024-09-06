@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "../button/Button";
 import { articleApi } from "../../api";
-import { useArticleStore } from "../../config/store";
+import { useArticleStore, useImageStore } from "../../config/store";
+import { useNavigate } from "react-router-dom";
 
 interface ModalConfirmProps {
     onClose: () => void;
@@ -12,8 +13,10 @@ interface ModalConfirmProps {
 }
 
 const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => {
+    const nav = useNavigate();
     const modalRef = useRef<HTMLTextAreaElement>(null);
     const { initArticle } = useArticleStore();
+    const { image, resetImage } = useImageStore();
     useEffect(() => {
         if (isOpen) {
             modalRef.current?.focus();
@@ -21,10 +24,22 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
     }, [isOpen]);
 
     const handleConfirm = async () => {
-        const responseArticle = await articleApi.articleList();
-        initArticle(responseArticle.data);
+        nav("/");
         onClose();
         parentOnClose();
+        if (image && image.id !== null) {
+            image.id.forEach(async (itemId) => {
+                await articleApi.articleDeleteImage(itemId);
+                resetImage();
+            });
+        }
+
+        const responseArticle = await articleApi.articleList();
+        initArticle(responseArticle.data);
+    };
+
+    const handleClose = async () => {
+        onClose();
     };
 
     return (
@@ -58,7 +73,7 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
                             <Button onClick={handleConfirm} className="w-full">
                                 확인
                             </Button>
-                            <Button onClick={onClose} className="w-full">
+                            <Button onClick={handleClose} className="w-full">
                                 취소
                             </Button>
                         </div>

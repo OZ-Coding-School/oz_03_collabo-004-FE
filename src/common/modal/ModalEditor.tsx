@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
 import ModalEditorSelect from "./ModalEditorSelect";
-import { articleApi } from "../../api";
+import { accountApi, articleApi } from "../../api";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalConfirm from "./ModalConfirm";
-import { useArticleStore, useImageStore } from "../../config/store";
+import { useArticleStore, useImageStore, useUserStore } from "../../config/store";
 import TipTapEditor from "../editor/Editor";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
@@ -15,20 +16,60 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     const [content, setContent] = useState("");
     const [tags, setTags] = useState(4);
     const [modalConfirmStatus, setModalConfirmStatus] = useState(false);
-    const { initArticle } = useArticleStore();
+    const { initArticle, article } = useArticleStore();
     const { image, resetImage } = useImageStore();
+    const { user, initUser } = useUserStore();
+    const location = useLocation();
+    const nav = useNavigate();
+    const editorFormURL = new URLSearchParams(location.search).get("editor");
+
+    useEffect(() => {
+        const initEditor = (id: number) => {
+            if (article) {
+                const selectData = article.find((item) => item.article_id === id);
+
+                setTitle(selectData?.title as string);
+                setContent(selectData?.content as string);
+            }
+        };
+
+        if (editorFormURL === "new") return;
+        if (!user.articles.find((item) => item.article_id === Number(editorFormURL))) {
+            return nav("/");
+        } else {
+            initEditor(Number(editorFormURL));
+        }
+    }, [editorFormURL, user.articles, nav, article]);
 
     const handleModalConfirmClose = () => {
         setModalConfirmStatus(false);
     };
 
     const handleSubmit = async () => {
-        await articleApi.articleCreate(title, content, tags, image.id ? image.id : null);
-        const responseArticle = await articleApi.articleList();
-        console.log("전송된 이미지", image);
+        if (editorFormURL !== "new") {
+            const doc = new DOMParser().parseFromString(content, "text/html");
+            const currentImagesAlt = Array.from(doc.images).map((img) => img.alt);
+            onClose();
+            await articleApi.articleRePost(
+                title,
+                content,
+                tags,
+                currentImagesAlt ? currentImagesAlt : [],
+                Number(editorFormURL)
+            );
+            resetImage();
+            const responseArticle = await articleApi.articleList();
+            initArticle(responseArticle.data);
+            return;
+        }
+
+        await articleApi.articleCreate(title, content, tags, image.id ? image.id : []);
         resetImage();
-        initArticle(responseArticle.data);
         onClose();
+        const responseArticle = await articleApi.articleList();
+        const responseUser = await accountApi.userInfo();
+        initArticle(responseArticle.data);
+        initUser(responseUser.data);
     };
 
     const handleSetTag = (number: number) => {
@@ -76,6 +117,10 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
         };
     }, [isOpen, parent]);
 
+    const handleArticleCancel = () => {
+        setModalConfirmStatus(true);
+    };
+
     return (
         <>
             <motion.nav
@@ -97,6 +142,8 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                 >
                     <div className="flex-grow overflow-hidden p-4">
                         <TipTapEditor
+                            initialTitle={title}
+                            initialContent={content}
                             onTitleChange={(title) => setTitle(title)}
                             onContentChange={(content) => setContent(content)}
                         />
@@ -107,9 +154,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                         <Button onClick={handleSubmit} color="confirm">
                             작성
                         </Button>
-                        <Button onClick={() => setModalConfirmStatus(true)} color="danger">
-                            취소
-                        </Button>
+                        <Button onClick={handleArticleCancel}>취소</Button>
                     </div>
                 </motion.nav>
             </div>

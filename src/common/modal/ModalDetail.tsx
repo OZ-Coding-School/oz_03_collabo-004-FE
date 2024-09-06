@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import hljs from "highlight.js";
 import Toast from "../toast/Toast";
 
-const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
+const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailModalProps) => {
     const { user } = useUserStore();
     const [modalDeleteStatus, setModalDeleteStatus] = useState(false);
     const [comments, setComments] = useState<MyComment[]>([]);
@@ -145,6 +145,15 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
         setToast(true, text);
     };
 
+    const handleReArticle = (id: string) => {
+        onClose();
+        onSelect(id);
+    };
+
+    const handleModalExit = () => {
+        onClose();
+    };
+
     return (
         <>
             <motion.nav
@@ -154,7 +163,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                 className="modal-content z-40 fixed flex justify-center items-center inset-0 bg-black w-full h-full"
             ></motion.nav>
             <div
-                onClick={onClose}
+                onClick={handleModalExit}
                 className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-40 "
             >
                 {toast.status && <Toast />}
@@ -182,7 +191,10 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                                     <div className="text-sm text-gray-400 flex gap-1">
                                         {!articleData.is_closed && (
                                             <>
-                                                <span className="cursor-pointer duration-150 hover:text-literal-normal">
+                                                <span
+                                                    onClick={() => handleReArticle(String(articleData.article_id))}
+                                                    className="cursor-pointer duration-150 hover:text-literal-normal"
+                                                >
                                                     수정
                                                 </span>
                                                 /

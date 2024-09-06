@@ -24,11 +24,20 @@ const HeaderInfoLogged = () => {
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
+
         setIsDetailModalOpen(true);
         handleNotificationRead(notification_id);
     };
+
     const closeDetailModal = () => {
         setIsDetailModalOpen(false);
+    };
+
+    const editModalNewHandler = () => {
+        nav(`?editor=new`);
+    };
+    const editModalSelectHandler = (id: string) => {
+        nav(`?editor=${id}`);
     };
 
     const modalEditorStatusClose = () => {
@@ -146,7 +155,7 @@ const HeaderInfoLogged = () => {
                     </div>
                 </div>
                 <Button
-                    onClick={() => setModalEditorStatus(true)}
+                    onClick={editModalNewHandler}
                     color="confirm"
                     className="px-2 py-0 flex gap-1 justify-center items-center"
                 >
@@ -180,6 +189,7 @@ const HeaderInfoLogged = () => {
                 )}
                 {isDetailModalOpen && selectedArticleId && (
                     <ModalDetail
+                        onSelect={editModalSelectHandler}
                         isOpen={isDetailModalOpen}
                         parent="home-parent"
                         onClose={closeDetailModal}

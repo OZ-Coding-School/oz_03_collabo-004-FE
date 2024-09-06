@@ -150,3 +150,20 @@ export interface AllArticle {
         user_id: number;
     };
 }
+
+export interface notification {
+    id: number;
+    recipient: number;
+    actor_nickname?: string;
+    actor_username?: string;
+    verb: string;
+    content_type: string;
+    object_id: number;
+    target_object: string;
+    read: boolean;
+    timestamp: string;
+    description: string;
+    article_title: string;
+    comment_content: string;
+    article_id: number;
+}

@@ -46,37 +46,29 @@ const RegisterPage = () => {
             password: data.password.trim(),
         };
         if (!id || !nickname || !email || !password) {
-            toastHandler("모든 필드를 채워주세요.", false);
+            toastHandler("모든 필드를 채워주세요.");
             setIsSubmit(false);
             return;
         }
         try {
             const response = await userRegister({ username: id, nickname: nickname, password: password, email: email });
             console.log(response);
-            if (response.status === 200) {
-                setIsSubmit(false);
-                toastHandler("회원가입이 완료되었습니다.", true);
-                reset();
-            }
+            reset();
+            setIsSubmit(false);
+            navigate("/tag");
         } catch (error) {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
                 console.log("회원가입 실패", error);
                 if (error.response.status === 400) {
-                    toastHandler("아이디, 이메일 또는 닉네임이 중복되었습니다.", false);
+                    toastHandler("아이디, 이메일 또는 닉네임이 중복되었습니다.");
                     reset({ id: "", nickname: "", email: "" });
                 }
             }
         }
     };
-    const toastHandler = (text: string, success: boolean) => {
+    const toastHandler = (text: string) => {
         setToast(true, text);
-        if (success) {
-            setTimeout(() => {
-                setToast(false, "");
-                navigate("/tag");
-            }, 2000);
-        }
     };
 
     return (

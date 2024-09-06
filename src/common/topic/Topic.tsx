@@ -1,10 +1,12 @@
 import { twMerge as tw } from "tailwind-merge";
 import { DUMMY_TAGS } from "../../config/const";
 import { FaChevronRight } from "react-icons/fa6";
-import { useArticleStore } from "../../config/store";
+import { useArticleStore, useUserStore } from "../../config/store";
+import { FaStar } from "react-icons/fa6";
 
 const Topic = () => {
     const { selectTag, setTag } = useArticleStore();
+    const { user } = useUserStore();
 
     const handleTagClick = (id: number) => {
         if (selectTag === id) return;
@@ -97,6 +99,26 @@ const Topic = () => {
                     </li>
                 </ul>
             </div>
+            {user && user.selected_tags.length > 0 && (
+                <>
+                    <Line />
+                    <div className="w-full mb-2">
+                        <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-2 rounded-md">
+                            <li
+                                key="customTag"
+                                onClick={() => setTag(100)}
+                                className={tw(
+                                    "flex text-md items-center gap-2 font-medium duration-100 hover:text-primary-second-dark cursor-pointer",
+                                    selectTag === 100 && "text-primary-second-dark"
+                                )}
+                            >
+                                <FaStar />
+                                나의 전문 훈수
+                            </li>
+                        </ul>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

@@ -16,11 +16,12 @@ export const articleAddLike = (article_id: number) => {
     return axiosInstance.post(`/article/${article_id}/like/`, { withCredentials: true });
 };
 
-export const articleCreate = (title: string, content: string, tags: number) => {
+export const articleCreate = (title: string, content: string, tags: number, image: string[] | null) => {
     const requestForm = {
         title: title,
         content: content,
         tag_id: tags,
+        temp_image_ids: image,
     };
     return axiosInstance.post(`/article/create/`, requestForm, {
         headers: {
@@ -46,5 +47,15 @@ export const articleTopList = () => {
 };
 
 export const articleUploadImage = (image: File) => {
-    return axiosInstance.post(`/article/images/`, image);
+    const requestForm = {
+        images: image,
+    };
+    return axiosInstance.post(`/article/images/`, requestForm, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+};
+export const articleDeleteImage = (image_id: string) => {
+    return axiosInstance.delete(`/article/images/${image_id}/`);
 };

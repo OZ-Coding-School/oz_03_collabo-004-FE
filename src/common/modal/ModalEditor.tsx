@@ -6,7 +6,7 @@ import ModalEditorSelect from "./ModalEditorSelect";
 import { articleApi } from "../../api";
 import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalConfirm from "./ModalConfirm";
-import { useArticleStore } from "../../config/store";
+import { useArticleStore, useImageStore } from "../../config/store";
 import TipTapEditor from "../editor/Editor";
 
 const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
@@ -16,14 +16,17 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     const [tags, setTags] = useState(4);
     const [modalConfirmStatus, setModalConfirmStatus] = useState(false);
     const { initArticle } = useArticleStore();
+    const { image, resetImage } = useImageStore();
 
     const handleModalConfirmClose = () => {
         setModalConfirmStatus(false);
     };
 
     const handleSubmit = async () => {
-        await articleApi.articleCreate(title, content, tags);
+        await articleApi.articleCreate(title, content, tags, image.id ? image.id : null);
         const responseArticle = await articleApi.articleList();
+        console.log("전송된 이미지", image);
+        resetImage();
         initArticle(responseArticle.data);
         onClose();
     };

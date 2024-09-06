@@ -11,13 +11,15 @@ interface ProfileStatusProps {
 
 const ProfileStatus = ({ nickname, user_id, hunsoo_level, profile_image }: ProfileStatusProps) => {
     return (
-        <Link to={`/my/${user_id}`}>
+        <div>
             <div className="flex gap-2 text-literal-normal mb-[5px]">
-                <div className="relative w-[40px] h-[40px] my-auto">
+                <Link to={`/my/${user_id}`} className="relative w-[40px] h-[40px] my-auto">
                     <ProfileImage src={profile_image} />
-                </div>
+                </Link>
                 <div className="flex flex-col">
-                    <div className="font-semibold">{nickname}</div>
+                    <Link to={`/my/${user_id}`} className="font-semibold">
+                        {nickname}
+                    </Link>
 
                     <div className="flex gap-1 text-sm">
                         <div className="font-point">Lv{hunsoo_level}</div>
@@ -25,7 +27,7 @@ const ProfileStatus = ({ nickname, user_id, hunsoo_level, profile_image }: Profi
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 };
 

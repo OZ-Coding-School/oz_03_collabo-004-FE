@@ -91,3 +91,36 @@ export const useArticleStore = create<ArticleStore>((set) => ({
     initSearch: (form: AllArticle[]) => set(() => ({ search: form })),
     setTag: (tag: number) => set(() => ({ selectTag: tag })),
 }));
+
+interface Image {
+    src: string[] | null;
+    id: string[] | null;
+}
+
+interface ImageStore {
+    image: Image;
+    initImage: (src: string[], id: string[]) => void;
+    addImage: (src: string, id: string) => void;
+    removeImage: (src: string, id: string) => void;
+    resetImage: () => void;
+}
+
+export const useImageStore = create<ImageStore>((set) => ({
+    image: { src: null, id: null },
+    initImage: (src: string[], id: string[]) => set(() => ({ image: { src, id } })), // 이미지 초기화
+    addImage: (src: string, id: string) =>
+        set((state) => ({
+            image: {
+                src: state.image.src ? [...state.image.src, src] : [src],
+                id: state.image.id ? [...state.image.id, id] : [id],
+            },
+        })),
+    removeImage: (src: string, id: string) =>
+        set((state) => ({
+            image: {
+                src: state.image.src?.filter((img) => img !== src) || null,
+                id: state.image.id?.filter((imgId) => imgId !== id) || null,
+            },
+        })),
+    resetImage: () => set(() => ({ image: { src: null, id: null } })), // 초기화
+}));

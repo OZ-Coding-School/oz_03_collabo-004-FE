@@ -22,68 +22,77 @@ import { IoMdQuote } from "react-icons/io";
 import { articleApi } from "../../api";
 import { FaCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useToastStore } from "../../config/store";
+import { useImageStore, useToastStore } from "../../config/store";
 
 import Toast from "../toast/Toast";
 const lowlight = createLowlight(common);
 
-const MenuBar = ({ editor }: any) => {
-    const [linkInputStatus, setLinkInputStatus] = useState(false);
+const MenuBar = ({ editor, onImageUpload }: any) => {
+    const [isLinkInputVisible, setIsLinkInputVisible] = useState(false);
     const [linkInput, setLinkInput] = useState("");
     const { setToast, toast } = useToastStore();
-    const inputRef = useRef<HTMLInputElement>(null);
-    const linkRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const linkInputRef = useRef<HTMLInputElement>(null);
+
     if (!editor) {
         return null;
     }
 
-    const handleImageUpload = () => {
-        if (inputRef.current) {
-            inputRef.current.click();
+    const handleImageUploadClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
         }
     };
 
-    const handleUploadPhoto = async (files: FileList | null) => {
+    const handleImageUpload = async (files: FileList | null) => {
         if (files === null) return;
         const file = files[0];
         const formData = new FormData();
-        formData.append("file", file);
-        const imgResponse = await articleApi.articleUploadImage(file);
-        const IMG_URL = imgResponse.data.image_url;
+        formData.append("images", file);
+        try {
+            const imgResponse = await articleApi.articleUploadImage(file);
+            const imgURL = imgResponse.data.image_url;
+            const imgID = imgResponse.data.id;
 
-        editor.commands.setImage({ src: IMG_URL });
+            editor?.chain().focus().setImage({ src: imgURL, id: imgID }).run();
+
+            onImageUpload(imgID, imgURL);
+            setToast(true, "이미지가 성공적으로 업로드되었습니다.");
+        } catch (error) {
+            setToast(true, `이미지 업로드에 실패했습니다. ${error}`);
+        }
     };
 
-    const handleLinkInput = () => {
+    const toggleLinkInput = () => {
         const { from, to } = editor.state.selection;
         const selectedText = editor.getHTML().slice(from, to);
 
         if (selectedText) {
-            setLinkInputStatus(true);
-            linkRef.current?.focus();
+            setIsLinkInputVisible(true);
+            linkInputRef.current?.focus();
         } else {
-            setLinkInputStatus(false);
+            setIsLinkInputVisible(false);
             setToast(true, "글자를 드래그 하고 링크를 사용하세요");
         }
     };
 
-    const handleLinkCreate = () => {
+    const handleLinkSubmit = () => {
         if (!linkInput.includes("http")) {
             setLinkInput("");
-            setLinkInputStatus(false);
+            setIsLinkInputVisible(false);
             return;
         }
-        setLinkInputStatus(false);
+        setIsLinkInputVisible(false);
         editor.commands.setLink({ href: linkInput, target: "_blank" });
         setLinkInput("");
     };
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        if (linkInputStatus) {
-            linkRef.current?.focus();
+        if (isLinkInputVisible) {
+            linkInputRef.current?.focus();
         }
-    }, [linkInputStatus]);
+    }, [isLinkInputVisible]);
 
     return (
         <div className="flex gap-3 w-full justify-center items-center text-gray-800 mb-2 bg-gray-100 p-2 rounded-md relative">
@@ -229,24 +238,24 @@ const MenuBar = ({ editor }: any) => {
                 <RxDividerVertical className="text-gray-600 text-xl" />
             </div>
             <div className="relative flex flex-col items-center">
-                <button onClick={handleLinkInput} className={tw("p-1 hover:bg-gray-150 transition rounded-md")}>
+                <button onClick={toggleLinkInput} className={tw("p-1 hover:bg-gray-150 transition rounded-md")}>
                     <LuLink />
                 </button>
-                {linkInputStatus && (
+                {isLinkInputVisible && (
                     <motion.div
                         animate={{ scaleX: [0, 1] }}
                         transition={{ duration: 1, type: "spring" }}
                         className="absolute -bottom-11 flex gap-0"
                     >
                         <input
-                            ref={linkRef}
+                            ref={linkInputRef}
                             value={linkInput}
-                            onKeyDown={(e) => e.key === "Enter" && handleLinkCreate()}
+                            onKeyDown={(e) => e.key === "Enter" && handleLinkSubmit()}
                             onChange={(e) => setLinkInput(e.currentTarget.value)}
                             className="px-2 h-[30px] rounded-l-md outline-none border-gray-400 border-2 border-r-0"
                         />
                         <button
-                            onClick={handleLinkCreate}
+                            onClick={handleLinkSubmit}
                             className="hover:bg-gray-700 transition h-[30px] w-fit px-1 rounded-r-md bg-gray-400 text-white"
                         >
                             <FaCheck />
@@ -255,7 +264,7 @@ const MenuBar = ({ editor }: any) => {
                 )}
             </div>
             <button
-                onClick={handleImageUpload}
+                onClick={handleImageUploadClick}
                 className={tw(
                     "p-1 hover:bg-gray-150 transition rounded-md",
                     editor.isActive("blockquote") && "bg-gray-200 hover:bg-gray-150 rounded-md"
@@ -264,9 +273,9 @@ const MenuBar = ({ editor }: any) => {
                 <FaImage className="text-lg" />
                 <input
                     onChange={(e) => {
-                        handleUploadPhoto(e.target.files);
+                        handleImageUpload(e.target.files);
                     }}
-                    ref={inputRef}
+                    ref={fileInputRef}
                     tabIndex={-1}
                     type="file"
                     className="hidden"
@@ -278,6 +287,7 @@ const MenuBar = ({ editor }: any) => {
     );
 };
 const extensions = [
+    Image,
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     TextStyle.configure({ types: [ListItem.name] } as any),
     StarterKit.configure({
@@ -294,7 +304,6 @@ const extensions = [
     Placeholder.configure({
         placeholder: "내용",
     }),
-    Image,
     TextAlign.configure({
         types: ["heading", "paragraph"],
     }),
@@ -312,12 +321,31 @@ interface EditorProps {
 
 const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChange, onContentChange }) => {
     const [title, setTitle] = useState("");
+    const { image, addImage, removeImage } = useImageStore(); // 이미지 스토어에서 상태와 함수 가져오기
+    const { setToast } = useToastStore();
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
         setTitle(newTitle);
         if (onTitleChange) {
             onTitleChange(newTitle);
+        }
+    };
+
+    const handleImageUpload = (id: string, url: string) => {
+        addImage(url, id); // 스토어에 이미지 추가
+    };
+
+    const handleImageDelete = async (url: string) => {
+        const imgId = image.id?.find((_, idx) => image.src && image.src[idx] === url); // 이미지 ID 가져오기
+        if (imgId) {
+            try {
+                await articleApi.articleDeleteImage(imgId);
+                removeImage(url, imgId); // 스토어에서 이미지 삭제
+                setToast(true, "이미지가 성공적으로 삭제되었습니다.");
+            } catch (error) {
+                setToast(true, `이미지 삭제에 실패했습니다. ${error}`);
+            }
         }
     };
 
@@ -334,6 +362,15 @@ const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChang
             if (onContentChange) {
                 onContentChange(html);
             }
+
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            const currentImages = Array.from(doc.images).map((img) => img.src);
+
+            image.src?.forEach((url) => {
+                if (!currentImages.includes(url)) {
+                    handleImageDelete(url);
+                }
+            });
         },
     });
 
@@ -347,7 +384,7 @@ const TipTapEditor: React.FC<EditorProps> = ({ initialContent = "", onTitleChang
                 value={title}
                 onChange={handleTitleChange}
             />
-            <MenuBar editor={editor} />
+            <MenuBar onImageDelete={handleImageDelete} onImageUpload={handleImageUpload} editor={editor} />
 
             <EditorContent editor={editor} className="mt-10 w-full flex-grow overflow-auto" />
         </div>

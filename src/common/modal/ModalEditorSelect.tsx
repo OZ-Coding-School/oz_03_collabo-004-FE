@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp } from "react-icons/fa6";
 
 const options = [
     { value: 2, label: "연애" },
@@ -37,7 +37,7 @@ const ModalEditorSelect = ({ defaultValue = 4, onChange }: ModalEditorSelect) =>
     };
 
     return (
-        <div className="relative w-40 text-sm">
+        <div className="relative w-40 text-sm font-medium">
             <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setIsOpen(!isOpen)}
@@ -45,7 +45,7 @@ const ModalEditorSelect = ({ defaultValue = 4, onChange }: ModalEditorSelect) =>
             >
                 <span className="block truncate">{selectedOption.label}</span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                    <FaChevronDown
+                    <FaChevronUp
                         className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
                             isOpen ? "transform rotate-180" : ""
                         }`}
@@ -56,21 +56,20 @@ const ModalEditorSelect = ({ defaultValue = 4, onChange }: ModalEditorSelect) =>
             <AnimatePresence>
                 {isOpen && (
                     <motion.ul
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: -280 }}
+                        animate={{ opacity: 1, y: -290 }}
+                        exit={{ opacity: 0, y: -280 }}
                         transition={{ duration: 0.2 }}
                         className="absolute z-10 w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
                         {options.map((option) => (
-                            <motion.li
+                            <li
                                 key={option.value}
-                                whileHover={{ backgroundColor: "#F3F4F6" }}
-                                className="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9"
+                                className="hover:bg-amber-200 transition relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9"
                                 onClick={() => handleSelect(option)}
                             >
                                 <span className="block truncate">{option.label}</span>
-                            </motion.li>
+                            </li>
                         ))}
                     </motion.ul>
                 )}

@@ -111,7 +111,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             나만의 훈수 태그를 골라보세요!
                         </div>
                     ) : (
-                        DUMMY_TAGS.filter((tag) => tag.id !== 6)
+                        DUMMY_TAGS.filter((tag) => tag.id !== 8)
                             .filter((tag) => selectedTags.includes(tag.id))
                             .map((tag) => (
                                 <TagSkill

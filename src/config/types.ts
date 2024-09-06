@@ -8,7 +8,7 @@ export interface ModalProps {
 
 export interface DetailModalProps {
     onClose: () => void;
-    onSelect: (id: string) => void;
+    onSelect?: (id: string) => void;
     isOpen: boolean;
     parent: string;
     articleId: number;

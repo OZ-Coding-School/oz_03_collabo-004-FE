@@ -7,11 +7,7 @@ import { authApi } from "../../api";
 import { useAuthStore } from "../../config/store";
 import { motion } from "framer-motion";
 
-interface HeaderProps {
-    isAdmin?: boolean;
-}
-
-const Header = ({ isAdmin = false }: HeaderProps) => {
+const Header = () => {
     const nav = useNavigate();
     const { setStatus, status } = useAuthStore();
 
@@ -33,13 +29,11 @@ const Header = ({ isAdmin = false }: HeaderProps) => {
                 >
                     <img onClick={() => nav("/")} className="cursor-pointer h-[30px]" src="/img/header_logo.png"></img>
 
-                    {!isAdmin && (
-                        <>
-                            <HeaderSearch />
-                            {status === true && <HeaderInfoLogged />}
-                            {status === false && <HeaderInfo />}
-                        </>
-                    )}
+                    <>
+                        <HeaderSearch />
+                        {status === true && <HeaderInfoLogged />}
+                        {status === false && <HeaderInfo />}
+                    </>
                 </motion.div>
             </div>
         </div>

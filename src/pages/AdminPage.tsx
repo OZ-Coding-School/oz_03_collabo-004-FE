@@ -4,7 +4,7 @@ import Header from "../common/header/Header";
 const AdminPage = () => {
     return (
         <>
-            <Header isAdmin={true} />
+            <Header />
             <div className="flex flex-col items-center">
                 <div className="mt-[50px]"></div>
                 <AdminUserList />

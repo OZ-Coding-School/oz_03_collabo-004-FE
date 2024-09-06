@@ -160,7 +160,9 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
 
     const handleReArticle = (id: string) => {
         onClose();
-        onSelect(id);
+        if (onSelect) {
+            onSelect(id);
+        }
     };
 
     const handleModalExit = () => {

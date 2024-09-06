@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "../button/Button";
-import { articleApi } from "../../api";
-import { useArticleStore } from "../../config/store";
+import { accountApi, articleApi } from "../../api";
+import { useArticleStore, useUserStore } from "../../config/store";
 
 interface ModalDeleteProps {
     onClose: () => void;
@@ -15,6 +15,7 @@ interface ModalDeleteProps {
 const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) => {
     const modalRef = useRef<HTMLTextAreaElement>(null);
     const { initArticle } = useArticleStore();
+    const { initUser } = useUserStore();
     useEffect(() => {
         if (isOpen) {
             modalRef.current?.focus();
@@ -22,11 +23,13 @@ const ModalDelete = ({ onClose, parentOnClose, isOpen, id }: ModalDeleteProps) =
     }, [isOpen]);
 
     const handleDeleteArticle = async (id: number) => {
+        onClose();
+        parentOnClose();
         await articleApi.articleDelete(id);
         const responseArticle = await articleApi.articleList();
         initArticle(responseArticle.data);
-        onClose();
-        parentOnClose();
+        const responseUser = await accountApi.userInfo();
+        initUser(responseUser.data);
     };
 
     const handleArticleCancel = () => {

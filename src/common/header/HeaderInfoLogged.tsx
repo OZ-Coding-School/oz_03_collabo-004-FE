@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
 import Button from "../button/Button";
@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { twMerge as tw } from "tailwind-merge";
 import ModalDetail from "../modal/ModalDetail";
 import { HiXCircle } from "react-icons/hi";
+import { MdAdminPanelSettings } from "react-icons/md";
 const HeaderInfoLogged = () => {
     const nav = useNavigate();
     const { user, initUser } = useUserStore();
@@ -21,6 +22,8 @@ const HeaderInfoLogged = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number>();
     const [notificationData, setNotificationData] = useState<notification[]>([]);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const location = useLocation();
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
@@ -52,7 +55,9 @@ const HeaderInfoLogged = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await accountApi.userInfo();
+            const roleResponse = await authApi.userRoleStatus();
             initUser(response.data);
+            setIsAdmin(roleResponse.data.status);
         };
         fetchData();
     }, [initUser]);
@@ -170,6 +175,16 @@ const HeaderInfoLogged = () => {
                 >
                     <PiPencilCircleDuotone className="size-5" /> <div className="text-sm font-normal">새 포스트</div>
                 </Button>
+                {location.pathname === "/" && (
+                    <Button
+                        color="confirm"
+                        onClick={editModalNewHandler}
+                        className=" px-2 py-0 flex gap-1 justify-center items-center"
+                    >
+                        <PiPencilCircleDuotone className="size-5" />{" "}
+                        <div className="text-sm font-normal">훈수 요청</div>
+                    </Button>
+                )}
                 <div className="flex justify-center items-center relative">
                     <div className="w-[36px] h-[36px] cursor-pointer relative group">
                         <ProfileImage src={user.profile_image} />
@@ -184,6 +199,15 @@ const HeaderInfoLogged = () => {
                                 >
                                     <CgProfile className="size-4" /> 마이페이지
                                 </div>
+                                {isAdmin ? (
+                                    <div
+                                        onClick={() => nav("/admin")}
+                                        className="font-normal px-1 py-1 flex gap-2 items-center text-gray-400 duration-200 hover:text-gray-700"
+                                    >
+                                        <MdAdminPanelSettings className="size-4" /> Admin
+                                    </div>
+                                ) : null}
+
                                 <Button onClick={handleLogout} color="danger" className="px-2 py-1 text-sm font-normal">
                                     로그아웃
                                 </Button>

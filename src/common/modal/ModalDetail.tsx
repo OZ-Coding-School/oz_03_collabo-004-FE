@@ -185,7 +185,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[870px] md:max-h-[95vh] md:rounded-3xl bg-white relative py-10 px-5 md:px-14 overflow-auto"
+                    className="outline-none w-full h-full md:w-[870px] md:max-h-[95vh] md:rounded-md bg-white relative py-10 px-5 md:px-14 overflow-auto"
                 >
                     {isLoading ? (
                         <div className="flex justify-center items-center h-full"></div>

@@ -136,7 +136,7 @@ const CommentDetail = ({
                     color === "writer" && "hidden"
                 )}
             >
-                AI
+                훈수봇
             </div>
             <div className={tw("flex flex-col gap-0", color === "default" && "gap-3")}>
                 {color !== "ai" && comment.images.length > 0 && (

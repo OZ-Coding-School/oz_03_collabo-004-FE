@@ -386,10 +386,13 @@ const TipTapEditor: React.FC<EditorProps> = ({
         },
     });
 
+    const contentSetRef = useRef(false);
+
     useEffect(() => {
-        if (editor) {
+        if (editor && !contentSetRef.current) {
             editor.commands.setContent(initialContent, true);
             setTitle(initialTitle);
+            contentSetRef.current = true;
         }
     }, [editor, initialContent, initialTitle]);
 

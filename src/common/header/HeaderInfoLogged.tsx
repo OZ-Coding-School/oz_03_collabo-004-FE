@@ -168,18 +168,11 @@ const HeaderInfoLogged = () => {
                         </div>
                     </div>
                 </div>
-                <Button
-                    onClick={editModalNewHandler}
-                    color="confirm"
-                    className="px-2 py-0 flex gap-1 justify-center items-center h-8"
-                >
-                    <PiPencilCircleDuotone className="size-5" /> <div className="text-sm font-normal">새 포스트</div>
-                </Button>
                 {location.pathname === "/" && (
                     <Button
                         color="confirm"
                         onClick={editModalNewHandler}
-                        className=" px-2 py-0 flex gap-1 justify-center items-center"
+                        className="px-2 py-1 flex gap-1 justify-center items-center"
                     >
                         <PiPencilCircleDuotone className="size-5" />{" "}
                         <div className="text-sm font-normal">훈수 요청</div>

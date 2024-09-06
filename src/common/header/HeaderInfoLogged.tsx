@@ -122,9 +122,9 @@ const HeaderInfoLogged = () => {
 
                     <div
                         className="min-w-80 max-h-80 overflow-y-auto absolute top-12 right-0 text-sm text-literal-normal font-normal bg-white p-1 rounded-xl shadow-lg
-                       invisible group-hover:visible opacity-0 group-hover:opacity-100 duration-300 translate-x-[10%]"
+                        invisible group-hover:visible opacity-0 group-hover:opacity-100 duration-300 translate-x-[10%]"
                     >
-                        <div className="w-full h-full px-1 py-2 flex flex-col gap-2">
+                        <div className="w-full h-full px-1 py-1 flex flex-col gap-2">
                             {notificationData && notificationData.length > 0 ? (
                                 notificationData.map((notifi) => (
                                     <div

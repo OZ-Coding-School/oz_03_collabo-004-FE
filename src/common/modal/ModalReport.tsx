@@ -2,17 +2,18 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "../button/Button";
-import { commentReport } from "../../api/report";
+import { articleReport, commentReport } from "../../api/report";
 import Toast from "../toast/Toast";
 import { useToastStore } from "../../config/store";
 
 interface ModalReportProps {
     onClose: () => void;
-    comment_id: number;
+    comment_id?: number;
+    article_id?: number;
     isOpen: boolean;
 }
 
-const ModalReport = ({ onClose, isOpen, comment_id }: ModalReportProps) => {
+const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportProps) => {
     const [text, setText] = useState("");
     const length = text.length < 100 ? 100 - text.length : 0;
     const modalRef = useRef<HTMLTextAreaElement>(null);
@@ -26,18 +27,28 @@ const ModalReport = ({ onClose, isOpen, comment_id }: ModalReportProps) => {
     }, [isOpen, setToast]);
 
     const handleReport = async () => {
-        if (!comment_id) return;
-        try {
-            const response = await commentReport(comment_id, text);
-            console.log(response);
-            if (response.status === 201) toastHandler();
-        } catch (error) {
-            console.log(error);
+        if (comment_id) {
+            try {
+                const response = await commentReport(comment_id, text);
+                console.log(response);
+                if (response.status === 201) toastHandler("댓글 신고가 완료되었습니다.");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if (article_id) {
+            try {
+                const response = await articleReport(article_id, text);
+                console.log(response);
+                if (response.status === 201) toastHandler("게시글 신고가 완료되었습니다.");
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
-    const toastHandler = () => {
-        setToast(true, "댓글 신고가 완료되었습니다.");
+    const toastHandler = (text: string) => {
+        setToast(true, text);
         setTimeout(() => {
             onClose();
         }, 2000);

@@ -19,10 +19,13 @@ import ModalDelete from "./ModalDelete";
 import { useNavigate } from "react-router-dom";
 import hljs from "highlight.js";
 import Toast from "../toast/Toast";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import ModalReport from "./ModalReport";
 
 const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) => {
     const { user } = useUserStore();
     const [modalDeleteStatus, setModalDeleteStatus] = useState(false);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [comments, setComments] = useState<MyComment[]>([]);
     const [articleData, setArticleData] = useState<MyArticle | undefined>(undefined);
     const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
@@ -79,6 +82,16 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
             window.scrollTo(0, storedScrollY);
         };
     }, [isOpen, parent]);
+
+    const handleReportClick = () => {
+        if (user.user_id === 0) {
+            toastHandler("로그인 후 이용 가능합니다.");
+            return;
+        }
+        setIsReportModalOpen(true);
+    };
+
+    const closeReportModal = () => setIsReportModalOpen(false);
 
     useEffect(() => {
         const getDetails = async () => {
@@ -200,6 +213,17 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                             <div className="text-sm flex gap-5 pb-3">
                                 <p className="font-semibold">{articleData && articleData.user.nickname}</p>
                                 <p className="text-gray-500">{formattedDate}</p>
+                                {articleData && user.user_id !== articleData.user.user_id && (
+                                    <div className="flex items-center gap-1 ml-auto  cursor-pointer duration-200 rounded-md px-1">
+                                        <RiAlarmWarningFill className="text-literal-highlight" />
+                                        <p
+                                            className="text-literal-highlight font-medium text-sm"
+                                            onClick={handleReportClick}
+                                        >
+                                            신고하기
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                             <div className="text-xl my-2">{articleData && articleData.title}</div>
                             <div
@@ -284,6 +308,13 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId }: DetailModalProps) =
                         onClose={handleModalDeleteClose}
                         parentOnClose={onClose}
                         id={articleId}
+                    />
+                )}
+                {isReportModalOpen && (
+                    <ModalReport
+                        isOpen={isReportModalOpen}
+                        onClose={closeReportModal}
+                        article_id={articleData?.article_id as number}
                     />
                 )}
             </ModalPortalModal>

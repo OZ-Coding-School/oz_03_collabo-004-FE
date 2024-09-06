@@ -30,7 +30,6 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportPro
         if (comment_id) {
             try {
                 const response = await commentReport(comment_id, text);
-                console.log(response);
                 if (response.status === 201) toastHandler("댓글 신고가 완료되었습니다.");
             } catch (error) {
                 console.log(error);
@@ -39,7 +38,6 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportPro
         if (article_id) {
             try {
                 const response = await articleReport(article_id, text);
-                console.log(response);
                 if (response.status === 201) toastHandler("게시글 신고가 완료되었습니다.");
             } catch (error) {
                 console.log(error);

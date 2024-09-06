@@ -96,10 +96,12 @@ const HomePage = () => {
             return article.filter((item) => [2, 3, 4, 5, 6, 7].includes(item.tags[0]?.tag_id));
         } else if (selectTag === 8) {
             return article.filter((item) => [9, 10].includes(item.tags[0]?.tag_id));
+        } else if (selectTag === 100) {
+            return article.filter((item) => user.selected_tags.includes(item.tags[0]?.tag_id));
         } else {
             return article.filter((item) => item.tags[0]?.tag_id === selectTag);
         }
-    }, [article, selectTag]);
+    }, [article, selectTag, user.selected_tags]);
 
     // 필터링된 결과를 상태에 저장
     useEffect(() => {

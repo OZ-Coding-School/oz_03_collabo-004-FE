@@ -96,14 +96,21 @@ const HeaderInfoLogged = () => {
     };
 
     const generateNotificationMessage = (notification: notification) => {
-        const { actor_nickname, description, content_type, article_title } = notification;
-        const filteredDescription = description.replace(`${actor_nickname}님이`, "");
-        if (content_type === "ai_hunsoo") {
-            return <>{filteredDescription}</>;
+        const { actor_nickname, description, article_title, verb } = notification;
+        if (verb === "ai_response" || verb === "report") {
+            return <>{description}</>;
+        }
+        if (verb === "select") {
+            return (
+                <>
+                    {description} <br /> {article_title && <span> (게시글: {article_title})</span>}
+                </>
+            );
         }
         return (
             <>
-                <span className="font-bold">{actor_nickname}</span>님이 {filteredDescription}{" "}
+                <span className="font-bold">{actor_nickname}</span>
+                {description} <br />
                 {article_title && <span> (게시글: {article_title})</span>}
             </>
         );
@@ -111,17 +118,19 @@ const HeaderInfoLogged = () => {
 
     return (
         <>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
                 <div className="flex justify-center items-center relative group">
                     <IoNotifications
                         className={tw(
                             "text-gray-200 cursor-pointer transition size-6 text-lg",
-                            notificationData && notificationData.length > 0 && "text-yellow-500 animate-ring"
+                            notificationData &&
+                                notificationData.filter((notifi) => !notifi.read).length > 0 &&
+                                "text-yellow-500 animate-ring"
                         )}
                     />
-                    {notificationData && notificationData.length > 0 && (
+                    {notificationData && notificationData.filter((notifi) => !notifi.read).length > 0 && (
                         <div className="absolute top-0 right-0 text-xs size-4 text-white font-normal bg-red-500 translate-x-[20%] px-[2px] rounded-full flex justify-center items-center">
-                            {notificationData && notificationData.length}
+                            {notificationData.filter((notifi) => !notifi.read).length}
                         </div>
                     )}
 
@@ -163,13 +172,12 @@ const HeaderInfoLogged = () => {
                     <Button
                         color="confirm"
                         onClick={editModalNewHandler}
-                        className=" px-2 py-0 flex gap-1 justify-center items-center"
+                        className="px-2 py-1 flex gap-1 justify-center items-center"
                     >
                         <PiPencilCircleDuotone className="size-5" />{" "}
                         <div className="text-sm font-normal">훈수 요청</div>
                     </Button>
                 )}
-
                 <div className="flex justify-center items-center relative">
                     <div className="w-[36px] h-[36px] cursor-pointer relative group">
                         <ProfileImage src={user.profile_image} />

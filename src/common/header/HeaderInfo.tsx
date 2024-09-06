@@ -36,8 +36,12 @@ const HeaderInfo = () => {
     return (
         <div className="flex justify-center items-center relative">
             <div className="gap-[10px] hidden md:flex">
-                <Button onClick={loginModalOpenHandler}>로그인</Button>
-                <Button onClick={registerModalOpenHandler}>회원가입</Button>
+                <Button className="py-0 h-8 text-sm font-medium" onClick={loginModalOpenHandler}>
+                    로그인
+                </Button>
+                <Button className="py-0 h-8 text-sm font-medium" onClick={registerModalOpenHandler}>
+                    회원가입
+                </Button>
             </div>
             <motion.div className="md:hidden" initial={false} animate={isMenuOpen ? "open" : "closed"}>
                 <motion.button

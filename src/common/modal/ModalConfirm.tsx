@@ -57,7 +57,10 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
                 <motion.nav
                     tabIndex={-1}
                     ref={modalRef}
-                    onKeyDown={(e) => e.key === "Escape" && onClose()}
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") onClose();
+                        if (e.key === "Enter") parentOnClose();
+                    }}
                     initial={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}

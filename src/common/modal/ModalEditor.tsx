@@ -49,6 +49,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
         if (editorFormURL !== "new") {
             const doc = new DOMParser().parseFromString(content, "text/html");
             const currentImagesAlt = Array.from(doc.images).map((img) => img.alt);
+
             onClose();
             await articleApi.articleRePost(
                 title,
@@ -63,11 +64,11 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
             return;
         }
 
-        await articleApi.articleCreate(title, content, tags, image.id ? image.id : []);
-        resetImage();
         onClose();
+        await articleApi.articleCreate(title, content, tags, image.id ? image.id : []);
         const responseArticle = await articleApi.articleList();
         const responseUser = await accountApi.userInfo();
+        resetImage();
         initArticle(responseArticle.data);
         initUser(responseUser.data);
     };

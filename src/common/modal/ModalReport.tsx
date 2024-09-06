@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "../button/Button";
 import { articleReport, commentReport } from "../../api/report";
-import Toast from "../toast/Toast";
 import { useToastStore } from "../../config/store";
 
 interface ModalReportProps {
@@ -17,7 +16,7 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportPro
     const [text, setText] = useState("");
     const length = text.length < 100 ? 100 - text.length : 0;
     const modalRef = useRef<HTMLTextAreaElement>(null);
-    const { toast, setToast } = useToastStore();
+    const { setToast } = useToastStore();
 
     useEffect(() => {
         if (isOpen) {
@@ -47,9 +46,7 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportPro
 
     const toastHandler = (text: string) => {
         setToast(true, text);
-        setTimeout(() => {
-            onClose();
-        }, 2000);
+        onClose();
     };
     return (
         <>
@@ -70,7 +67,6 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportPro
                     onClick={(e) => e.stopPropagation()}
                     className="outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
-                    {toast.status && <Toast />}
                     <form className="md:px-[80px] flex flex-col justify-center items-center">
                         <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 신고</div>
                         <div className="w-full font-default text-center mt-5 text-literal-error">

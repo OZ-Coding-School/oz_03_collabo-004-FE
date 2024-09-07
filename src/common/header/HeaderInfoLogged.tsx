@@ -66,7 +66,7 @@ const HeaderInfoLogged = () => {
         const getNotificationList = async () => {
             try {
                 const response = await notificationApi.notificationList();
-                console.log(response.data);
+
                 setNotificationData(response.data);
             } catch (error) {
                 console.error("알림:", error);

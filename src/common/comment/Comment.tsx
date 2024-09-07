@@ -78,6 +78,10 @@ const CommentDetail = ({
             toast("로그인 후 이용가능합니다.");
             return;
         }
+        if (user.user_id === comment.user) {
+            toast("자신의 댓글은 반응할 수 없습니다.");
+            return;
+        }
         if (type === "helpful") {
             if (userReaction === "helpful") {
                 setHelpful(helpful - 1);
@@ -138,7 +142,7 @@ const CommentDetail = ({
             >
                 훈수봇
             </div>
-            <div className={tw("flex flex-col gap-0", color === "default" && "gap-3")}>
+            <div className={tw("flex flex-col gap-0", color !== "ai" && "gap-3")}>
                 {color !== "ai" && comment.images.length > 0 && (
                     <div className="flex gap-2 mb-3">
                         {comment.images.map((img) => (
@@ -156,16 +160,7 @@ const CommentDetail = ({
                     className="ml-1 mr-28 custom-code-block"
                     dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(content || "") }}
                 />
-
-                <div
-                    className={tw(
-                        "flex items-center w-[80px] cursor-pointer text-literal-highlight",
-                        color === "ai" && "hidden",
-                        color === "default" && "hidden"
-                    )}
-                    onClick={handleReportClick}
-                ></div>
-                <div className="flex-wrap justify-between sm:flex">
+                <div className={tw("flex-wrap justify-between flex", color === "writer" && "justify-end")}>
                     {color === "default" && (
                         <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
                             <RiAlarmWarningFill className="text-literal-highlight" />
@@ -175,13 +170,7 @@ const CommentDetail = ({
                         </div>
                     )}
 
-                    <div
-                        className={tw(
-                            "flex bottom-4 right-4 gap-5",
-                            color === "ai" && "hidden",
-                            color === "writer" && "hidden"
-                        )}
-                    >
+                    <div className={tw("flex bottom-4 right-4 gap-5", color === "ai" && "hidden")}>
                         <div className="flex gap-3 items-center mt-auto">
                             <div className="flex gap-1">
                                 <ImHappy2
@@ -191,7 +180,7 @@ const CommentDetail = ({
                                         userReaction === "helpful" && "text-[#FF8800]"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{helpful}</span>
+                                <span className="text-sm font-normal">{helpful ?? 0}</span>
                             </div>
                             <div className="flex gap-1">
                                 <ImNeutral2
@@ -201,7 +190,7 @@ const CommentDetail = ({
                                         userReaction === "not_helpful" && "text-red-500"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{notHelpful}</span>
+                                <span className="text-sm font-normal">{notHelpful ?? 0}</span>
                             </div>
                         </div>
                         {comment.is_selected ? (

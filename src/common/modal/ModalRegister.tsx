@@ -7,12 +7,13 @@ import { ModalProps } from "../../config/types";
 import { useNavigate } from "react-router-dom";
 import { accountApi, authApi } from "../../api";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useUserStore } from "../../config/store";
+import { useAuthStore, useUserStore } from "../../config/store";
 
 const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const nav = useNavigate();
     const { initUser } = useUserStore();
+    const { setStatus } = useAuthStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -58,6 +59,7 @@ const ModalRegister = ({ onClose, isOpen, parent }: ModalProps) => {
         try {
             await authApi.userGoogleAccessTokenReceiver(token);
             const accountResponse = await accountApi.userInfo();
+            setStatus(true);
             initUser(accountResponse.data);
             nav("/");
             onClose();

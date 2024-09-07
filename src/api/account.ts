@@ -25,3 +25,10 @@ export const userInfoPublic = (userId: number) => {
 export const userInfoImageDelete = () => {
     return axiosInstance.delete("/account/profile/image/delete/");
 };
+
+export const userLevelUpdate = (userId: number, level: number) => {
+    const requestForm = {
+        hunsoo_level: level,
+    };
+    return axiosInstance.put(`/account/level/${userId}/`, requestForm);
+};

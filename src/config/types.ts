@@ -168,3 +168,46 @@ export interface notification {
     comment_content: string;
     article_id: number;
 }
+
+//? ADMIN
+export interface AdminUserListType {
+    created_at: string;
+    email: string;
+    hunsoo_level: number;
+    id: number;
+    is_active: boolean;
+    is_superuser: boolean;
+    last_login: string;
+    selected_tags: number[];
+    social_platform: string;
+    updated_at: string;
+    username: string;
+    nickname: string;
+    warning_count: number;
+}
+
+interface Report {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+    report_detail: string;
+    status: string;
+    reporter: number;
+    reported_user: number;
+    reported_article: number;
+}
+type ArticleReport = Report;
+type CommentReport = Report;
+
+// 전체 데이터 구조를 나타내는 타입
+interface ReportData {
+    article_reports: ArticleReport[];
+    comment_reports: CommentReport[];
+}
+
+export interface AdminList {
+    userList: AdminUserListType[];
+    reportList: ReportData;
+    articleList: Article[];
+}

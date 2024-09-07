@@ -19,7 +19,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
     const len = selectedTags.length;
-    const progress = user.hunsoo_level;
+    const progress = user.exp;
     const userLevel = isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level;
     const levelTitle = useLevelTitle(userLevel);
 
@@ -54,8 +54,8 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                 <div className="font-point font-bold text-lg text-literal-normal">
                     훈수 레벨 : LV {isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level}
                 </div>
-                <div className="flex flex-col items-end font-default text-xs ml-auto">
-                    <p className="text-literal-normal">
+                <div className="flex flex-col items-end font-default ml-auto">
+                    <p className="text-literal-info">
                         채택된 훈수 {isUserMypage ? user.selected_comment_count : otherUser.selected_comment_count}개
                     </p>
                     <p className="text-literal-highlight">
@@ -63,31 +63,38 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     </p>
                 </div>
             </div>
-            <div className="w-full h-11 relative">
-                <div
-                    className="absolute flex flex-col items-center transition-all duration-300"
-                    style={{ left: `${progress}%`, transform: "translateX(-50%)", bottom: "20px" }}
-                >
-                    <p className="font-default text-sm font-medium text-primary-second-dark min-w-24 text-center">
-                        {levelTitle}
-                    </p>
-                    <IoMdArrowDropdown className="text-primary-second-dark" />
-                </div>
-                <div className="absolute bottom-0 w-full bg-gray-100 rounded-full h-2">
+            {isUserMypage && (
+                <div className="w-full h-11 relative">
                     <div
-                        className="bg-primary-second-dark h-full rounded-full transition-all duration-300"
-                        style={{ width: `${progress}%` }}
-                    ></div>
+                        className="absolute flex flex-col items-center transition-all duration-300"
+                        style={{
+                            left: `${progress}%`,
+                            transform: "translateX(-50%)",
+                            bottom: "20px",
+                        }}
+                    >
+                        <p className="font-default text-sm font-medium text-primary-second-dark min-w-24 text-center">
+                            {levelTitle}
+                        </p>
+                        <IoMdArrowDropdown className="text-primary-second-dark" />
+                    </div>
+                    <div className="absolute bottom-0 w-full bg-gray-100 rounded-full h-2">
+                        <div
+                            className="bg-primary-second-dark h-full rounded-full transition-all duration-300"
+                            style={{ width: `${progress}%` }}
+                        ></div>
+                    </div>
                 </div>
-            </div>
+            )}
+
             <div className="flex mt-9 mb-5 justify-between">
-                <p className="font-point text-base text-literal-normal">
+                <p className="font-point text-lg text-literal-normal">
                     {isUserMypage ? "나의 전문 훈수는" : <>' {otherUser.nickname} ' 님의 전문 훈수</>}
                 </p>
                 {isUserMypage && (
                     <Button
                         onClick={() => (isEdit ? handleTagUpdate() : setIsEdit(true))}
-                        className={"text-xs w-13 h-6 py-1"}
+                        className={"text-sm w-13 h-6 flex justify-center items-center"}
                     >
                         {isEdit ? "완료" : "수정"}
                     </Button>

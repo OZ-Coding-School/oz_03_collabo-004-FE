@@ -27,6 +27,7 @@ export interface UserData {
     selected_tags: number[];
     warning_count: number;
     status: boolean;
+    exp: number;
 }
 
 export interface User {

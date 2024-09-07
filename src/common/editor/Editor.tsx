@@ -271,13 +271,7 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
                     </motion.div>
                 )}
             </div>
-            <button
-                onClick={handleImageUploadClick}
-                className={tw(
-                    "p-1 hover:bg-gray-150 transition rounded-md",
-                    editor.isActive("blockquote") && "bg-gray-200 hover:bg-gray-150 rounded-md"
-                )}
-            >
+            <button onClick={handleImageUploadClick} className={tw("p-1 hover:bg-gray-150 transition rounded-md")}>
                 <FaImage className="text-lg" />
                 <input
                     onChange={(e) => {

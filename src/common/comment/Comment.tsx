@@ -125,7 +125,7 @@ const CommentDetail = ({
                 "relative w-[90%] h-full rounded-2xl p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
                 color === "default" && "bg-gray-100 ",
                 color === "writer" && "bg-primary-second bg-opacity-60",
-                color === "ai" && "bg-slate-800 text-white w-full",
+                color === "ai" && "bg-slate-800 text-white w-full mt-3",
                 className
             )}
         >
@@ -174,20 +174,24 @@ const CommentDetail = ({
                         <div className="flex gap-3 items-center mt-auto">
                             <div className="flex gap-1">
                                 <ImHappy2
-                                    onClick={() => handleReact(comment.id, "helpful")}
+                                    onClick={() => user.user_id !== comment.user && handleReact(comment.id, "helpful")}
                                     className={tw(
                                         "text-primary-second my-auto size-5 cursor-pointer duration-150 hover:scale-110",
-                                        userReaction === "helpful" && "text-[#FF8800]"
+                                        userReaction === "helpful" && "text-[#FF8800]",
+                                        user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
                                 <span className="text-sm font-normal">{helpful ?? 0}</span>
                             </div>
                             <div className="flex gap-1">
                                 <ImNeutral2
-                                    onClick={() => handleReact(comment.id, "not_helpful")}
+                                    onClick={() =>
+                                        user.user_id !== comment.user && handleReact(comment.id, "not_helpful")
+                                    }
                                     className={tw(
                                         "text-red-300 my-auto size-5 cursor-pointer duration-150 hover:scale-110",
-                                        userReaction === "not_helpful" && "text-red-500"
+                                        userReaction === "not_helpful" && "text-red-500",
+                                        user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
                                 <span className="text-sm font-normal">{notHelpful ?? 0}</span>

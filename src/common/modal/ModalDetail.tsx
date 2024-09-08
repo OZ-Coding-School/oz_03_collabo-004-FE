@@ -274,7 +274,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                                 <ProfileStatus
                                                     nickname={comment.user_nickname}
                                                     user_id={comment.user}
-                                                    hunsoo_level={articleData.user.hunsoo_level}
+                                                    hunsoo_level={comment.user_hunsoo_level}
                                                     profile_image={comment.user_profile_image}
                                                 />
                                             )}

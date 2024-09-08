@@ -3,6 +3,14 @@ export default {
     content: ["./src/**/*.{tsx,ts,js,jsx}"],
     theme: {
         extend: {
+            typography: (theme) => ({
+                DEFAULT: {
+                    css: {
+                        maxWidth: "100%",
+                    },
+                },
+            }),
+
             keyframes: {
                 ring: {
                     "0%": { rotate: "5deg" },

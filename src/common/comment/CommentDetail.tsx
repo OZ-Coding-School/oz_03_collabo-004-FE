@@ -185,8 +185,8 @@ const CommentDetail = ({
                         </div>
                     )}
 
-                    <div className={tw("flex bottom-4 right-4 gap-5", color === "ai" && "hidden")}>
-                        <div className="flex gap-3 items-center mt-auto">
+                    <div className={tw("flex bottom-4 right-4 gap-3", color === "ai" && "hidden")}>
+                        <div className="flex gap-2 items-center mt-auto">
                             <div className="flex gap-1">
                                 <ImHappy2
                                     onClick={() => user.user_id !== comment.user && handleReact(comment.id, "helpful")}
@@ -196,7 +196,7 @@ const CommentDetail = ({
                                         user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{helpful ?? 0}</span>
+                                <span className="text-sm font-normal min-w-4">{helpful ?? 0}</span>
                             </div>
                             <div className="flex gap-1">
                                 <ImNeutral2
@@ -209,7 +209,7 @@ const CommentDetail = ({
                                         user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{notHelpful ?? 0}</span>
+                                <span className="text-sm font-normal min-w-4">{notHelpful ?? 0}</span>
                             </div>
                         </div>
                         {comment.is_selected ? (

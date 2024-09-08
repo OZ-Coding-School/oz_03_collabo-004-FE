@@ -28,7 +28,6 @@ const HomePage = () => {
     const [filterArticle, setFilterArticle] = useState<AllArticle[] | null>(null);
     const navigate = useNavigate();
     const location = useLocation();
-
     const articleIdFromURL = new URLSearchParams(location.search).get("article");
     const searchFormURL = new URLSearchParams(location.search).get("search");
     const editorFormURL = new URLSearchParams(location.search).get("editor");

@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoWarning } from "react-icons/io5";
 import { AiHunsu, DetailModalProps } from "../../config/types";
 import Badge from "../badge/Badge";
-import { useToastStore, useUserStore } from "../../config/store";
+import { useUserStore } from "../../config/store";
 import CommentInput from "../comment/CommentInput";
 import { twMerge as tw } from "tailwind-merge";
 import { aiHunsuDetail } from "../../api/ai";
@@ -17,7 +17,6 @@ import { ModalPortalModal } from "../../config/ModalPortalModal";
 import ModalDelete from "./ModalDelete";
 import { useNavigate } from "react-router-dom";
 import hljs from "highlight.js";
-import Toast from "../toast/Toast";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import ModalReport from "./ModalReport";
 import CommentDetail from "../comment/CommentDetail";
@@ -34,9 +33,16 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
     const [hideInput, setHideInput] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSelecting, setIsSelecting] = useState(false);
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
     const sanitizer = DOMPurify.sanitize;
     const nav = useNavigate();
     useScrollLock(isOpen, parent);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
 
     const formattedDate = dayjs(articleData && articleData.created_at).format("YYYY년 MM월 DD일 HH:mm");
 
@@ -46,7 +52,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
 
     const handleReportClick = () => {
         if (user.user_id === 0) {
-            toastHandler("로그인 후 이용 가능합니다.");
+            alertHandler("로그인 후 이용 가능합니다.");
             return;
         }
         setIsReportModalOpen(true);
@@ -113,10 +119,6 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
             element.innerHTML = result.value;
         }
     }, [isLoading]);
-    const { toast, setToast } = useToastStore();
-    const toastHandler = (text: string) => {
-        setToast(true, text);
-    };
 
     const handleReArticle = (id: string) => {
         onClose();
@@ -128,6 +130,17 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
     const handleModalExit = () => {
         onClose();
     };
+
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
 
     return (
         <>
@@ -141,7 +154,6 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                 onClick={handleModalExit}
                 className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-40 "
             >
-                {toast.status && <Toast />}
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: [1], translateY: 0 }}
@@ -184,14 +196,16 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                     </div>
                                 )}
                             </div>
-                            <div className="text-sm flex gap-5 pb-3">
-                                <p className="font-semibold">{articleData && articleData.user.nickname}</p>
-                                <p className="text-gray-500">{formattedDate}</p>
+                            <div className="text-sm flex pb-3 flex-wrap justify-between gap-1">
+                                <div className="flex gap-3">
+                                    <p className="font-semibold">{articleData && articleData.user.nickname}</p>
+                                    <p className="text-gray-500 font-normal">{formattedDate}</p>
+                                </div>
                                 {articleData && user.user_id !== articleData.user.user_id && (
-                                    <div className="flex items-center gap-1 ml-auto  cursor-pointer duration-200 rounded-md px-1">
-                                        <RiAlarmWarningFill className="text-literal-highlight" />
+                                    <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
+                                        <RiAlarmWarningFill className="text-literal-highlight size-3 sm:size-4" />
                                         <p
-                                            className="text-literal-highlight font-medium text-sm"
+                                            className="text-literal-highlight font-medium text-xs sm:text-sm sm:font-medium"
                                             onClick={handleReportClick}
                                         >
                                             신고하기
@@ -204,7 +218,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                 dangerouslySetInnerHTML={{
                                     __html: sanitizer((articleData && articleData.content) as string),
                                 }}
-                                className="pt-3 text-[16px] pb-20 mb-3 tiptap prose ProseMirror"
+                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-gray-100 tiptap prose ProseMirror"
                             />
 
                             {articleData &&
@@ -216,7 +230,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                             onClose={onClose}
                                             articleId={articleData?.article_id}
                                             onCommentSubmit={handleCommentSubmit}
-                                            toast={toastHandler}
+                                            toast={alertHandler}
                                         />
                                     </div>
                                 )}
@@ -229,7 +243,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                         key={`${comment.id}-${index}`}
                                         className={tw("flex flex-col", comment.user === user.user_id && "items-end")}
                                     >
-                                        <div className="relative w-[90%] h-full rounded-[15px] flex flex-col justify-between mb-1">
+                                        <div className="relative sm:w-[90%] w-full h-full rounded-[15px] flex flex-col justify-between mb-1">
                                             {articleData?.user && (
                                                 <ProfileStatus
                                                     nickname={comment.user_nickname}
@@ -245,7 +259,8 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                             comment={comment}
                                             article_user_id={articleData && articleData.user.user_id}
                                             onSelect={handleSelect}
-                                            toast={toastHandler}
+                                            toast={alertHandler}
+                                            is_closed={articleData?.is_closed}
                                         />
 
                                         {/* 선택된 comment_id 뒤에만 스켈레톤 표시 */}
@@ -260,7 +275,8 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                                 comment={comment}
                                                 ai={aiData}
                                                 article_user_id={articleData && articleData.user.user_id}
-                                                toast={toastHandler}
+                                                toast={alertHandler}
+                                                is_closed={articleData?.is_closed}
                                             />
                                         )}
                                     </motion.div>
@@ -274,6 +290,21 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                         className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
+
+                <AnimatePresence>
+                    {isAlert && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-10 text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertText}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
             <ModalPortalModal>
                 {modalDeleteStatus && (

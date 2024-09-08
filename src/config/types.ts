@@ -28,6 +28,7 @@ export interface UserData {
     warning_count: number;
     status: boolean;
     exp: number;
+    verified: boolean;
 }
 
 export interface User {

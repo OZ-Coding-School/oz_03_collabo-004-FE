@@ -15,22 +15,28 @@ import { twMerge as tw } from "tailwind-merge";
 import { FaBold, FaItalic, FaStrikethrough, FaCode, FaImage } from "react-icons/fa6";
 import { FaAlignLeft, FaAlignCenter, FaAlignRight } from "react-icons/fa";
 import { RxDividerVertical } from "react-icons/rx";
-import { IoText } from "react-icons/io5";
+import { IoText, IoWarning } from "react-icons/io5";
 import { LuHeading1, LuHeading2, LuHeading3, LuListOrdered, LuLink } from "react-icons/lu";
 import { MdFormatListBulleted } from "react-icons/md";
 import { IoMdQuote } from "react-icons/io";
 import { articleApi } from "../../api";
 import { FaCheck } from "react-icons/fa";
-import { motion } from "framer-motion";
-import { useImageStore, useToastStore } from "../../config/store";
+import { AnimatePresence, motion } from "framer-motion";
+import { useImageStore } from "../../config/store";
 
-import Toast from "../toast/Toast";
 const lowlight = createLowlight(common);
 
 const MenuBar = ({ editor, onImageUpload }: any) => {
     const [isLinkInputVisible, setIsLinkInputVisible] = useState(false);
     const [linkInput, setLinkInput] = useState("");
-    const { setToast, toast } = useToastStore();
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const linkInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,7 +58,7 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
         const validFiles = Array.from(files).filter((file) => allowedExtensions.test(file.name));
 
         if (validFiles.length === 0) {
-            setToast(true, "유효한 이미지 파일을 선택해주세요.");
+            alertHandler("유효한 이미지를 삽입 해 주세요");
             return;
         }
 
@@ -68,7 +74,7 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
 
             onImageUpload(imgID, imgURL);
         } catch (error) {
-            setToast(true, `${error}`);
+            console.error("error,", error);
         }
     };
 
@@ -101,6 +107,18 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
             linkInputRef.current?.focus();
         }
     }, [isLinkInputVisible]);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
 
     return (
         <div className="flex gap-3 w-full justify-center items-center text-gray-800 mb-2 bg-gray-100 p-2 rounded-md relative">
@@ -286,7 +304,20 @@ const MenuBar = ({ editor, onImageUpload }: any) => {
                     id="file-upload"
                 ></input>
             </button>
-            {toast.status && <Toast />}
+            <AnimatePresence>
+                {isAlert && (
+                    <motion.div
+                        initial={{ translateY: -120 }}
+                        animate={{ translateY: -50 }}
+                        exit={{ translateY: -120 }}
+                        transition={{ type: "spring", duration: 1 }}
+                        className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-0 text-background"
+                    >
+                        <IoWarning />
+                        <div>{alertText}</div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

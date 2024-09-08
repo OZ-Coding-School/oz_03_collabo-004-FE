@@ -34,3 +34,29 @@ export const userLogout = () => {
 export const userLoginStatus = () => {
     return axiosInstance.get("/auth/login/status/");
 };
+
+export const userIdCheck = (id: string) => {
+    return axiosInstance.get(`/auth/check-username/?username=${id}`);
+};
+export const userNameCheck = (name: string) => {
+    return axiosInstance.get(`/auth/check-nickname/?nickname=${name}`);
+};
+export const userEmailCheck = (email: string) => {
+    return axiosInstance.get(`/auth/check-email/?email=${email}`);
+};
+
+export const passwordResetEmail = (id: string) => {
+    const requestForm = {
+        username: id,
+    };
+    return axiosInstance.post(`/auth/email/password/`, requestForm);
+};
+
+export const passwordResetConfirm = (uidb64: string, token: string, password: string) => {
+    const requestForm = {
+        uidb64: uidb64,
+        token: token,
+        new_password: password,
+    };
+    return axiosInstance.post(`/auth/password/reset/`, requestForm);
+};

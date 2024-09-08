@@ -5,7 +5,7 @@ import { DUMMY_TAGS } from "../config/const";
 import Toast from "../common/toast/Toast";
 import { useToastStore } from "../config/store";
 import Button from "../common/button/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userInfoUpdate } from "../api/account";
 import { AxiosError } from "axios";
 
@@ -16,6 +16,10 @@ const TagPage = () => {
 
     const toastHandler = () => {
         setToast(true, "최대 3개의 태그만 선택할 수 있습니다.");
+    };
+
+    const handleMain = () => {
+        navigate("/welcome");
     };
 
     const handleTagClick = (index: number) => {
@@ -33,6 +37,7 @@ const TagPage = () => {
         try {
             await userInfoUpdate({ selected_tags: selectedTags });
             navigate("/");
+            localStorage.setItem("status", JSON.stringify({ status: true }));
         } catch (error) {
             if (error instanceof AxiosError && error.response) {
                 console.error(error);
@@ -79,11 +84,11 @@ const TagPage = () => {
                                 <p className="text-gray-500 font-normal text-center">
                                     훈수 태그는 나중에 다시 수정할 수 있어요!
                                 </p>
-                                <Link to={"/"}>
+                                <div onClick={handleMain}>
                                     <p className=" text-literal-normal font-normal hover:underline cursor-pointer">
                                         지금은 넘어가기
                                     </p>
-                                </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ const MyPage = () => {
             if (!userId) return;
             try {
                 const response = await accountApi.userInfoPublic(Number(userId));
-                console.log(response);
+
                 if (response.data.status) {
                     updateUser(response.data);
                     setIsUserMypage(response.data.status);

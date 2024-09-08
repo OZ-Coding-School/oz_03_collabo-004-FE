@@ -51,15 +51,15 @@ const RegisterPage = () => {
             return;
         }
         try {
-            const response = await userRegister({ username: id, nickname: nickname, password: password, email: email });
-            console.log(response);
+            await userRegister({ username: id, nickname: nickname, password: password, email: email });
+
             reset();
             setIsSubmit(false);
             navigate("/tag");
         } catch (error) {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
-                console.log("회원가입 실패", error);
+                console.error("회원가입 실패", error);
                 if (error.response.status === 400) {
                     toastHandler("아이디, 이메일 또는 닉네임이 중복되었습니다.");
                     reset({ id: "", nickname: "", email: "" });

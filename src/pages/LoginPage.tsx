@@ -43,7 +43,7 @@ const LoginPage = () => {
         } catch (error) {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
-                console.log("로그인 실패", error);
+                console.error("로그인 실패", error);
                 if (error.response.status === 400) toastHandler("아이디 혹은 비밀번호가 맞지 않습니다.");
                 reset();
             }

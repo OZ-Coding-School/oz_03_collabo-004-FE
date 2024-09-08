@@ -35,7 +35,7 @@ const TagPage = () => {
             navigate("/");
         } catch (error) {
             if (error instanceof AxiosError && error.response) {
-                console.log(error);
+                console.error(error);
                 switch (error.response.status) {
                     case 400:
                         alert("문제가 발생하였습니다.");

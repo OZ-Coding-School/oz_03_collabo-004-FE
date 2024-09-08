@@ -67,7 +67,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
 
                 if (aiResponse.status) setAiData(aiResponse.data);
             } catch (error) {
-                console.log("데이터 불러오기 실패", error);
+                console.warn("데이터 불러오기 실패", error);
                 nav("/");
             } finally {
                 setIsLoading(false);
@@ -81,7 +81,6 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
         setSelectedCommentId(comment_id);
         try {
             const response = await commentSelect(comment_id);
-            console.log("채택 성공:", response.data);
             setAiData(response.data);
             setComments((prevComments) =>
                 prevComments.map((comment) => (comment.id === comment_id ? { ...comment, is_selected: true } : comment))

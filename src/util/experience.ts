@@ -20,7 +20,6 @@ export const calculateUserLevelAndExperience = (count: number) => {
 
 export const calculateUserLevel = async (currentLevel: number, userId: number, count: number) => {
     const result = calculateUserLevelAndExperience(count);
-    console.log(result);
 
     if (result.userLevel > currentLevel) {
         await accountApi.userLevelUpdate(userId, result.userLevel);

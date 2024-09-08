@@ -4,10 +4,9 @@ import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../api/auth";
-import { useState } from "react";
-import { AxiosError } from "axios";
-import { useToastStore } from "../config/store";
-import Toast from "../common/toast/Toast";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoWarning } from "react-icons/io5";
 
 interface RegisterData {
     id: string;
@@ -34,50 +33,52 @@ const RegisterPage = () => {
         },
     });
     const [isSubmit, setIsSubmit] = useState(false);
+    const [isVerify, setIsVerify] = useState(false);
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<string | null>(null);
     const navigate = useNavigate();
-    const { toast, setToast } = useToastStore();
 
     const onSubmit: SubmitHandler<RegisterData> = async (data) => {
         setIsSubmit(true);
+        if (!isVerify) {
+            setIsAlert(true);
+            setAlertText("이메일 인증은 필수사항 입니다.");
+            return setIsSubmit(false);
+        }
         const { id, nickname, email, password } = {
             id: data.id.trim(),
             nickname: data.nickname.trim(),
             email: data.email.trim(),
             password: data.password.trim(),
         };
-        if (!id || !nickname || !email || !password) {
-            toastHandler("모든 필드를 채워주세요.");
-            setIsSubmit(false);
-            return;
-        }
         try {
-            const response = await userRegister({ username: id, nickname: nickname, password: password, email: email });
-            console.log(response);
+            await userRegister({ username: id, nickname: nickname, password: password, email: email });
+
             reset();
             setIsSubmit(false);
             navigate("/tag");
         } catch (error) {
             setIsSubmit(false);
-            if (error instanceof AxiosError && error.response) {
-                console.log("회원가입 실패", error);
-                if (error.response.status === 400) {
-                    toastHandler("아이디, 이메일 또는 닉네임이 중복되었습니다.");
-                    reset({ id: "", nickname: "", email: "" });
-                } else {
-                    toastHandler("회원가입에 실패했습니다.");
-                }
-            }
+            setIsAlert(true);
+            setAlertText(`회원 가입에 실패했습니다. ${error}`);
         }
     };
-    const toastHandler = (text: string) => {
-        setToast(true, text);
-    };
+
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
 
     return (
         <>
             <Header />
-            <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white">
-                {toast.status && <Toast />}
+            <div className="relative overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white">
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
@@ -136,21 +137,32 @@ const RegisterPage = () => {
                         </p>
 
                         <label className="text-sm font-medium px-1">이메일 *</label>
-                        <input
-                            className={tw(
-                                "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
-                                errors.email && "focus:outline-literal-highlight"
-                            )}
-                            type="email"
-                            placeholder="hunsuking@example.com"
-                            {...register("email", {
-                                required: "필수 항목입니다.",
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-                                    message: "이메일 형식에 먖춰 입력해주세요.",
-                                },
-                            })}
-                        />
+                        <div className="flex gap-1">
+                            <input
+                                className={tw(
+                                    "flex-grow p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
+                                    errors.email && "focus:outline-literal-highlight"
+                                )}
+                                type="email"
+                                placeholder="hunsuking@example.com"
+                                {...register("email", {
+                                    required: "필수 항목입니다.",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                                        message: "이메일 형식에 먖춰 입력해주세요.",
+                                    },
+                                })}
+                            />
+                            <motion.button
+                                type="button"
+                                initial={{ background: "rgb(231 229 228)" }}
+                                whileTap={{ scale: 1.1 }}
+                                whileHover={{ background: "rgb(250 188 117)" }}
+                                className="p-1 rounded-sm w-[100px]"
+                            >
+                                이메일 인증
+                            </motion.button>
+                        </div>
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.email && errors.email.message}
                         </p>
@@ -212,6 +224,20 @@ const RegisterPage = () => {
                         </Link>
                     </form>
                 </div>
+                <AnimatePresence>
+                    {isAlert && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-20 text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertText}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );

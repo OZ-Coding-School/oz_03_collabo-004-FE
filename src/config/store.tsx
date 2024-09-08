@@ -47,6 +47,7 @@ export const useUserStore = create<UserStore>((set) => ({
         selected_tags: [],
         warning_count: 0,
         status: true,
+        exp: 0,
     },
     otherUser: {
         articles: [],
@@ -60,6 +61,7 @@ export const useUserStore = create<UserStore>((set) => ({
         selected_tags: [],
         warning_count: 0,
         status: false,
+        exp: 0,
     },
     initUser: (form: UserData) => set(() => ({ user: form })),
     initOtherUser: (form: UserData) => set(() => ({ otherUser: form })),

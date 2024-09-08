@@ -3,7 +3,7 @@ import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
 import Button from "../button/Button";
 import { accountApi, authApi, notificationApi } from "../../api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { ModalPortal } from "../../config/ModalPortal";
 import ModalEditor from "../modal/ModalEditor";
@@ -15,15 +15,18 @@ import { twMerge as tw } from "tailwind-merge";
 import ModalDetail from "../modal/ModalDetail";
 import { HiXCircle } from "react-icons/hi";
 import { MdAdminPanelSettings } from "react-icons/md";
+import { calculateUserLevel } from "../../util/experience";
 const HeaderInfoLogged = () => {
     const nav = useNavigate();
-    const { user, initUser } = useUserStore();
+    const { user, updateUser } = useUserStore();
     const [modalEditorStatus, setModalEditorStatus] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number>();
     const [notificationData, setNotificationData] = useState<notification[]>([]);
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
+
+    console.log(user);
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
@@ -52,20 +55,28 @@ const HeaderInfoLogged = () => {
         window.location.reload();
     };
 
+    const userLevelCalculate = useCallback(async () => {
+        const result = await calculateUserLevel(user.hunsoo_level, user.user_id, user.selected_comment_count);
+
+        const userResponse = await accountApi.userInfo();
+        updateUser(userResponse.data);
+        updateUser({ exp: result.experience });
+    }, [updateUser, user.hunsoo_level, user.selected_comment_count, user.user_id]);
+
     useEffect(() => {
         const fetchData = async () => {
-            const response = await accountApi.userInfo();
             const roleResponse = await authApi.userRoleStatus();
-            initUser(response.data);
+            await userLevelCalculate();
             setIsAdmin(roleResponse.data.status);
         };
         fetchData();
-    }, [initUser]);
+    }, [updateUser, userLevelCalculate]);
 
     useEffect(() => {
         const getNotificationList = async () => {
             try {
                 const response = await notificationApi.notificationList();
+
                 setNotificationData(response.data);
             } catch (error) {
                 console.error("알림:", error);
@@ -173,8 +184,8 @@ const HeaderInfoLogged = () => {
                         onClick={editModalNewHandler}
                         className="px-2 py-1 flex gap-1 justify-center items-center"
                     >
-                        <PiPencilCircleDuotone className="size-5" />{" "}
-                        <div className="text-sm font-normal">훈수 요청</div>
+                        <PiPencilCircleDuotone className="size-5" />
+                        <div className="text-sm font-normal hidden xl:block">훈수 요청</div>
                     </Button>
                 )}
                 <div className="flex justify-center items-center relative">

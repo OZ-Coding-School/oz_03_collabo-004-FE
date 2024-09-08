@@ -26,6 +26,10 @@ export const DUMMY_TAGS = [
     { id: 11, icon: <FaPencilAlt />, text: "교육", path: "" },
 ];
 
+export const EXPERIENCE: { [key: number]: number } = {
+    0: 1,
+    ...Object.fromEntries(Array.from({ length: 99 }, (_, i) => [i + 1, 3])),
+};
 export const LEVEL_TITLE = [
     { maxLevel: 4, title: "훈수 새싹" },
     { maxLevel: 9, title: "견습 훈수꾼" },

@@ -12,14 +12,14 @@ export default defineConfig({
         },
     },
     //?LOCAL
-    server: {
-        proxy: {
-            "/api": {
-                target: "https://api.hunsuking.yoyobar.xyz",
-                changeOrigin: true,
-                secure: false,
-                rewrite: (path) => path.replace(/^\/api/, "/api"),
-            },
-        },
-    },
+    // server: {
+    //     proxy: {
+    //         "/api": {
+    //             target: "https://api.hunsuking.yoyobar.xyz",
+    //             changeOrigin: true,
+    //             secure: false,
+    //             rewrite: (path) => path.replace(/^\/api/, "/api"),
+    //         },
+    //     },
+    // },
 });

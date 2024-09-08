@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ModalProps } from "../../config/types";
 import Button from "../button/Button";
@@ -9,9 +9,12 @@ import ModalConfirm from "./ModalConfirm";
 import { useArticleStore, useImageStore, useUserStore } from "../../config/store";
 import TipTapEditor from "../editor/Editor";
 import { useLocation, useNavigate } from "react-router-dom";
+import { IoClose, IoWarning } from "react-icons/io5";
 
 const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
+    const [warning, setWarning] = useState(false);
+    const [warningTitle, setWarningTitle] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState(4);
@@ -45,7 +48,28 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
         setModalConfirmStatus(false);
     };
 
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                setWarning(false);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [warning]);
+
     const handleSubmit = async () => {
+        if (title.trim() === "") {
+            setWarning(true);
+            setWarningTitle("제목을 작성 해주세요");
+            return;
+        }
+        if (content.trim() === "") {
+            setWarning(true);
+            setWarningTitle("내용을 작성 해주세요");
+            return;
+        }
+
         if (editorFormURL !== "new") {
             const doc = new DOMParser().parseFromString(content, "text/html");
             const currentImagesAlt = Array.from(doc.images).map((img) => img.alt);
@@ -130,7 +154,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                 exit={{ opacity: 0 }}
                 className="fixed flex justify-center inset-0 bg-black w-full h-full"
             ></motion.nav>
-            <div className="inset-0 select-none z-40 fixed flex items-center justify-center p-4">
+            <div className="inset-0 select-none z-40 fixed flex items-center justify-center">
                 <motion.nav
                     tabIndex={-1}
                     ref={modalRef}
@@ -139,7 +163,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full max-w-4xl h-full max-h-[90vh] bg-white rounded-lg shadow-xl flex flex-col"
+                    className="relative outline-none w-full xl:max-w-4xl h-full xl:max-h-[90vh] bg-white xl:rounded-lg shadow-xl flex flex-col"
                 >
                     <div className="flex-grow overflow-hidden p-4">
                         <TipTapEditor
@@ -157,7 +181,26 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                         </Button>
                         <Button onClick={handleArticleCancel}>취소</Button>
                     </div>
+                    <IoClose
+                        onClick={handleArticleCancel}
+                        title="닫기"
+                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                    />
                 </motion.nav>
+                <AnimatePresence>
+                    {warning && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-4 text-background"
+                        >
+                            <IoWarning />
+                            <div>{warningTitle}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
             <ModalPortalModal>
                 {modalConfirmStatus && (

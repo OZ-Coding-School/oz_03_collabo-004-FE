@@ -117,12 +117,15 @@ const HomePage = () => {
                     <Topic />
                 </nav>
                 <main className="w-full xl:max-w-[658px] mx-4 xl:mx-0 flex flex-col items-center">
-                    <div className="flex gap-3 mb-4 w-full justify-center items-center">
-                        <div className="w-[40px] h-[40px] relative ">
-                            <ProfileImage src={user.profile_image} />
+                    {user.nickname && (
+                        <div className="flex gap-3 mb-4 w-full justify-center items-center">
+                            <div className="w-[40px] h-[40px] relative ">
+                                <ProfileImage src={user.profile_image} />
+                            </div>
+
+                            <EditorInput onClick={() => editModalOpenHandler()} />
                         </div>
-                        <EditorInput onClick={() => editModalOpenHandler()} />
-                    </div>
+                    )}
                     {!filterArticle && (
                         <div className="flex flex-col gap-4">
                             <SkeletonContent type={1} />

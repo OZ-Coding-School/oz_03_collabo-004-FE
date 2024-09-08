@@ -64,7 +64,7 @@ const TrendingComment = () => {
                                     </p>
                                 </div>
                                 <p className="text-xs font-normal font-default text-literal-normal">
-                                    {truncateText(item.content, 20)}
+                                    {truncateText(item.content, 19)}
                                 </p>
                             </div>
                         </div>

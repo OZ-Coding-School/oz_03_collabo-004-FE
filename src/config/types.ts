@@ -77,6 +77,7 @@ export interface Comment {
     user_nickname: string;
     user_profile_image: string;
     reaction: string;
+    user_hunsoo_level: number;
 }
 
 export interface CommentImage {

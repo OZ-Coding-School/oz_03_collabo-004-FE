@@ -196,14 +196,16 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                     </div>
                                 )}
                             </div>
-                            <div className="text-sm flex gap-5 pb-3">
-                                <p className="font-semibold">{articleData && articleData.user.nickname}</p>
-                                <p className="text-gray-500">{formattedDate}</p>
+                            <div className="text-sm flex pb-3 flex-wrap justify-between gap-1">
+                                <div className="flex gap-3">
+                                    <p className="font-semibold">{articleData && articleData.user.nickname}</p>
+                                    <p className="text-gray-500 font-normal">{formattedDate}</p>
+                                </div>
                                 {articleData && user.user_id !== articleData.user.user_id && (
-                                    <div className="flex items-center gap-1 ml-auto  cursor-pointer duration-200 rounded-md px-1">
-                                        <RiAlarmWarningFill className="text-literal-highlight" />
+                                    <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
+                                        <RiAlarmWarningFill className="text-literal-highlight size-3 sm:size-4" />
                                         <p
-                                            className="text-literal-highlight font-medium text-sm"
+                                            className="text-literal-highlight font-medium text-xs sm:text-sm sm:font-medium"
                                             onClick={handleReportClick}
                                         >
                                             신고하기
@@ -216,7 +218,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                 dangerouslySetInnerHTML={{
                                     __html: sanitizer((articleData && articleData.content) as string),
                                 }}
-                                className="pt-3 text-[16px] pb-20 mb-3 border-b tiptap prose ProseMirror"
+                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-gray-100 tiptap prose ProseMirror"
                             />
 
                             {articleData &&
@@ -241,7 +243,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                         key={`${comment.id}-${index}`}
                                         className={tw("flex flex-col", comment.user === user.user_id && "items-end")}
                                     >
-                                        <div className="relative w-[90%] h-full rounded-[15px] flex flex-col justify-between mb-1">
+                                        <div className="relative sm:w-[90%] w-full h-full rounded-[15px] flex flex-col justify-between mb-1">
                                             {articleData?.user && (
                                                 <ProfileStatus
                                                     nickname={comment.user_nickname}

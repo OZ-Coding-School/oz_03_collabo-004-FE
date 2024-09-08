@@ -260,6 +260,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                             article_user_id={articleData && articleData.user.user_id}
                                             onSelect={handleSelect}
                                             toast={alertHandler}
+                                            is_closed={articleData?.is_closed}
                                         />
 
                                         {/* 선택된 comment_id 뒤에만 스켈레톤 표시 */}
@@ -275,6 +276,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                                 ai={aiData}
                                                 article_user_id={articleData && articleData.user.user_id}
                                                 toast={alertHandler}
+                                                is_closed={articleData?.is_closed}
                                             />
                                         )}
                                     </motion.div>

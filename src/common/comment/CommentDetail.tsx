@@ -19,6 +19,7 @@ interface CommentProps {
     ai?: AiHunsu;
     article_user_id?: number;
     toast: (text: string) => void;
+    is_closed?: boolean;
 }
 const CommentDetail = ({
     className,
@@ -28,6 +29,7 @@ const CommentDetail = ({
     article_user_id,
     onSelect,
     toast,
+    is_closed,
 }: CommentProps) => {
     const { user } = useUserStore();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -148,7 +150,7 @@ const CommentDetail = ({
                     {color === "ai" ? formatDate(ai?.updated_at) : formatDate(comment?.created_at)}
                 </div>
             </div>
-            <div className={tw("flex flex-col gap-0", color === "default" && "gap-2")}>
+            <div className={tw("flex flex-col gap-2", color === "ai" && "gap-0")}>
                 {color !== "ai" && comment.images.length > 0 && (
                     <div className="flex gap-2 mb-3">
                         {comment.images.map((img) => (
@@ -183,8 +185,8 @@ const CommentDetail = ({
                         </div>
                     )}
 
-                    <div className={tw("flex bottom-4 right-4 gap-5", color === "ai" && "hidden")}>
-                        <div className="flex gap-3 items-center mt-auto">
+                    <div className={tw("flex bottom-4 right-4 gap-3", color === "ai" && "hidden")}>
+                        <div className="flex gap-2 items-center mt-auto">
                             <div className="flex gap-1">
                                 <ImHappy2
                                     onClick={() => user.user_id !== comment.user && handleReact(comment.id, "helpful")}
@@ -194,7 +196,7 @@ const CommentDetail = ({
                                         user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{helpful ?? 0}</span>
+                                <span className="text-sm font-normal min-w-4">{helpful ?? 0}</span>
                             </div>
                             <div className="flex gap-1">
                                 <ImNeutral2
@@ -207,7 +209,7 @@ const CommentDetail = ({
                                         user.user_id === comment.user && "hover:scale-100 cursor-default"
                                     )}
                                 />
-                                <span className="text-sm font-normal">{notHelpful ?? 0}</span>
+                                <span className="text-sm font-normal min-w-4">{notHelpful ?? 0}</span>
                             </div>
                         </div>
                         {comment.is_selected ? (
@@ -215,8 +217,12 @@ const CommentDetail = ({
                         ) : (
                             user.user_id === article_user_id && (
                                 <button
+                                    disabled={is_closed}
                                     onClick={handleSelect}
-                                    className="sm:w-[80px] w-[70px] sm:h-[30px] h-6 text-sm sm:text-base bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]"
+                                    className={tw(
+                                        "sm:w-[80px] w-[70px] sm:h-[30px] h-6 text-sm sm:text-base bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]",
+                                        is_closed && "hover:bg-literal-highlight"
+                                    )}
                                 >
                                     채택하기
                                 </button>

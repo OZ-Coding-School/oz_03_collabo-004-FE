@@ -17,6 +17,7 @@ import { AllArticle } from "../config/types";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import TopicDrop from "../common/topic/TopicDrop";
 
 const HomePage = () => {
     const [editModalStatus, setEditModalStatus] = useState(false);
@@ -172,6 +173,7 @@ const HomePage = () => {
                     </div>
                 </nav>
             </div>
+            <TopicDrop />
             <ModalPortal>
                 {editModalStatus && (
                     <ModalEditor onClose={editModalCloseHandler} parent={"home-parent"} isOpen={editModalStatus} />

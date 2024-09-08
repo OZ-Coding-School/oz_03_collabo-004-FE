@@ -205,7 +205,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                 dangerouslySetInnerHTML={{
                                     __html: sanitizer((articleData && articleData.content) as string),
                                 }}
-                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-b-gray-100 tiptap prose ProseMirror"
+                                className="pt-3 text-[16px] pb-20 mb-3 tiptap prose ProseMirror"
                             />
 
                             {articleData &&

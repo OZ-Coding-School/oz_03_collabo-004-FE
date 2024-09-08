@@ -31,8 +31,10 @@ export const EXPERIENCE: { [key: number]: number } = {
     ...Object.fromEntries(Array.from({ length: 99 }, (_, i) => [i + 1, 3])),
 };
 export const LEVEL_TITLE = [
-    { maxLevel: 4, title: "훈수 새싹" },
-    { maxLevel: 9, title: "견습 훈수꾼" },
+    { maxLevel: 2, title: "훈수 새싹" },
+    { maxLevel: 4, title: "훈수 묘목" },
+    { maxLevel: 6, title: "훈수 나무" },
+    { maxLevel: 8, title: "견습 훈수꾼" },
     { maxLevel: 14, title: "풋내기 훈수꾼" },
     { maxLevel: 19, title: "초보 훈수꾼" },
     { maxLevel: 24, title: "훈수 초급자" },

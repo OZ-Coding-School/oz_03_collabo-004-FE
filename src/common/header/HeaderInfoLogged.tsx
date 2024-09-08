@@ -16,23 +16,34 @@ import ModalDetail from "../modal/ModalDetail";
 import { HiXCircle } from "react-icons/hi";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { calculateUserLevel } from "../../util/experience";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+const getNotificationList = async (): Promise<notification[] | null> => {
+    try {
+        const response = await notificationApi.notificationList();
+
+        return response.data;
+    } catch (error) {
+        console.error("알림:", error);
+        return null;
+    }
+};
+
 const HeaderInfoLogged = () => {
     const nav = useNavigate();
     const { user, updateUser } = useUserStore();
     const [modalEditorStatus, setModalEditorStatus] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number>();
-    const [notificationData, setNotificationData] = useState<notification[]>([]);
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
-
-    console.log(user);
+    const queryClient = useQueryClient();
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
 
         setIsDetailModalOpen(true);
-        handleNotificationRead(notification_id);
+        readNotificationMutation.mutate(notification_id);
     };
 
     const closeDetailModal = () => {
@@ -72,38 +83,34 @@ const HeaderInfoLogged = () => {
         fetchData();
     }, [updateUser, userLevelCalculate]);
 
-    useEffect(() => {
-        const getNotificationList = async () => {
-            try {
-                const response = await notificationApi.notificationList();
+    const { data: notificationData } = useQuery({
+        queryKey: ["notifications"],
+        queryFn: getNotificationList,
+        refetchInterval: 30000,
+        refetchIntervalInBackground: false,
+    });
 
-                setNotificationData(response.data);
-            } catch (error) {
-                console.error("알림:", error);
-            }
-        };
-        getNotificationList();
-    }, []);
-
-    const handleDeleteNotification = async (notification_id: number) => {
-        try {
-            await notificationApi.notificationDelete(notification_id);
-            setNotificationData((prevData) => prevData?.filter((notifi) => notifi.id !== notification_id));
-        } catch (error) {
+    const deleteNotificationMutation = useMutation({
+        mutationFn: (notificationId: number) => notificationApi.notificationDelete(notificationId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notifications"] });
+        },
+        onError: (error) => {
             console.error("알림 삭제 실패:", error);
-        }
-    };
+        },
+    });
 
-    const handleNotificationRead = async (notification_id: number) => {
-        try {
-            await notificationApi.notificationRead(notification_id);
-            setNotificationData((prevData) =>
-                prevData.map((notifi) => (notifi.id === notification_id ? { ...notifi, read: true } : notifi))
+    const readNotificationMutation = useMutation({
+        mutationFn: (notificationId: number) => notificationApi.notificationRead(notificationId),
+        onSuccess: (_, notificationId) => {
+            queryClient.setQueryData<notification[]>(["notifications"], (oldData) =>
+                oldData?.map((notifi) => (notifi.id === notificationId ? { ...notifi, read: true } : notifi))
             );
-        } catch (error) {
+        },
+        onError: (error) => {
             console.error("읽음 처리 안됨", error);
-        }
-    };
+        },
+    });
 
     const generateNotificationMessage = (notification: notification) => {
         const { actor_nickname, description, article_title, verb } = notification;
@@ -162,7 +169,7 @@ const HeaderInfoLogged = () => {
                                         <HiXCircle
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleDeleteNotification(notifi.id);
+                                                deleteNotificationMutation.mutate(notifi.id);
                                             }}
                                             className="absolute top-0 right-0 size-5 translate-x-[20%] translate-y-[-10%] text-gray-600 duration-150 hover:text-literal-info"
                                         />

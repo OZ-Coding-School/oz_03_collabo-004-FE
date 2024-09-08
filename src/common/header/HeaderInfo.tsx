@@ -35,11 +35,17 @@ const HeaderInfo = () => {
 
     return (
         <div className="flex justify-center items-center relative">
-            <div className="gap-[10px] hidden md:flex">
-                <Button className="py-0 h-8 text-sm font-medium" onClick={loginModalOpenHandler}>
+            <div className="gap-2 hidden md:flex">
+                <Button
+                    className="py-0 h-8 text-sm font-medium text-white bg-transparent border border-gray-500"
+                    onClick={loginModalOpenHandler}
+                >
                     로그인
                 </Button>
-                <Button className="py-0 h-8 text-sm font-medium" onClick={registerModalOpenHandler}>
+                <Button
+                    className="py-0 h-8 text-sm font-medium  text-white bg-transparent border border-gray-500"
+                    onClick={registerModalOpenHandler}
+                >
                     회원가입
                 </Button>
             </div>
@@ -62,8 +68,12 @@ const HeaderInfo = () => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
                             <div className="flex flex-col p-2 gap-2 w-[120px]">
-                                <Button onClick={loginModalOpenHandler}>로그인</Button>
-                                <Button onClick={registerModalOpenHandler}>회원가입</Button>
+                                <Button className="py-0 h-8 text-sm font-medium" onClick={loginModalOpenHandler}>
+                                    로그인
+                                </Button>
+                                <Button className="py-0 h-8 text-sm font-medium" onClick={registerModalOpenHandler}>
+                                    회원가입
+                                </Button>
                             </div>
                         </motion.div>
                     )}

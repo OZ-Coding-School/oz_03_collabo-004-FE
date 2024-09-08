@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Header from "../common/header/Header";
 import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
-import { Link, replace, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../api/auth";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";

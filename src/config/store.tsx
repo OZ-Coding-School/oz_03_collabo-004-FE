@@ -48,6 +48,7 @@ export const useUserStore = create<UserStore>((set) => ({
         warning_count: 0,
         status: true,
         exp: 0,
+        verified: false,
     },
     otherUser: {
         articles: [],
@@ -62,6 +63,7 @@ export const useUserStore = create<UserStore>((set) => ({
         warning_count: 0,
         status: false,
         exp: 0,
+        verified: true,
     },
     initUser: (form: UserData) => set(() => ({ user: form })),
     initOtherUser: (form: UserData) => set(() => ({ otherUser: form })),

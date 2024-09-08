@@ -4,10 +4,10 @@ import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../api/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import Toast from "../common/toast/Toast";
-import { useToastStore } from "../config/store";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoWarning } from "react-icons/io5";
 
 interface LoginData {
     id: string;
@@ -28,7 +28,13 @@ const LoginPage = () => {
     });
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
-    const { toast, setToast } = useToastStore();
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertMsg, setAlertMsg] = useState<null | string>(null);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertMsg(text);
+    };
 
     const onSubmit: SubmitHandler<LoginData> = async (data) => {
         const { id, password } = data;
@@ -44,20 +50,33 @@ const LoginPage = () => {
             setIsSubmit(false);
             if (error instanceof AxiosError && error.response) {
                 console.error("로그인 실패", error);
-                if (error.response.status === 400) toastHandler("아이디 혹은 비밀번호가 맞지 않습니다.");
-                reset();
+                if (error.response.status === 400) {
+                    reset();
+                    return alertHandler("아이디 또는 비밀번호가 일치하지 않습니다.");
+                }
+                if (error.response.status === 409) {
+                    reset();
+                    return alertHandler("이메일 인증 이후 로그인이 가능합니다.");
+                }
             }
         }
     };
-    const toastHandler = (text: string) => {
-        setToast(true, text);
-    };
+
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertMsg(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
 
     return (
         <>
             <Header />
             <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white ">
-                {toast.status && <Toast />}
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
@@ -122,8 +141,27 @@ const LoginPage = () => {
                                 회원가입 하러 가기
                             </p>
                         </Link>
+                        <Link to={"/find"}>
+                            <p className="text-right text-sm text-gray-500 hover:text-gray-800 cursor-pointer">
+                                비밀번호를 잊으셨나요?
+                            </p>
+                        </Link>
                     </form>
                 </div>
+                <AnimatePresence>
+                    {isAlert && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="fixed flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg top-20 text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertMsg}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );

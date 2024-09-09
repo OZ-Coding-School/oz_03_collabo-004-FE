@@ -65,9 +65,14 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
         <div className="bg-white w-full min-w-[300px] md:mt-10 rounded-2xl py-6 px-10 flex-col relative dark:bg-gray-800">
             <div className="flex mb-6">
                 <div className="text-lg font-bold font-point text-literal-normal dark:text-gray-100">
-                    훈수 레벨 : LV {isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level}
+                    <div className="text-lg font-bold font-point text-literal-normal dark:text-gray-100">
+                        {isUserMypage
+                            ? `훈수 레벨 : LV${user.hunsoo_level}`
+                            : `LV${otherUser.hunsoo_level} : ${levelTitle}`}
+                    </div>
                 </div>
-                <div className="flex flex-col items-end ml-auto text-sm font-normal font-default">
+
+                <div className="flex flex-col items-end ml-auto text-sm font-default">
                     <p className="text-literal-info dark:text-primary-second-dark">
                         채택된 훈수 {isUserMypage ? user.selected_comment_count : otherUser.selected_comment_count}개
                     </p>

@@ -3,17 +3,17 @@ import Button from "../button/Button";
 import { useEffect, useState } from "react";
 import TagSkill from "../tag/TagSkill";
 import { DUMMY_TAGS } from "../../config/const";
-import { useToastStore, useUserStore } from "../../config/store";
-import Toast from "../../common/toast/Toast";
+import { useUserStore } from "../../config/store";
 import { userInfoUpdate } from "../../api/account";
 import useLevelTitle from "../../hooks/useLevelTitle";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoWarning } from "react-icons/io5";
 
 type InfoMyPageLeftProps = {
     isUserMypage: boolean;
 };
 
 const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
-    const { toast, setToast } = useToastStore();
     const { user, otherUser } = useUserStore();
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -22,14 +22,17 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const progress = user.exp;
     const userLevel = isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level;
     const levelTitle = useLevelTitle(userLevel);
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
 
     useEffect(() => {
         setSelectedTags(user.selected_tags);
     }, [user]);
-
-    const toastHandler = () => {
-        setToast(true, "최대 3개의 태그만 선택할 수 있습니다.");
-    };
 
     const handleTagClick = (index: number) => {
         if (selectedTags.includes(index)) {
@@ -38,7 +41,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
         } else if (selectedTags.length < 3) {
             setSelectedTags([...selectedTags, index]);
         } else {
-            toastHandler();
+            alertHandler("태그는 3개까지 선택 가능합니다.");
         }
     };
 
@@ -47,9 +50,19 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
         setIsEdit(false);
     };
 
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
+
     return (
-        <div className="bg-white w-full min-w-[300px] md:mt-10 rounded-2xl py-6 px-10 flex-col dark:bg-gray-800">
-            {toast.status && <Toast />}
+        <div className="bg-white w-full min-w-[300px] md:mt-10 rounded-2xl py-6 px-10 flex-col relative dark:bg-gray-800">
             <div className="flex mb-6">
                 <div className="text-lg font-bold font-point text-literal-normal dark:text-white">
                     훈수 레벨 : LV {isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level}
@@ -62,6 +75,20 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                         받은 경고 {isUserMypage ? user.warning_count : otherUser.warning_count}건
                     </p>
                 </div>
+                <AnimatePresence>
+                    {isAlert && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="absolute top-0 flex items-center gap-2 p-2 bg-orange-600 rounded-lg text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertText}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
             {isUserMypage && (
                 <div className="relative w-full h-11">

@@ -10,21 +10,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     status: null,
     setStatus: (bool: boolean) => set(() => ({ status: bool })),
 }));
-interface ToastStore {
-    toast: {
-        status: boolean;
-        text: string;
-    };
-    setToast: (bool: boolean, text: string) => void;
-}
-export const useToastStore = create<ToastStore>((set) => ({
-    toast: {
-        status: false,
-        text: "",
-    },
-    setToast: (bool, text) => set(() => ({ toast: { status: bool, text: text } })),
-}));
-
 interface UserStore {
     user: UserData;
     otherUser: UserData;

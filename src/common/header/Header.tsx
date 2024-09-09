@@ -6,15 +6,15 @@ import { useEffect } from "react";
 import { articleApi, authApi } from "../../api";
 import { useArticleStore, useAuthStore } from "../../config/store";
 import { motion } from "framer-motion";
-import useDarkMode from "../../hooks/useDarkmode";
-import { AiOutlineSun } from "react-icons/ai";
-import { AiOutlineMoon } from "react-icons/ai";
+// import useDarkMode from "../../hooks/useDarkmode";
+// import { AiOutlineSun } from "react-icons/ai";
+// import { AiOutlineMoon } from "react-icons/ai";
 
 const Header = () => {
     const nav = useNavigate();
     const { setStatus, status } = useAuthStore();
     const { initArticle } = useArticleStore();
-    const { isDarkMode, switchDarkMode } = useDarkMode();
+    // const { isDarkMode, switchDarkMode } = useDarkMode();
 
     useEffect(() => {
         const loginStatusCheck = async () => {
@@ -42,12 +42,12 @@ const Header = () => {
 
                     <>
                         <HeaderSearch />
-                        <button
+                        {/* <button
                             onClick={switchDarkMode}
                             className="px-3 py-1 text-black bg-gray-100 rounded-md dark:bg-[#323232] dark:text-white"
                         >
                             {isDarkMode ? <AiOutlineSun /> : <AiOutlineMoon />}
-                        </button>
+                        </button> */}
                         {status === true && <HeaderInfoLogged />}
                         {status === false && <HeaderInfo />}
                     </>

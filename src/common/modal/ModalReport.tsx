@@ -3,51 +3,63 @@ import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "../button/Button";
 import { articleReport, commentReport } from "../../api/report";
-import { useToastStore } from "../../config/store";
+
+import { AxiosError } from "axios";
 
 interface ModalReportProps {
     onClose: () => void;
     comment_id?: number;
     article_id?: number;
     isOpen: boolean;
+    onAlert: (text: string) => void;
 }
 
-const ModalReport = ({ onClose, isOpen, comment_id, article_id }: ModalReportProps) => {
+const ModalReport = ({ onClose, isOpen, comment_id, article_id, onAlert }: ModalReportProps) => {
     const [text, setText] = useState("");
     const length = text.length < 100 ? 100 - text.length : 0;
     const modalRef = useRef<HTMLTextAreaElement>(null);
-    const { setToast } = useToastStore();
 
     useEffect(() => {
         if (isOpen) {
-            setToast(false, "");
             modalRef.current?.focus();
         }
-    }, [isOpen, setToast]);
+    }, [isOpen]);
 
     const handleReport = async () => {
         if (comment_id) {
             try {
                 const response = await commentReport(comment_id, text);
-                if (response.status === 201) toastHandler("댓글 신고가 완료되었습니다.");
+                onClose();
+                if (response.status === 201) onAlert("댓글 신고가 완료되었습니다.");
             } catch (error) {
-                console.error(error);
+                if (error instanceof AxiosError && error.response) {
+                    if (error.response.status === 409) {
+                        onClose();
+                        onAlert("이미 신고한 댓글입니다.");
+                    } else {
+                        console.error(error);
+                    }
+                }
             }
         }
         if (article_id) {
             try {
                 const response = await articleReport(article_id, text);
-                if (response.status === 201) toastHandler("게시글 신고가 완료되었습니다.");
+                onClose();
+                if (response.status === 201) onAlert("게시글 신고가 완료되었습니다.");
             } catch (error) {
-                console.error(error);
+                if (error instanceof AxiosError && error.response) {
+                    if (error.response.status === 409) {
+                        onClose();
+                        onAlert("이미 신고한 게시글입니다.");
+                    } else {
+                        console.error(error);
+                    }
+                }
             }
         }
     };
 
-    const toastHandler = (text: string) => {
-        setToast(true, text);
-        onClose();
-    };
     return (
         <>
             <motion.nav

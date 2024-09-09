@@ -5,6 +5,8 @@ import ProfileImage from "../profile/ProfileImage";
 import { useUserStore } from "../../config/store";
 import { userInfoImageUpdate, userInfoUpdate } from "../../api/account";
 import { AxiosError } from "axios";
+import { ModalPortalModal } from "../../config/ModalPortalModal";
+import ModalUserDelete from "../modal/ModalUserDelete";
 
 type InfoMyPageLeftProps = {
     isUserMypage: boolean;
@@ -17,6 +19,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const { user, updateUser, otherUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
+    const [deleteUserModal, setDeleteUserModal] = useState(false);
 
     useEffect(() => {
         if (user.nickname) setNicknameText(user.nickname);
@@ -55,11 +58,19 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
         }
     };
 
+    const handleDeleteUserModalClose = () => {
+        setDeleteUserModal(false);
+    };
+
+    const handleDeleteUserModalOpen = () => {
+        setDeleteUserModal(true);
+    };
+
     return (
         <form
             className={tw(
                 "bg-white w-full min-w-[300px] rounded-2xl px-5 py-6 flex flex-col sticky top-20 dark:bg-gray-800 ",
-                isUserMypage ? "min-h-[300px]" : "min-h-[200px]"
+                isUserMypage ? "min-h-[325px]" : "min-h-[200px]"
             )}
         >
             <div className="flex flex-col flex-grow gap-8">
@@ -146,10 +157,27 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
             </div>
             <p className="mb-1 text-xs font-medium text-center text-literal-highlight">{error}</p>
             {isUserMypage && (
-                <Button color="primary" onClick={() => (isEdit ? handleUpdate() : setIsEdit(true))}>
-                    {isEdit ? "프로필 수정 완료" : "프로필 수정"}
-                </Button>
+                <>
+                    <Button color="primary" onClick={() => (isEdit ? handleUpdate() : setIsEdit(true))}>
+                        {isEdit ? "프로필 수정 완료" : "프로필 수정"}
+                    </Button>
+                    <Button
+                        onClick={handleDeleteUserModalOpen}
+                        className="mt-3 bg-transparent text-gray-500 text-xs py-0 px-0 w-fit ml-auto hover:bg-transparent hover:text-gray-500 hover:underline"
+                    >
+                        회원탈퇴
+                    </Button>
+                </>
             )}
+            <ModalPortalModal>
+                {deleteUserModal && (
+                    <ModalUserDelete
+                        isOpen={deleteUserModal}
+                        onClose={handleDeleteUserModalClose}
+                        parent="home-parent"
+                    />
+                )}
+            </ModalPortalModal>
         </form>
     );
 };

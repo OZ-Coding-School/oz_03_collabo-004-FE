@@ -89,7 +89,7 @@ const RegisterPage = () => {
             await authApi.userRegister(form);
             reset();
             setIsSubmit(false);
-            navigate("/tag", { replace: true });
+            navigate("/welcome", { replace: true });
         } catch (error) {
             setIsSubmit(false);
             alertHandler(`회원 가입에 실패했습니다. ${error}`);

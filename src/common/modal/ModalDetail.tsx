@@ -320,6 +320,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                         isOpen={isReportModalOpen}
                         onClose={closeReportModal}
                         article_id={articleData?.article_id as number}
+                        onAlert={alertHandler}
                     />
                 )}
             </ModalPortalModal>

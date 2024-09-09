@@ -141,7 +141,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             />
                         ))
                     ) : len <= 0 ? (
-                        <div className="w-full my-2 text-sm text-center font-default">
+                        <div className="w-full my-2 text-sm text-center font-default dark:text-gray-100">
                             나만의 훈수 태그를 골라보세요!
                         </div>
                     ) : (

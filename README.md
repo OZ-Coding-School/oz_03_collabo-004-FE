@@ -4,7 +4,7 @@
 ### 프로젝트 제목
 **HunsuKing :: AI Question Community Platform**
 
-<img src="https://placehold.co/1280x720" width=100%>
+<img src="https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/main_image.png" width=100%>
 
 ### 프로젝트 정보
 우리 팀은 네이버의 지식인 서비스를 착안하여, <br/>
@@ -107,30 +107,23 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
 
 | 홈 페이지                                 | 
 |--------------------------------------------|
-| <img src="https://placehold.co/1280x720"/> | 
+| <img src="https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/main_page.png"/> | 
 | 서비스 메인 페이지와 게시물을 볼 수 있습니다.              |
 
 | 로그인 페이지                             | 
 |--------------------------------------------|
-| <img src="https://placehold.co/1280x720"/> | 
+| <img src="https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/register_page.png"/> | 
 | 현대웹 구조에 맞게 로그인 페이지를 구성하고, 이메일 인증과 비밀번호 찾기가 가능합니다.         |
 
 | 마이 페이지                             | 
 |--------------------------------------------|
-| <img src="https://placehold.co/1280x720"/> | 
+| <img src="https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/my_page.png"/> | 
 | 사용자 정보를 확인하고 레벨, 사용자 이미지, 탈퇴처리, 작성한 게시물 등 다양한 작업이 가능합니다.|
 
 | 어드민 페이지                             | 
 |--------------------------------------------|
-| <img src="https://placehold.co/1280x720"/> | 
+| <img src="https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/admin_page.png"/> | 
 | React-query를 통한 실시간 동기화 데이터를 지원하는 어드민 페이지입니다. 유저 신고관리, 게시물 관리, 유저 관리 등이 가능합니다.|
-
-
-| 에디터 모달                                 | 
-|--------------------------------------------|
-| <img src="https://placehold.co/1280x720"/> | 
-| TipTap을 통해 직접 구성한 에디터 모달입니다. `lowlight`를 통해 렌더링되며, 클라이언트로 데이터로 넘어올 경우 `highlight.js`로 렌더링 됩니다.|
-
 
 
 ---
@@ -168,29 +161,42 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
 ## 5. 아키텍처, 클라우드 아키텍처, ERD
 
 ### 아키텍처
-![Architecture](https://placehold.co/1280x720)
+![Architecture](https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/architecture.png)
 
 ### 클라우드 아키텍처
 ![CloudArchitecture](https://placehold.co/1280x720)
 
 ### ERD
-![ERD](https://placehold.co/1280x720)
+![ERD](https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/ERD.png)
 
 ---
 
 ## 6. Front-End 트러블 슈팅
 
-- **문제:** Lorem Ipsum.
-  - **해결:** Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.
+- **문제:** Toast 모달 지연시간 이전 컴포넌트 이동시 재등장
+  - **해결:**
+  - Toast 모달이 등장 이후 지연시간 이후 사라지기전에 페이지를 이동하면, 해당 토스트의 시간이 초기화 되는 문제가 있었습니다.
+  - 해당 Toast 모달을 파기하고, Alert모달로 변경하여 각 페이지별로 개별적으로 관리하도록 수정하였습니다.
 
-- **문제:** Lorem Ipsum.
-  - **해결:** Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.
+- **문제:** Editor 이미지 업로드후 글 작성 취소시 S3내 데이터 잔존
+  - **해결:**
+  - Editor 모달 내에서 onChangeEvent 발생이후 기존 img src 배열이 사라질경우, api 엔드포인트로 객체 삭제를 전달하여 해당 문제를 해결하였습니다.
+    
+- **문제:** 알림 기능이 새로고침시에만 동작.
+  - **해결:**
+  - 알림기능에 `React-query`를 반영하여 `Refetch`를 30초 간격으로 수정하여, 알림이 실시간으로 동기화 되도록 수정했습니다.
+  - 해당 부분에 착안하여 어드민페이지는 모든 데이터를 실시간 동기화하도록 수정하였습니다.
+ 
+- **문제:** `Editor` 모달 스타일링이 게시물에 반영되지 않음
+  - **해결:**
+  - 실제로 게시물 로직은 html만 전송하기때문에, 스타일링을 유지할 수 없었습니다.
+  - Editor는 `lowlight`로 스타일링을 채용했으나, 해당 스타일이 넘어오지 않았습니다.
+  - `highlight.js`로 뷰어측 코드블럭을 디자인하고, `tailwind/typography`을 커스텀 스타일하여 해당 스타일과 동일하게 맞췄습니다.
 
-- **문제:** Lorem Ipsum.
-  - **해결:** Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.
-
-- **문제:** Lorem Ipsum.
-  - **해결:** Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.Lorem Ipsum.
+ - **문제:** `Editor` 모달 컴포넌트 디자인이 깨짐
+  - **해결:**
+  - Editor Modal은 `Tiptap`을 채택하였는데, `Tiptap`이 tailwindcss를 사용중일경우 문제가 발생할 수 있다는 점을 확인했습니다. [StackOverFlow](https://stackoverflow.com/questions/78057571/why-isnt-the-headings-and-lists-working-in-tiptap)
+  - 해당 문제를 해결하기위해 `tailwind/typography`를 활용하고, 다른 `tailwindcss`사용자의 에디터 레포를 확인해서 스타일링을 수정하였습니다. [Repository](https://github.com/ZanyuanYang/Text-Editor-Tiptap)
 
 
 

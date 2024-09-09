@@ -18,8 +18,8 @@ const Topic = () => {
             <p
                 onClick={() => setTag(0)}
                 className={tw(
-                    "cursor-pointer hover:text-primary-second-dark transition font-point px-1 text-literal-normal text-lg font-medium dark:text-white",
-                    selectTag === 0 && "text-primary-second-dark"
+                    "cursor-pointer hover:text-primary-second-dark dark:hover:text-primary-second-dark transition font-point px-1 text-literal-normal text-lg font-medium dark:text-white",
+                    selectTag === 0 && "text-primary-second-dark dark:text-primary-second-dark"
                 )}
             >
                 모든 훈수
@@ -30,8 +30,8 @@ const Topic = () => {
                     key={DUMMY_TAGS[1].id}
                     onClick={() => setTag(DUMMY_TAGS[1].id)}
                     className={tw(
-                        "flex items-center gap-2 duration-100 font-medium hover:text-primary-second-dark cursor-pointer ",
-                        selectTag === DUMMY_TAGS[1].id && "text-primary-second-dark"
+                        "flex items-center gap-2 duration-100 font-medium dark:hover:text-primary-second-dark hover:text-primary-second-dark cursor-pointer ",
+                        selectTag === DUMMY_TAGS[1].id && "text-primary-second-dark dark:text-primary-second-dark"
                     )}
                 >
                     {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="ml-auto text-sm" />
@@ -45,8 +45,8 @@ const Topic = () => {
                             key={i.id}
                             onClick={() => handleTagClick(i.id)}
                             className={tw(
-                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer",
-                                selectTag === i.id && "text-primary-second-dark"
+                                "flex items-center gap-2 duration-100 dark:hover:text-primary-second-dark hover:text-primary-second-dark cursor-pointer",
+                                selectTag === i.id && "text-primary-second-dark dark:text-primary-second-dark"
                             )}
                         >
                             {i.icon} {i.text}
@@ -60,8 +60,8 @@ const Topic = () => {
                     key={DUMMY_TAGS[8].id}
                     onClick={() => handleTagClick(DUMMY_TAGS[8].id)}
                     className={tw(
-                        "flex text-md items-center gap-2 font-medium duration-100 hover:text-primary-second-dark cursor-pointer",
-                        selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark"
+                        "flex text-md items-center gap-2 font-medium duration-100 hover:text-primary-second-dark dark:hover:text-primary-second-dark cursor-pointer",
+                        selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark dark:text-primary-second-dark"
                     )}
                 >
                     {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="ml-auto text-sm" />
@@ -75,8 +75,8 @@ const Topic = () => {
                             key={i.id}
                             onClick={() => handleTagClick(i.id)}
                             className={tw(
-                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark cursor-pointer dark:text-white",
-                                selectTag === i.id && "text-primary-second-dark"
+                                "flex items-center gap-2 duration-100 hover:text-primary-second-dark dark:hover:text-primary-second-dark cursor-pointer dark:text-white",
+                                selectTag === i.id && "text-primary-second-dark dark:text-primary-second-dark"
                             )}
                         >
                             {i.icon} {i.text}

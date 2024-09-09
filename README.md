@@ -193,9 +193,9 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
   - `highlight.js`로 뷰어측 코드블럭을 디자인하고, `tailwind/typography`을 커스텀 스타일하여 해당 스타일과 동일하게 맞췄습니다.
 
  - **문제:** `Editor` 모달 컴포넌트 디자인이 깨짐
-  - **해결:**
-  - Editor Modal은 `Tiptap`을 채택하였는데, `Tiptap`이 tailwindcss를 사용중일경우 문제가 발생할 수 있다는 점을 확인했습니다. [StackOverFlow](https://stackoverflow.com/questions/78057571/why-isnt-the-headings-and-lists-working-in-tiptap)
-  - 해당 문제를 해결하기위해 `tailwind/typography`를 활용하고, 다른 `tailwindcss`사용자의 에디터 레포를 확인해서 스타일링을 수정하였습니다. [Repository](https://github.com/ZanyuanYang/Text-Editor-Tiptap)
+   - **해결:**
+   - Editor Modal은 `Tiptap`을 채택하였는데, tailwindcss를 사용중일경우 문제가 발생할 수 있다는 점을 확인했습니다. [StackOverFlow](https://stackoverflow.com/questions/78057571/why-isnt-the-headings-and-lists-working-in-tiptap)
+   - 해당 문제를 해결하기위해 `tailwind/typography`를 활용하고, 다른 `tailwindcss`사용자의 에디터 레포를 확인해서 스타일링을 수정하였습니다. [Repository](https://github.com/ZanyuanYang/Text-Editor-Tiptap)
 
 
 

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoWarning } from "react-icons/io5";
+import useDarkMode from "../hooks/useDarkmode";
 
 interface LoginData {
     id: string;
@@ -30,6 +31,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [isAlert, setIsAlert] = useState(false);
     const [alertMsg, setAlertMsg] = useState<null | string>(null);
+    const { isDarkMode } = useDarkMode();
 
     const alertHandler = (text: string) => {
         setIsAlert(true);
@@ -77,12 +79,16 @@ const LoginPage = () => {
         <>
             <Header />
             <div className="flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-[#323232]">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-slate-400">
                     <Link to={"/"}>
-                        <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
+                        <img
+                            className="max-w-[130px]"
+                            src={isDarkMode ? "/img/header_logo.png" : "/img/hunsu_logo_dark.png"}
+                            alt="hunsuking_logo"
+                        />
                     </Link>
                     <form className="flex flex-col w-full gap-1 " onSubmit={handleSubmit(onSubmit)}>
-                        <label className="px-1 text-sm font-medium">아이디 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second-dark">아이디 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -109,7 +115,7 @@ const LoginPage = () => {
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.id && errors.id.message}
                         </p>
-                        <label className="px-1 text-sm font-medium">비밀번호 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second-dark">비밀번호 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -137,12 +143,12 @@ const LoginPage = () => {
                             {isSubmit ? "로그인 중.." : "로그인"}
                         </Button>
                         <Link to={"/register"}>
-                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800">
+                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800 dark:text-gray-100 dark:hover:text-gray-300">
                                 회원가입 하러 가기
                             </p>
                         </Link>
                         <Link to={"/find"}>
-                            <p className="text-sm text-right text-gray-500 cursor-pointer hover:text-gray-800">
+                            <p className="text-sm text-right text-gray-500 cursor-pointer hover:text-gray-800 dark:text-gray-100 dark:hover:text-gray-300">
                                 비밀번호를 잊으셨나요?
                             </p>
                         </Link>

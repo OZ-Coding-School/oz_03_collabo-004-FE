@@ -133,7 +133,9 @@ const HomePage = () => {
                             <SkeletonContent type={2} />
                         </div>
                     )}
-                    {filterArticle && filterArticle.length === 0 && <div>검색 결과가 없습니다.</div>}
+                    {filterArticle && filterArticle.length === 0 && (
+                        <div className="dark:text-primary-second-dark">검색 결과가 없습니다.</div>
+                    )}
                     {filterArticle &&
                         filterArticle.map((article) => (
                             <motion.div

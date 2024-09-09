@@ -49,9 +49,9 @@ const TrendingContent = () => {
                         <div
                             key={article.article_id}
                             onClick={() => handleDetailModalOpen(article.article_id)}
-                            className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100"
+                            className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600"
                         >
-                            <p className="text-md font-point text-slate-600 ">{index + 1}</p>
+                            <p className="text-md font-point text-slate-600 dark:text-white">{index + 1}</p>
                             {article.thumbnail_image === null ? (
                                 <FaQuestion className="rounded-md w-[32px] h-[32px] p-1 bg-slate-300 text-white" />
                             ) : (
@@ -62,7 +62,7 @@ const TrendingContent = () => {
                                 />
                             )}
 
-                            <p className="text-[14px] font-medium font-default text-literal-normal dark:text-primary-second-dark">
+                            <p className="text-[14px] font-medium font-default text-literal-normal dark:text-gray-100">
                                 {truncateText(article.title, 11)}
                             </p>
                         </div>

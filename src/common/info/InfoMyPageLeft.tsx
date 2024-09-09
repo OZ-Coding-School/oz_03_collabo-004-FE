@@ -111,7 +111,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                     )}
 
                     <div className="flex flex-col flex-grow gap-1">
-                        <p className="px-2 text-sm font-semibold text-literal-normal dark:text-white">별명</p>
+                        <p className="px-2 text-sm font-semibold text-literal-normal dark:text-gray-100">별명</p>
                         {isEdit ? (
                             <input
                                 type="text"
@@ -121,14 +121,14 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                 className="w-full px-2 py-1 text-base text-gray-500 border border-gray-300 rounded-md focus:outline-primary-second"
                             />
                         ) : (
-                            <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-white">
+                            <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-gray-100">
                                 {isUserMypage ? nicknameText : otherUser.nickname}
                             </div>
                         )}
                     </div>
                 </div>
                 <div className="flex flex-col gap-1">
-                    <div className="px-2 text-sm font-semibold text-literal-normal dark:text-white">한 줄 소개</div>
+                    <div className="px-2 text-sm font-semibold text-literal-normal dark:text-gray-100">한 줄 소개</div>
                     {isEdit ? (
                         <input
                             placeholder="한 줄 소개를 작성해주세요."
@@ -138,7 +138,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             className="px-2 py-1 text-base text-gray-500 border border-gray-300 rounded-md focus:outline-primary-second"
                         />
                     ) : (
-                        <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-white">
+                        <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-gray-100">
                             {isUserMypage ? bioText : otherUser.bio}
                         </div>
                     )}

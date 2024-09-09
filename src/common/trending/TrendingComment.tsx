@@ -49,21 +49,21 @@ const TrendingComment = () => {
                         <div
                             key={item.id}
                             onClick={() => handleDetailModalOpen(item.article_id)}
-                            className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100 "
+                            className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600"
                         >
-                            <p className="text-base font-point text-slate-600">{index + 1}</p>
-                            <div className="flex flex-col">
+                            <p className="text-base font-point text-slate-600 dark:text-white">{index + 1}</p>
+                            <div className="flex flex-col ">
                                 <div className="flex items-center gap-1">
                                     <img
                                         src={item.user_profile_image || "img/profile_placeholder.png"}
                                         alt="trending-content-image"
                                         className="rounded-full size-5"
                                     />
-                                    <p className="text-sm font-medium font-default text-literal-normal dark:text-primary-second-dark">
+                                    <p className="text-sm font-medium font-default text-literal-normal dark:text-gray-100">
                                         {truncateText(item.user_nickname, 10)}
                                     </p>
                                 </div>
-                                <p className="text-xs font-normal font-default text-literal-normal dark:text-primary-second-dark">
+                                <p className="text-xs font-normal font-default text-literal-normal dark:text-gray-100">
                                     {truncateText(item.content, 19)}
                                 </p>
                             </div>

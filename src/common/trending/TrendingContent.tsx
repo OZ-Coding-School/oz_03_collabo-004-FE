@@ -38,12 +38,12 @@ const TrendingContent = () => {
             <div className="w-full h-full">
                 <div className="flex items-center gap-2 px-1 mb-1">
                     <FaFireAlt className="ml-1 text-literal-highlight" />
-                    <p className="font-default font-medium text-md text-literal-highlight">인기 게시글</p>
+                    <p className="font-medium font-default text-md text-literal-highlight">인기 게시글</p>
                 </div>
                 <motion.div
                     animate={{ opacity: [0.5, 1] }}
                     transition={{ delay: 0.3 }}
-                    className="flex flex-col gap-1 w-full h-auto px-1 py-1 bg-white rounded-xl "
+                    className="flex flex-col w-full h-auto gap-1 px-1 py-1 bg-white rounded-xl "
                 >
                     {trendingArticles.map((article, index) => (
                         <div

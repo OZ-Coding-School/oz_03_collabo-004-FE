@@ -57,10 +57,10 @@ const TagPage = () => {
     return (
         <>
             <Header />
-            <div className="flex w-screen justify-center items-center min-h-screen sm:bg-transparent bg-white ">
+            <div className="flex items-center justify-center w-screen min-h-screen bg-white sm:bg-transparent dark:bg-gray-900">
                 {toast.status && <Toast />}
                 <div className="max-w-[620px] min-w-[330px] sm:bg-white sm:rounded-[40px] sm:border-2 sm:border-[#4d3e3971] gap-16 flex flex-col justify-center items-center py-14 px-3 sm:px-10">
-                    <p className="font-point text-xl sm:text-2xl text-literal-normal w-full text-center flex flex-wrap justify-center">
+                    <p className="flex flex-wrap justify-center w-full text-xl text-center font-point sm:text-2xl text-literal-normal">
                         <span>내가 전문가다,&nbsp; </span> <span>훈수 태그 고르기</span>
                     </p>
                     <div className="flex flex-col gap-14">
@@ -80,12 +80,12 @@ const TagPage = () => {
                             <Button color="primary" className="w-full" onClick={handleTagUpdate}>
                                 완료
                             </Button>
-                            <div className="flex justify-center gap-1 font-default text-sm pt-5 px-1 flex-wrap">
-                                <p className="text-gray-500 font-normal text-center">
+                            <div className="flex flex-wrap justify-center gap-1 px-1 pt-5 text-sm font-default">
+                                <p className="font-normal text-center text-gray-500">
                                     훈수 태그는 나중에 다시 수정할 수 있어요!
                                 </p>
                                 <div onClick={handleMain}>
-                                    <p className=" text-literal-normal font-normal hover:underline cursor-pointer">
+                                    <p className="font-normal cursor-pointer  text-literal-normal hover:underline">
                                         지금은 넘어가기
                                     </p>
                                 </div>

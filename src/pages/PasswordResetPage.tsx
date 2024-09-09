@@ -5,8 +5,7 @@ import { twMerge as tw } from "tailwind-merge";
 import { useState } from "react";
 import Header from "../common/header/Header";
 import { authApi } from "../api";
-import { AnimatePresence, motion } from "framer-motion";
-import { IoWarning } from "react-icons/io5";
+import { FaKey } from "react-icons/fa";
 
 interface PasswordData {
     password: string;
@@ -17,13 +16,7 @@ const PasswordResetPage = () => {
     const navigate = useNavigate();
     const { uidb64, token } = useParams();
     const [isSubmit, setIsSubmit] = useState(false);
-    const [isAlert, setIsAlert] = useState(false);
-    const [alertText, setAlertText] = useState<string | null>(null);
 
-    const alertHandler = (text: string) => {
-        setIsAlert(true);
-        setAlertText(text);
-    };
     const {
         handleSubmit,
         formState: { errors },
@@ -45,13 +38,14 @@ const PasswordResetPage = () => {
 
         try {
             if (!uidb64 || !token) {
-                return alertHandler(`잘못된 요청입니다. 계정정보 및 토큰이 유효하지 않습니다.`);
+                return;
             }
             await authApi.passwordResetConfirm(uidb64, token, password);
             reset();
             navigate("/", { replace: true });
-        } catch (error) {
-            alertHandler(`잘못된 요청입니다. ${error}`);
+        } catch {
+            reset();
+            navigate("/", { replace: true });
         } finally {
             setIsSubmit(false);
         }
@@ -66,6 +60,11 @@ const PasswordResetPage = () => {
                         <img className="max-w-[130px]" src="/img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
                     <form className="flex flex-col w-full gap-1" onSubmit={handleSubmit(onSubmit)}>
+                        <div className="w-full text-center font-point text-xl mb-20 flex gap-1 items-center">
+                            <FaKey className="text-yellow-500 animate-ring" />
+                            <div>비밀번호 재수정</div>
+                        </div>
+
                         <label className="text-sm font-medium px-1">비밀번호 *</label>
                         <input
                             className={tw(
@@ -119,20 +118,6 @@ const PasswordResetPage = () => {
                     </form>
                 </div>
             </div>
-            <AnimatePresence>
-                {isAlert && (
-                    <motion.div
-                        initial={{ translateY: -100 }}
-                        animate={{ translateY: 0 }}
-                        exit={{ translateY: -100 }}
-                        transition={{ type: "spring", duration: 1 }}
-                        className="fixed flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg top-20 text-background"
-                    >
-                        <IoWarning />
-                        <div>{alertText}</div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

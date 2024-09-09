@@ -3,7 +3,6 @@ import Header from "../common/header/Header";
 import Button from "../common/button/Button";
 import { twMerge as tw } from "tailwind-merge";
 import { Link, useNavigate } from "react-router-dom";
-import { userRegister } from "../api/auth";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoWarning } from "react-icons/io5";
@@ -79,8 +78,15 @@ const RegisterPage = () => {
             email: data.email.trim(),
             password: data.password.trim(),
         };
+        const form = {
+            username: id,
+            nickname: nickname,
+            password: password,
+            email: email,
+        };
+
         try {
-            await userRegister({ username: id, nickname: nickname, password: password, email: email });
+            await authApi.userRegister(form);
             reset();
             setIsSubmit(false);
             navigate("/tag", { replace: true });

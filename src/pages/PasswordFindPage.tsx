@@ -55,13 +55,13 @@ const PasswordFindPage = () => {
     return (
         <>
             <Header />
-            <div className="relative overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white ">
+            <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
 
                     <div className="flex flex-col w-full">
-                        <div className="w-full text-center font-point text-xl mb-20">비밀번호 찾기</div>
-                        <label htmlFor="id" className="text-sm font-medium px-1">
+                        <div className="w-full mb-20 text-xl text-center font-point">비밀번호 찾기</div>
+                        <label htmlFor="id" className="px-1 text-sm font-medium">
                             아이디
                         </label>
                         <div className="flex gap-1">
@@ -81,7 +81,7 @@ const PasswordFindPage = () => {
                             <button
                                 onClick={handleValidation}
                                 disabled={isCompleted || isConfirm}
-                                className="disabled:bg-primary-second disabled:hover:bg-primary-second rounded-sm bg-primary-second hover:bg-primary-second-dark p-1 text-stone-50"
+                                className="p-1 rounded-sm disabled:bg-primary-second disabled:hover:bg-primary-second bg-primary-second hover:bg-primary-second-dark text-stone-50"
                             >
                                 {isConfirm === true ? "인증 요청 중" : isCompleted ? "요청 완료" : "인증 요청"}
                             </button>
@@ -96,7 +96,7 @@ const PasswordFindPage = () => {
                             animate={{ translateY: 0 }}
                             exit={{ translateY: -100 }}
                             transition={{ type: "spring", duration: 1 }}
-                            className="fixed flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg top-20 text-background"
+                            className="fixed flex items-center gap-2 p-2 bg-orange-600 bg-opacity-75 rounded-lg top-20 text-background"
                         >
                             <IoWarning />
                             <div>{alertMsg}</div>

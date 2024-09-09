@@ -35,9 +35,9 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
         <>
             <div
                 onClick={handleArticleClick}
-                className="cursor-pointer flex flex-col bg-white rounded-t-lg min-w-full md:w-[626px]"
+                className="cursor-pointer flex flex-col bg-white rounded-t-lg min-w-full md:w-[626px] dark:bg-gray-800 dark:text-white"
             >
-                <div className={`flex justify-center mt-[20px] mb-[10px] ${thumbnail_image ? "" : "hidden"}`}>
+                <div className={`flex justify-center mt-[20px] mb-[10px]  ${thumbnail_image ? "" : "hidden"}`}>
                     {thumbnail_image && (
                         <img
                             src={thumbnail_image}
@@ -46,13 +46,13 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
                         />
                     )}
                 </div>
-                <div className="flex flex-col p-4 w-full">
-                    <h2 className="mb-2 text-lg text-black fontsize-xl break-words">{title}</h2>
+                <div className="flex flex-col w-full p-4 dark:text-white">
+                    <h2 className="mb-2 text-lg text-black break-words fontsize-xl dark:text-white">{title}</h2>
                     <div
                         dangerouslySetInnerHTML={{
                             __html: sanitizeAndRemoveImages(truncateText(content, 300)),
                         }}
-                        className="tiptap prose ProseMirror text-[16px] text-black break-words"
+                        className="tiptap prose ProseMirror text-[16px] text-black break-words dark:text-white"
                     />
                 </div>
             </div>

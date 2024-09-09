@@ -48,14 +48,14 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
     };
 
     return (
-        <div className="bg-white w-full min-w-[300px] md:mt-10 rounded-2xl py-6 px-10 flex-col">
+        <div className="bg-white w-full min-w-[300px] md:mt-10 rounded-2xl py-6 px-10 flex-col dark:bg-gray-800">
             {toast.status && <Toast />}
             <div className="flex mb-6">
-                <div className="font-point font-bold text-lg text-literal-normal">
+                <div className="text-lg font-bold font-point text-literal-normal dark:text-white">
                     훈수 레벨 : LV {isUserMypage ? user.hunsoo_level : otherUser.hunsoo_level}
                 </div>
-                <div className="flex flex-col items-end font-default ml-auto">
-                    <p className="text-literal-info">
+                <div className="flex flex-col items-end ml-auto font-default">
+                    <p className="text-literal-info dark:text-primary-second-dark">
                         채택된 훈수 {isUserMypage ? user.selected_comment_count : otherUser.selected_comment_count}개
                     </p>
                     <p className="text-literal-highlight">
@@ -64,7 +64,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                 </div>
             </div>
             {isUserMypage && (
-                <div className="w-full h-11 relative">
+                <div className="relative w-full h-11">
                     <div
                         className="absolute flex flex-col items-center transition-all duration-300"
                         style={{
@@ -73,22 +73,22 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             bottom: "20px",
                         }}
                     >
-                        <p className="font-default text-sm font-medium text-primary-second-dark min-w-24 text-center">
+                        <p className="text-sm font-medium text-center font-default text-primary-second-dark min-w-24">
                             {levelTitle}
                         </p>
                         <IoMdArrowDropdown className="text-primary-second-dark" />
                     </div>
-                    <div className="absolute bottom-0 w-full bg-gray-100 rounded-full h-2">
+                    <div className="absolute bottom-0 w-full h-2 bg-gray-100 rounded-full">
                         <div
-                            className="bg-primary-second-dark h-full rounded-full transition-all duration-300"
+                            className="h-full transition-all duration-300 rounded-full bg-primary-second-dark"
                             style={{ width: `${progress}%` }}
                         ></div>
                     </div>
                 </div>
             )}
 
-            <div className="flex mt-9 mb-5 justify-between">
-                <p className="font-point text-lg text-literal-normal">
+            <div className="flex justify-between mb-5 mt-9">
+                <p className="text-lg font-point text-literal-normal dark:text-white">
                     {isUserMypage ? "나의 전문 훈수는" : <>' {otherUser.nickname} ' 님의 전문 훈수</>}
                 </p>
                 {isUserMypage && (
@@ -114,7 +114,7 @@ const InfoMyPageRight = ({ isUserMypage }: InfoMyPageLeftProps) => {
                             />
                         ))
                     ) : len <= 0 ? (
-                        <div className="font-default text-sm text-center w-full my-2">
+                        <div className="w-full my-2 text-sm text-center font-default">
                             나만의 훈수 태그를 골라보세요!
                         </div>
                     ) : (

@@ -43,7 +43,7 @@ const TrendingContent = () => {
                 <motion.div
                     animate={{ opacity: [0.5, 1] }}
                     transition={{ delay: 0.3 }}
-                    className="flex flex-col w-full h-auto gap-1 px-1 py-1 bg-white rounded-xl "
+                    className="flex flex-col w-full h-auto gap-1 px-1 py-1 bg-white rounded-xl dark:bg-gray-800"
                 >
                     {trendingArticles.map((article, index) => (
                         <div
@@ -51,7 +51,7 @@ const TrendingContent = () => {
                             onClick={() => handleDetailModalOpen(article.article_id)}
                             className="flex items-center gap-2 px-2 py-1 transition rounded-md cursor-pointer hover:bg-gray-100"
                         >
-                            <p className="text-md font-point text-slate-600">{index + 1}</p>
+                            <p className="text-md font-point text-slate-600 ">{index + 1}</p>
                             {article.thumbnail_image === null ? (
                                 <FaQuestion className="rounded-md w-[32px] h-[32px] p-1 bg-slate-300 text-white" />
                             ) : (
@@ -62,7 +62,7 @@ const TrendingContent = () => {
                                 />
                             )}
 
-                            <p className="text-[14px] font-medium font-default text-literal-normal">
+                            <p className="text-[14px] font-medium font-default text-literal-normal dark:text-primary-second-dark">
                                 {truncateText(article.title, 11)}
                             </p>
                         </div>

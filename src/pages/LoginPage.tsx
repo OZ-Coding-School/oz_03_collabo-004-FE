@@ -77,11 +77,11 @@ const LoginPage = () => {
         <>
             <Header />
             <div className="flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-[#323232]">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
-                    <form className="flex flex-col w-full gap-1" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="flex flex-col w-full gap-1 " onSubmit={handleSubmit(onSubmit)}>
                         <label className="px-1 text-sm font-medium">아이디 *</label>
                         <input
                             className={tw(

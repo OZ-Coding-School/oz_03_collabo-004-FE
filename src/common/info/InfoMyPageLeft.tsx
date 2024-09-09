@@ -58,12 +58,12 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
     return (
         <form
             className={tw(
-                "bg-white w-full min-w-[300px] rounded-2xl px-5 py-6 flex flex-col sticky top-20",
+                "bg-white w-full min-w-[300px] rounded-2xl px-5 py-6 flex flex-col sticky top-20 dark:bg-gray-800 ",
                 isUserMypage ? "min-h-[300px]" : "min-h-[200px]"
             )}
         >
             <div className="flex flex-col flex-grow gap-8">
-                <div className="flex gap-2 lg:gap-5 items-center">
+                <div className="flex items-center gap-2 lg:gap-5 ">
                     {isUserMypage ? (
                         isEdit ? (
                             <>
@@ -81,7 +81,7 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                                                     : user.profile_image
                                             }
                                         />
-                                        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 rounded-full"></div>
+                                        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 rounded-full opacity-40"></div>
                                     </div>
                                 </label>
                             </>
@@ -110,41 +110,41 @@ const InfoMyPageLeft = ({ isUserMypage }: InfoMyPageLeftProps) => {
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-1 flex-grow">
-                        <p className="text-sm px-2 font-semibold text-literal-normal">별명</p>
+                    <div className="flex flex-col flex-grow gap-1">
+                        <p className="px-2 text-sm font-semibold text-literal-normal dark:text-white">별명</p>
                         {isEdit ? (
                             <input
                                 type="text"
                                 maxLength={20}
                                 defaultValue={nicknameText}
                                 onChange={(e) => setNicknameText(e.target.value)}
-                                className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second w-full"
+                                className="w-full px-2 py-1 text-base text-gray-500 border border-gray-300 rounded-md focus:outline-primary-second"
                             />
                         ) : (
-                            <div className="text-base text-literal-normal border border-transparent rounded-md pl-2 py-1">
+                            <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-white">
                                 {isUserMypage ? nicknameText : otherUser.nickname}
                             </div>
                         )}
                     </div>
                 </div>
                 <div className="flex flex-col gap-1">
-                    <div className="text-literal-normal text-sm font-semibold px-2">한 줄 소개</div>
+                    <div className="px-2 text-sm font-semibold text-literal-normal dark:text-white">한 줄 소개</div>
                     {isEdit ? (
                         <input
                             placeholder="한 줄 소개를 작성해주세요."
                             defaultValue={bioText}
                             maxLength={50}
                             onChange={(e) => setBioText(e.target.value)}
-                            className="text-base text-gray-500 border border-gray-300 rounded-md px-2 py-1 focus:outline-primary-second"
+                            className="px-2 py-1 text-base text-gray-500 border border-gray-300 rounded-md focus:outline-primary-second"
                         />
                     ) : (
-                        <div className="text-base text-literal-normal border border-transparent rounded-md pl-2 py-1">
+                        <div className="py-1 pl-2 text-base border border-transparent rounded-md text-literal-normal dark:text-white">
                             {isUserMypage ? bioText : otherUser.bio}
                         </div>
                     )}
                 </div>
             </div>
-            <p className="text-xs mb-1 text-center text-literal-highlight font-medium">{error}</p>
+            <p className="mb-1 text-xs font-medium text-center text-literal-highlight">{error}</p>
             {isUserMypage && (
                 <Button color="primary" onClick={() => (isEdit ? handleUpdate() : setIsEdit(true))}>
                     {isEdit ? "프로필 수정 완료" : "프로필 수정"}

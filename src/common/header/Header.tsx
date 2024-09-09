@@ -44,7 +44,7 @@ const Header = () => {
                         <HeaderSearch />
                         <button
                             onClick={switchDarkMode}
-                            className="px-3 py-1 text-black bg-gray-100 rounded-md dark:bg-gray-800 dark:text-white"
+                            className="px-3 py-1 text-black bg-gray-100 rounded-md dark:bg-[#323232] dark:text-white"
                         >
                             {isDarkMode ? <AiOutlineSun /> : <AiOutlineMoon />}
                         </button>

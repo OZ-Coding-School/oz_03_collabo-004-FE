@@ -211,12 +211,12 @@ const RegisterPage = () => {
         <>
             <Header />
             <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10 dark:bg-[#323232]">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
                     <form className="flex flex-col w-full gap-1" onSubmit={handleSubmit(onSubmit)}>
-                        <label className="px-1 text-sm font-medium">아이디 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second">아이디 *</label>
                         <div className="flex gap-1">
                             <input
                                 disabled={validation.id === true}
@@ -260,7 +260,7 @@ const RegisterPage = () => {
                             {errors.id && errors.id.message}
                         </p>
 
-                        <label className="px-1 text-sm font-medium">별명 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second">별명 *</label>
                         <div className="flex gap-1">
                             <input
                                 disabled={validation.name === true}
@@ -300,7 +300,7 @@ const RegisterPage = () => {
                             {errors.nickname && errors.nickname.message}
                         </p>
 
-                        <label className="px-1 text-sm font-medium">이메일 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second">이메일 *</label>
                         <div className="flex gap-1">
                             <input
                                 disabled={validation.email === true}
@@ -336,7 +336,7 @@ const RegisterPage = () => {
                             {errors.email && errors.email.message}
                         </p>
 
-                        <label className="px-1 text-sm font-medium">비밀번호 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second">비밀번호 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -357,7 +357,7 @@ const RegisterPage = () => {
                             {errors.password && errors.password.message}
                         </p>
 
-                        <label className="px-1 text-sm font-medium">비밀번호 확인 *</label>
+                        <label className="px-1 text-sm font-medium dark:text-primary-second">비밀번호 확인 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -387,7 +387,7 @@ const RegisterPage = () => {
                             {isSubmit ? "회원가입 중.." : "회원가입"}
                         </Button>
                         <Link to={"/login"}>
-                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800">
+                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800 dark:text-primary-second dark:hover:text-primary-second-dark">
                                 로그인 하러 가기
                             </p>
                         </Link>

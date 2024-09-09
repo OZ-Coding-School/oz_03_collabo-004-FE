@@ -55,7 +55,7 @@ const TrendingComment = () => {
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1">
                                     <img
-                                        src={item.user_profile_image}
+                                        src={item.user_profile_image || "img/profile_placeholder.png"}
                                         alt="trending-content-image"
                                         className="rounded-full size-5"
                                     />

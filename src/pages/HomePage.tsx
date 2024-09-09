@@ -109,15 +109,15 @@ const HomePage = () => {
     }, [filteredArticles]);
 
     return (
-        <div className="home-parent">
+        <div className="min-h-screen text-black bg-gray-100 home-parent dark:bg-gray-900">
             <Header />
-            <div className=" flex font-default w-full justify-center mx-auto pt-[80px] gap-10">
+            <div className="flex font-default w-full justify-center mx-auto pt-[80px] gap-10">
                 <nav className="hidden xl:block w-[190px] h-fit sticky top-[80px]">
                     <Topic />
                 </nav>
                 <main className="w-full xl:max-w-[658px] mx-4 xl:mx-0 flex flex-col items-center">
                     {user.nickname && (
-                        <div className="flex gap-3 mb-4 w-full justify-center items-center">
+                        <div className="flex items-center justify-center w-full gap-3 mb-4">
                             <div className="w-[40px] h-[40px] relative ">
                                 <ProfileImage src={user.profile_image} />
                             </div>
@@ -133,12 +133,12 @@ const HomePage = () => {
                             <SkeletonContent type={2} />
                         </div>
                     )}
-                    {filterArticle && filterArticle.length === 0 && <div>검색 결과가 없습니다.</div>}{" "}
+                    {filterArticle && filterArticle.length === 0 && <div>검색 결과가 없습니다.</div>}
                     {filterArticle &&
                         filterArticle.map((article) => (
                             <motion.div
                                 animate={{ opacity: [0, 1], translateY: [10, 0] }}
-                                className="mb-4 w-full"
+                                className="w-full mb-4"
                                 key={article.article_id}
                             >
                                 <ProfileStatus
@@ -147,7 +147,7 @@ const HomePage = () => {
                                     profile_image={article.user.profile_image}
                                     user_id={article.user.user_id}
                                 />
-                                <div className="hover:shadow-md duration-200 hover:-translate-y-1 rounded-xl">
+                                <div className="duration-200 hover:shadow-md hover:-translate-y-1 rounded-xl">
                                     <Content
                                         onClick={handleArticleClick}
                                         id={article.article_id}
@@ -166,7 +166,7 @@ const HomePage = () => {
                             </motion.div>
                         ))}
                 </main>
-                <nav className="hidden xl:flex flex-col gap-4">
+                <nav className="flex-col hidden gap-4 xl:flex">
                     <div className="w-[226px] h-fit sticky top-[80px]">
                         <TrendingContent />
                     </div>

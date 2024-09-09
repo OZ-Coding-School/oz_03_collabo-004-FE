@@ -9,6 +9,8 @@ import { AiHunsu, MyComment } from "../../config/types";
 import { commentFeedback } from "../../api/comment";
 import { useUserStore } from "../../config/store";
 import dayjs from "dayjs";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoWarning } from "react-icons/io5";
 
 interface CommentProps {
     onClick?: () => void;
@@ -39,6 +41,13 @@ const CommentDetail = ({
     const [helpful, setHelpful] = useState(0);
     const [notHelpful, setNotHelpful] = useState(0);
     const content = color === "ai" ? ai?.content : comment?.content;
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
 
     useEffect(() => {
         setHelpful(comment.helpful_count);
@@ -121,126 +130,159 @@ const CommentDetail = ({
         }
     };
 
-    return (
-        <div
-            className={tw(
-                "relative h-full rounded-2xl p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
-                color === "default" && "bg-gray-100 sm:w-[90%] w-full",
-                color === "writer" && "bg-primary-second bg-opacity-60 sm:w-[90%] w-full",
-                color === "ai" && "bg-slate-800 text-white w-full mt-3",
-                className
-            )}
-        >
-            <div className="flex justify-between items-center ml-1">
-                <div
-                    className={tw(
-                        " text-literal-highlight text-base sm:text-lg font-medium",
-                        color === "default" && "hidden",
-                        color === "writer" && "hidden"
-                    )}
-                >
-                    훈수봇
-                </div>
-                <div
-                    className={tw(
-                        "text-xs sm:text-sm sm:font-normal font-normal self-start",
-                        color !== "ai" && "text-literal-info absolute top-4 right-5"
-                    )}
-                >
-                    {color === "ai" ? formatDate(ai?.updated_at) : formatDate(comment?.created_at)}
-                </div>
-            </div>
-            <div className={tw("flex flex-col gap-2", color === "ai" && "gap-0")}>
-                {color !== "ai" && comment.images.length > 0 && (
-                    <div className="flex gap-2 mb-3">
-                        {comment.images.map((img) => (
-                            <img
-                                key={img.id}
-                                className="w-[45px] h-[40px] cursor-pointer rounded"
-                                src={img.image}
-                                alt="Comment Image"
-                                onClick={() => handlePictureClick(img.image)}
-                            />
-                        ))}
-                    </div>
-                )}
-                <div
-                    className={tw(
-                        "ml-1 custom-code-block sm:text-base text-sm font-normal",
-                        color === "ai" && "mt-4",
-                        color !== "ai" && "mr-24"
-                    )}
-                    dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(content || "") }}
-                />
-                <div className={tw("flex-wrap justify-between flex", color === "writer" && "justify-end")}>
-                    {color === "default" && (
-                        <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
-                            <RiAlarmWarningFill className="text-literal-highlight size-3 sm:size-4" />
-                            <p
-                                className="text-literal-highlight font-medium text-xs sm:text-sm sm:font-medium"
-                                onClick={handleReportClick}
-                            >
-                                신고하기
-                            </p>
-                        </div>
-                    )}
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
 
-                    <div className={tw("flex bottom-4 right-4 gap-3", color === "ai" && "hidden")}>
-                        <div className="flex gap-2 items-center mt-auto">
-                            <div className="flex gap-1">
-                                <ImHappy2
-                                    onClick={() => user.user_id !== comment.user && handleReact(comment.id, "helpful")}
-                                    className={tw(
-                                        "text-primary-second my-auto size-4 sm:size-5 cursor-pointer duration-150 hover:scale-110",
-                                        userReaction === "helpful" && "text-[#FF8800]",
-                                        user.user_id === comment.user && "hover:scale-100 cursor-default"
-                                    )}
-                                />
-                                <span className="text-sm font-normal min-w-4">{helpful ?? 0}</span>
-                            </div>
-                            <div className="flex gap-1">
-                                <ImNeutral2
-                                    onClick={() =>
-                                        user.user_id !== comment.user && handleReact(comment.id, "not_helpful")
-                                    }
-                                    className={tw(
-                                        "text-red-300 my-auto size-4 sm:size-5  cursor-pointer duration-150 hover:scale-110",
-                                        userReaction === "not_helpful" && "text-red-500",
-                                        user.user_id === comment.user && "hover:scale-100 cursor-default"
-                                    )}
-                                />
-                                <span className="text-sm font-normal min-w-4">{notHelpful ?? 0}</span>
-                            </div>
-                        </div>
-                        {comment.is_selected ? (
-                            <p className="font-medium text-literal-highlight text-base sm:text-lg">채택됨</p>
-                        ) : (
-                            user.user_id === article_user_id && (
-                                <button
-                                    disabled={is_closed}
-                                    onClick={handleSelect}
-                                    className={tw(
-                                        "sm:w-[80px] w-[70px] sm:h-[30px] h-6 text-sm sm:text-base bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]",
-                                        is_closed && "hover:bg-literal-highlight"
-                                    )}
-                                >
-                                    채택하기
-                                </button>
-                            )
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
+
+    return (
+        <>
+            <div
+                className={tw(
+                    "relative h-full rounded-2xl p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
+                    color === "default" && "bg-gray-100 sm:w-[90%] w-full",
+                    color === "writer" && "bg-primary-second bg-opacity-60 sm:w-[90%] w-full",
+                    color === "ai" && "bg-slate-800 text-white w-full mt-3",
+                    className
+                )}
+            >
+                <div className="flex justify-between items-center ml-1">
+                    <div
+                        className={tw(
+                            " text-literal-highlight text-base sm:text-lg font-medium",
+                            color === "default" && "hidden",
+                            color === "writer" && "hidden"
                         )}
+                    >
+                        훈수봇
+                    </div>
+                    <div
+                        className={tw(
+                            "text-xs sm:text-sm sm:font-normal font-normal self-start",
+                            color !== "ai" && "text-literal-info absolute top-4 right-5"
+                        )}
+                    >
+                        {color === "ai" ? formatDate(ai?.updated_at) : formatDate(comment?.created_at)}
                     </div>
                 </div>
+                <div className={tw("flex flex-col gap-2", color === "ai" && "gap-0")}>
+                    {color !== "ai" && comment.images.length > 0 && (
+                        <div className="flex gap-2 mb-3">
+                            {comment.images.map((img) => (
+                                <img
+                                    key={img.id}
+                                    className="w-[45px] h-[40px] cursor-pointer rounded"
+                                    src={img.image}
+                                    alt="Comment Image"
+                                    onClick={() => handlePictureClick(img.image)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    <div
+                        className={tw(
+                            "ml-1 custom-code-block sm:text-base text-sm font-normal",
+                            color === "ai" && "mt-4",
+                            color !== "ai" && "mr-24"
+                        )}
+                        dangerouslySetInnerHTML={{ __html: formatContentWithLineBreaks(content || "") }}
+                    />
+                    <div className={tw("flex-wrap justify-between flex", color === "writer" && "justify-end")}>
+                        {color === "default" && (
+                            <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
+                                <RiAlarmWarningFill className="text-literal-highlight size-3 sm:size-4" />
+                                <p
+                                    className="text-literal-highlight font-medium text-xs sm:text-sm sm:font-medium"
+                                    onClick={handleReportClick}
+                                >
+                                    신고하기
+                                </p>
+                            </div>
+                        )}
+
+                        <div className={tw("flex bottom-4 right-4 gap-3", color === "ai" && "hidden")}>
+                            <div className="flex gap-2 items-center mt-auto">
+                                <div className="flex gap-1">
+                                    <ImHappy2
+                                        onClick={() =>
+                                            user.user_id !== comment.user && handleReact(comment.id, "helpful")
+                                        }
+                                        className={tw(
+                                            "text-primary-second my-auto size-4 sm:size-5 cursor-pointer duration-150 hover:scale-110",
+                                            userReaction === "helpful" && "text-[#FF8800]",
+                                            user.user_id === comment.user && "hover:scale-100 cursor-default"
+                                        )}
+                                    />
+                                    <span className="text-sm font-normal min-w-4">{helpful ?? 0}</span>
+                                </div>
+                                <div className="flex gap-1">
+                                    <ImNeutral2
+                                        onClick={() =>
+                                            user.user_id !== comment.user && handleReact(comment.id, "not_helpful")
+                                        }
+                                        className={tw(
+                                            "text-red-300 my-auto size-4 sm:size-5  cursor-pointer duration-150 hover:scale-110",
+                                            userReaction === "not_helpful" && "text-red-500",
+                                            user.user_id === comment.user && "hover:scale-100 cursor-default"
+                                        )}
+                                    />
+                                    <span className="text-sm font-normal min-w-4">{notHelpful ?? 0}</span>
+                                </div>
+                            </div>
+                            {comment.is_selected ? (
+                                <p className="font-medium text-literal-highlight text-base sm:text-lg">채택됨</p>
+                            ) : (
+                                user.user_id === article_user_id && (
+                                    <button
+                                        disabled={is_closed}
+                                        onClick={handleSelect}
+                                        className={tw(
+                                            "sm:w-[80px] w-[70px] sm:h-[30px] h-6 text-sm sm:text-base bg-literal-highlight text-white rounded-[5px] duration-200 hover:bg-[#a62642]",
+                                            is_closed && "hover:bg-literal-highlight"
+                                        )}
+                                    >
+                                        채택하기
+                                    </button>
+                                )
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <ModalPortal>
+                    {isReportModalOpen && (
+                        <ModalReport
+                            onAlert={alertHandler}
+                            isOpen={isReportModalOpen}
+                            onClose={closeReportModal}
+                            comment_id={comment.id}
+                        />
+                    )}
+                    {isPictureModalOpen && (
+                        <ModalPicture isOpen={isPictureModalOpen} onClose={closePictureModal} imageUrl={imageUrl} />
+                    )}
+                </ModalPortal>
             </div>
-            <ModalPortal>
-                {isReportModalOpen && (
-                    <ModalReport isOpen={isReportModalOpen} onClose={closeReportModal} comment_id={comment.id} />
+            <AnimatePresence>
+                {isAlert && (
+                    <motion.div
+                        initial={{ translateY: -100 }}
+                        animate={{ translateY: 0 }}
+                        exit={{ translateY: -100 }}
+                        transition={{ type: "spring", duration: 1 }}
+                        className="left-[50%] ml-[-90px] flex gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-10 text-background"
+                    >
+                        <IoWarning />
+                        <div>{alertText}</div>
+                    </motion.div>
                 )}
-                {isPictureModalOpen && (
-                    <ModalPicture isOpen={isPictureModalOpen} onClose={closePictureModal} imageUrl={imageUrl} />
-                )}
-            </ModalPortal>
-        </div>
+            </AnimatePresence>
+        </>
     );
 };
-
 export default CommentDetail;

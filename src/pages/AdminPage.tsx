@@ -34,7 +34,7 @@ const AdminPage = () => {
     return (
         <div className="admin-container">
             <Header />
-            <div className="font-default flex flex-col items-center">
+            <div className="flex flex-col items-center font-default dark:bg-gray-900 dark:text-primary-second-dark">
                 <div className="mt-[50px]"></div>
                 <AdminAnal userData={data} refetch={refetch} />
                 <AdminUserList userData={data} refetch={refetch} />

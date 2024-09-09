@@ -76,13 +76,13 @@ const LoginPage = () => {
     return (
         <>
             <Header />
-            <div className="overflow-hidden flex w-screen justify-center items-center min-h-screen font-default md:bg-transparent bg-white ">
+            <div className="flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
                 <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
                     <form className="flex flex-col w-full gap-1" onSubmit={handleSubmit(onSubmit)}>
-                        <label className="text-sm font-medium px-1">아이디 *</label>
+                        <label className="px-1 text-sm font-medium">아이디 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -109,7 +109,7 @@ const LoginPage = () => {
                         <p className="px-2 text-xs text-literal-highlight min-h-[20px] font-normal">
                             {errors.id && errors.id.message}
                         </p>
-                        <label className="text-sm font-medium px-1">비밀번호 *</label>
+                        <label className="px-1 text-sm font-medium">비밀번호 *</label>
                         <input
                             className={tw(
                                 "p-2 rounded-md border border-gray-200 focus:outline-primary-second h-9",
@@ -137,12 +137,12 @@ const LoginPage = () => {
                             {isSubmit ? "로그인 중.." : "로그인"}
                         </Button>
                         <Link to={"/register"}>
-                            <p className="text-sm text-gray-500 text-right mt-2 hover:text-gray-800 duration-200 cursor-pointer">
+                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800">
                                 회원가입 하러 가기
                             </p>
                         </Link>
                         <Link to={"/find"}>
-                            <p className="text-right text-sm text-gray-500 hover:text-gray-800 cursor-pointer">
+                            <p className="text-sm text-right text-gray-500 cursor-pointer hover:text-gray-800">
                                 비밀번호를 잊으셨나요?
                             </p>
                         </Link>
@@ -155,7 +155,7 @@ const LoginPage = () => {
                             animate={{ translateY: 0 }}
                             exit={{ translateY: -100 }}
                             transition={{ type: "spring", duration: 1 }}
-                            className="fixed flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg top-20 text-background"
+                            className="fixed flex items-center gap-2 p-2 bg-orange-600 bg-opacity-75 rounded-lg top-20 text-background"
                         >
                             <IoWarning />
                             <div>{alertMsg}</div>

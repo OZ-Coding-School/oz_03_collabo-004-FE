@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useToastStore, useUserStore } from "../../config/store";
+import { AnimatePresence, motion } from "framer-motion";
+import { useUserStore } from "../../config/store";
 import { useEffect, useState } from "react";
 import { MyComment, MyArticle, AiHunsu } from "../../config/types";
 import DOMPurify from "dompurify";
@@ -9,13 +9,12 @@ import { articleDetail } from "../../api/article";
 import { aiHunsuDetail } from "../../api/ai";
 import { adminApi, commentApi } from "../../api";
 import hljs from "highlight.js";
-import Toast from "../../common/toast/Toast";
 import Badge from "../../common/badge/Badge";
 import CommentInput from "../../common/comment/CommentInput";
 import { twMerge as tw } from "tailwind-merge";
 import ProfileStatus from "../../common/profile/ProfileStatus";
 import CommentDetail from "../../common/comment/CommentDetail";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoWarning } from "react-icons/io5";
 import useScrollLock from "../../hooks/useScrollLock";
 import Button from "../../common/button/Button";
 
@@ -46,7 +45,14 @@ const ModalReportDetail = ({
     const [hideInput, setHideInput] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSelecting, setIsSelecting] = useState(false);
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
     const sanitizer = DOMPurify.sanitize;
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
 
     const nav = useNavigate();
     useScrollLock(isOpen, parent);
@@ -112,10 +118,6 @@ const ModalReportDetail = ({
             element.innerHTML = result.value;
         }
     }, [isLoading]);
-    const { toast, setToast } = useToastStore();
-    const toastHandler = (text: string) => {
-        setToast(true, text);
-    };
 
     const handleModalExit = () => {
         onClose();
@@ -132,6 +134,17 @@ const ModalReportDetail = ({
         refetch();
     };
 
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
+
     return (
         <>
             <motion.nav
@@ -144,7 +157,6 @@ const ModalReportDetail = ({
                 onClick={handleModalExit}
                 className="text-literal-normal inset-0 font-default fixed flex items-center justify-center md:px-3 z-40 "
             >
-                {toast.status && <Toast />}
                 <motion.nav
                     initial={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: [1], translateY: 0 }}
@@ -187,7 +199,7 @@ const ModalReportDetail = ({
                                             onClose={onClose}
                                             articleId={articleData?.article_id}
                                             onCommentSubmit={handleCommentSubmit}
-                                            toast={toastHandler}
+                                            toast={alertHandler}
                                         />
                                     </div>
                                 )}
@@ -216,7 +228,7 @@ const ModalReportDetail = ({
                                             comment={comment}
                                             article_user_id={articleData && articleData.user.user_id}
                                             onSelect={handleSelect}
-                                            toast={toastHandler}
+                                            toast={alertHandler}
                                         />
 
                                         {/* 선택된 comment_id 뒤에만 스켈레톤 표시 */}
@@ -231,7 +243,7 @@ const ModalReportDetail = ({
                                                 comment={comment}
                                                 ai={aiData}
                                                 article_user_id={articleData && articleData.user.user_id}
-                                                toast={toastHandler}
+                                                toast={alertHandler}
                                             />
                                         )}
                                     </motion.div>
@@ -259,6 +271,20 @@ const ModalReportDetail = ({
                         </div>
                     </div>
                 </motion.nav>
+                <AnimatePresence>
+                    {isAlert && (
+                        <motion.div
+                            initial={{ translateY: -100 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -100 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-10 text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertText}</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );

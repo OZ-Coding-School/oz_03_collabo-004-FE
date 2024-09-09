@@ -16,12 +16,12 @@ const ProfileStatus = ({ nickname, user_id, hunsoo_level, profile_image }: Profi
                 <Link to={`/my/${user_id}`} className="relative w-[40px] h-[40px] my-auto">
                     <ProfileImage src={profile_image} />
                 </Link>
-                <div className="flex flex-col">
+                <div className="flex flex-col dark:text-white">
                     <Link to={`/my/${user_id}`} className="font-semibold">
                         {nickname}
                     </Link>
 
-                    <div className="flex gap-1 text-sm">
+                    <div className="flex gap-1 text-sm dark:text-white">
                         <div className="font-point">Lv{hunsoo_level}</div>
                         <div className="font-point text-primary-second-dark">{useLevelTitle(hunsoo_level)}</div>
                     </div>

@@ -65,10 +65,12 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[570px] md:h-[240px] md:rounded-3xl bg-white relative flex justify-center items-center"
+                    className="dark:bg-gray-900 outline-none w-full h-full md:w-[570px] md:h-[240px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
                     <div className="px-12 md:px-[110px] flex flex-col w-full h-full justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center ">글 작성 취소</div>
+                        <div className="w-full font-bold text-lg font-point text-center dark:text-gray-100">
+                            글 작성 취소
+                        </div>
                         <div className="text-literal-error mt-5 w-full text-center font-semibold">
                             작성을 취소하시겠습니까? 내용은 저장되지 않습니다.
                         </div>
@@ -85,7 +87,7 @@ const ModalConfirm = ({ onClose, parentOnClose, isOpen }: ModalConfirmProps) => 
                     <IoClose
                         onClick={onClose}
                         title="닫기"
-                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                        className="absolute text-gray-400 dark:hover:text-gray-100 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
             </div>

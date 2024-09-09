@@ -7,9 +7,7 @@ import { articleApi, authApi } from "../../api";
 import { useArticleStore, useAuthStore } from "../../config/store";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkmode";
-import { AiOutlineSun } from "react-icons/ai";
-import { AiOutlineMoon } from "react-icons/ai";
-
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 const Header = () => {
     const nav = useNavigate();
     const { setStatus, status } = useAuthStore();
@@ -44,9 +42,13 @@ const Header = () => {
                         <HeaderSearch />
                         <button
                             onClick={switchDarkMode}
-                            className="px-3 py-1 text-gray-100 border-none rounded-md bg-primary dark:bg-primary dark:text-white"
+                            className=" text-gray-100 border-none rounded-md bg-primary dark:bg-primary dark:text-white"
                         >
-                            {isDarkMode ? <AiOutlineSun /> : <AiOutlineMoon />}
+                            {isDarkMode ? (
+                                <MdLightMode className="size-6 text-gray-200" />
+                            ) : (
+                                <MdDarkMode className="size-6 text-gray-200" />
+                            )}
                         </button>
                         {status === true && <HeaderInfoLogged />}
                         {status === false && <HeaderInfo />}

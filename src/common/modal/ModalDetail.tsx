@@ -159,7 +159,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[870px] md:max-h-[95vh] md:rounded-md bg-white relative py-10 px-5 md:px-14 overflow-auto"
+                    className="dark:bg-gray-900 outline-none w-full h-full md:w-[870px] md:max-h-[95vh] md:rounded-md bg-white relative py-10 px-5 md:px-14 overflow-auto"
                 >
                     {isLoading ? (
                         <div className="flex justify-center items-center h-full"></div>
@@ -180,14 +180,14 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                             <>
                                                 <span
                                                     onClick={() => handleReArticle(String(articleData.article_id))}
-                                                    className="cursor-pointer duration-150 hover:text-literal-normal"
+                                                    className="cursor-pointer duration-150 hover:text-literal-normal dark:hover:text-gray-100"
                                                 >
                                                     수정
                                                 </span>
                                                 /
                                                 <span
                                                     onClick={() => setModalDeleteStatus(true)}
-                                                    className="cursor-pointer duration-150 hover:text-literal-normal"
+                                                    className="cursor-pointer duration-150 hover:text-literal-normal dark:hover:text-gray-100"
                                                 >
                                                     삭제
                                                 </span>
@@ -198,8 +198,10 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                             </div>
                             <div className="text-sm flex pb-3 flex-wrap justify-between gap-1">
                                 <div className="flex gap-3">
-                                    <p className="font-semibold">{articleData && articleData.user.nickname}</p>
-                                    <p className="text-gray-500 font-normal">{formattedDate}</p>
+                                    <p className="font-semibold dark:text-gray-100">
+                                        {articleData && articleData.user.nickname}
+                                    </p>
+                                    <p className="text-gray-500 font-normal dark:text-gray-400">{formattedDate}</p>
                                 </div>
                                 {articleData && user.user_id !== articleData.user.user_id && (
                                     <div className="flex items-center gap-1 cursor-pointer duration-200 rounded-md px-1">
@@ -213,12 +215,12 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                                     </div>
                                 )}
                             </div>
-                            <div className="text-xl my-2">{articleData && articleData.title}</div>
+                            <div className="text-xl my-2 dark:text-gray-100">{articleData && articleData.title}</div>
                             <div
                                 dangerouslySetInnerHTML={{
                                     __html: sanitizer((articleData && articleData.content) as string),
                                 }}
-                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-gray-100 tiptap prose ProseMirror"
+                                className="pt-3 text-[16px] pb-20 mb-3 border-b border-gray-100 tiptap prose ProseMirror dark:text-white dark:prose-strong:text-gray-200 dark:prose-headings:text-gray-200"
                             />
 
                             {articleData &&
@@ -287,7 +289,7 @@ const ModalDetail = ({ onClose, isOpen, parent, articleId, onSelect }: DetailMod
                     <IoClose
                         onClick={onClose}
                         title="닫기"
-                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                        className="dark:hover:text-gray-100 absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
 

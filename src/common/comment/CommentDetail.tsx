@@ -146,8 +146,8 @@ const CommentDetail = ({
             <div
                 className={tw(
                     "relative h-full rounded-2xl p-4 flex flex-col justify-between mb-4 shadow-inner text-literal-normal",
-                    color === "default" && "bg-gray-100 sm:w-[90%] w-full",
-                    color === "writer" && "bg-primary-second bg-opacity-60 sm:w-[90%] w-full",
+                    color === "default" && "bg-gray-100 dark:bg-stone-300 sm:w-[90%] w-full",
+                    color === "writer" && "bg-primary-second dark:bg-slate-300 bg-opacity-60 sm:w-[90%] w-full",
                     color === "ai" && "bg-slate-800 text-white w-full mt-3",
                     className
                 )}

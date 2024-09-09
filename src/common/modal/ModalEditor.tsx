@@ -163,9 +163,9 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="relative outline-none w-full xl:max-w-4xl h-full xl:max-h-[90vh] bg-white xl:rounded-lg shadow-xl flex flex-col"
+                    className="dark:bg-gray-900 relative outline-none w-full xl:max-w-4xl h-full xl:max-h-[90vh] bg-white xl:rounded-lg shadow-xl flex flex-col"
                 >
-                    <div className="flex-grow overflow-hidden p-4">
+                    <div className=" flex-grow overflow-hidden p-4">
                         <TipTapEditor
                             initialTitle={title}
                             initialContent={content}
@@ -184,7 +184,7 @@ const ModalEditor = ({ onClose, isOpen, parent }: ModalProps) => {
                     <IoClose
                         onClick={handleArticleCancel}
                         title="닫기"
-                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                        className="absolute dark:hover:text-gray-100 text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
                 <AnimatePresence>

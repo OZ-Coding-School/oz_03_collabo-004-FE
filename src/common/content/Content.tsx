@@ -52,7 +52,7 @@ const Content = ({ thumbnail_image, title, content, onClick, id }: ContentProps)
                         dangerouslySetInnerHTML={{
                             __html: sanitizeAndRemoveImages(truncateText(content, 300)),
                         }}
-                        className="tiptap prose ProseMirror text-[16px] text-black break-words dark:text-white"
+                        className="tiptap prose ProseMirror text-[16px] text-black break-words dark:text-white dark:prose-strong:text-gray-200 dark:prose-headings:text-gray-200"
                     />
                 </div>
             </div>

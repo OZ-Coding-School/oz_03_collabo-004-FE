@@ -27,7 +27,7 @@ const TopicDrop = () => {
             <button
                 onClick={toggleDropdown}
                 className={tw(
-                    "p-3 bg-primary bg-opacity-80 hover:bg-opacity-100 rounded-full text-white ",
+                    "p-3 bg-primary dark:bg-slate-700 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white ",
                     isOpen && "bg-opacity-100"
                 )}
             >
@@ -38,14 +38,14 @@ const TopicDrop = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    className="absolute right-0 z-50 w-40 p-2 bg-white border rounded-lg shadow-lg border-primary border-opacity-20 bottom-14 dark:bg-gray-800"
+                    className="absolute right-0 z-50 w-40 p-2 bg-white border rounded-lg shadow-lg border-primary border-opacity-20 bottom-14 dark:bg-slate-700"
                 >
                     <div className="flex flex-col gap-2">
                         <p
                             onClick={() => setTag(0)}
                             className={tw(
                                 "cursor-pointer hover:text-primary-second-dark transition font-default px-1 text-literal-normal text-base font-semibold dark:text-white",
-                                selectTag === 0 && "text-primary-second-dark"
+                                selectTag === 0 && "text-primary-second-dark dark:text-primary-second-dark"
                             )}
                         >
                             모든 훈수
@@ -65,13 +65,13 @@ const TopicDrop = () => {
                         </ul>
 
                         <div className="w-full mb-2">
-                            <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal">
+                            <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal dark:text-gray-100">
                                 {DUMMY_TAGS.slice(2, 8).map((i) => (
                                     <li
                                         key={i.id}
                                         onClick={() => handleTagClick(i.id)}
                                         className={tw(
-                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer dark:text-white",
+                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer",
                                             selectTag === i.id && "text-primary-second-dark"
                                         )}
                                     >

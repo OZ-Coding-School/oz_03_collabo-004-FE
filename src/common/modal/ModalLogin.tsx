@@ -97,10 +97,12 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
+                    className="dark:bg-gray-900 outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
                     <div className="flex flex-col justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center md:pt-10">훈수왕 로그인</div>
+                        <div className="w-full font-bold text-lg font-point text-center md:pt-10 dark:text-gray-100">
+                            훈수왕 로그인
+                        </div>
                         <div className="w-full text-center mt-5 text-gray-400">
                             훈수왕은 유머와 창의성으로 가득 찬 전문가들이 모여
                         </div>
@@ -116,7 +118,7 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
                     <IoClose
                         onClick={onClose}
                         title="닫기"
-                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                        className="dark:hover:text-gray-100 absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
             </div>

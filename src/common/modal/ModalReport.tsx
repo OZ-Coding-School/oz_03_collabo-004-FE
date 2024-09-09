@@ -77,10 +77,12 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id, onAlert }: Modal
                     animate={{ opacity: [1], translateY: 0 }}
                     exit={{ opacity: 0 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
+                    className="dark:bg-gray-900 outline-none w-full h-full md:w-[570px] md:h-[584px] md:rounded-3xl bg-white relative flex justify-center items-center"
                 >
                     <form className="md:px-[80px] flex flex-col justify-center items-center">
-                        <div className="w-full font-bold text-lg font-point text-center pt-10">훈수 신고</div>
+                        <div className="w-full font-bold text-lg font-point text-center pt-10 dark:text-gray-100">
+                            훈수 신고
+                        </div>
                         <div className="w-full font-default text-center mt-5 text-literal-error">
                             부적절한 신고는 다른 사용자에게 불필요한 피해를 줄 수 있습니다.
                         </div>
@@ -106,7 +108,7 @@ const ModalReport = ({ onClose, isOpen, comment_id, article_id, onAlert }: Modal
                     <IoClose
                         onClick={onClose}
                         title="닫기"
-                        className="absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
+                        className="dark:hover:text-gray-100 absolute text-gray-400 hover:text-gray-800 transition cursor-pointer w-[28px] h-[28px] top-2 right-2"
                     />
                 </motion.nav>
             </div>

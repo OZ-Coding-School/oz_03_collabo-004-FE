@@ -87,7 +87,7 @@ const TipTapEditor: React.FC<EditorProps> = ({
         content: initialContent,
         editorProps: {
             attributes: {
-                class: "font-default text-[18px] text-black",
+                class: "font-default text-[18px] text-black dark:text-gray-100",
             },
         },
         onUpdate: ({ editor }) => {
@@ -120,7 +120,7 @@ const TipTapEditor: React.FC<EditorProps> = ({
     return (
         <div className="w-full h-full flex flex-col font-default">
             <input
-                className="outline-none mb-4 font-default text-lg w-full placeholder:text-[#999]"
+                className="dark:bg-gray-900 dark:text-gray-100 outline-none mb-4 font-default text-lg w-full placeholder:text-[#999]"
                 required
                 maxLength={30}
                 placeholder="제목"

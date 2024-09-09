@@ -109,7 +109,7 @@ const HomePage = () => {
     }, [filteredArticles]);
 
     return (
-        <div className="min-h-screen text-black bg-gray-100 home-parent dark:bg-gray-900">
+        <div className="transition-colors min-h-screen text-black bg-gray-100 home-parent dark:bg-gray-900">
             <Header />
             <div className="flex font-default w-full justify-center mx-auto pt-[80px] gap-10">
                 <nav className="hidden xl:block w-[190px] h-fit sticky top-[80px]">

@@ -74,7 +74,9 @@ const ContentFooter = ({
                             <Icon
                                 className={tw(
                                     "transition-colors duration-200",
-                                    hoverIndex === index ? "text-primary-second-dark" : "text-primary-second"
+                                    hoverIndex === index
+                                        ? "text-primary-second-dark dark:text-rose-600"
+                                        : "text-primary-second dark:text-rose-300"
                                 )}
                             />
                             <p className="text-sm min-w-[80px] text-left dark:text-white">{item.count}</p>

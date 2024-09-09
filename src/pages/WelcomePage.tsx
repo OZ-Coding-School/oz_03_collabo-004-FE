@@ -54,9 +54,9 @@ const WelcomePage = () => {
     return (
         <>
             <Header />
-            <div className="welcome-container font-default flex w-full justify-center items-center min-h-screen bg-background">
+            <div className="dark:bg-gray-900 welcome-container font-default flex w-full justify-center items-center min-h-screen bg-background">
                 <motion.div
-                    className="bg-white p-8 rounded-lg shadow-2xl max-w-xl w-full mx-4"
+                    className="bg-white dark:bg-slate-700 p-8 rounded-lg shadow-2xl max-w-xl w-full mx-4"
                     variants={containerVariants}
                     initial="hidden"
                     animate={isVisible ? "visible" : "hidden"}
@@ -71,13 +71,16 @@ const WelcomePage = () => {
                             <PiConfettiFill onClick={handleClick} className=" w-20 h-20 mx-auto text-yellow-400" />
                         </motion.div>
                     </motion.div>
-                    <motion.h1 variants={itemVariants} className="text-3xl font-bold text-center mb-4 text-gray-800">
+                    <motion.h1
+                        variants={itemVariants}
+                        className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100"
+                    >
                         가입을 축하합니다!
                     </motion.h1>
-                    <motion.p variants={itemVariants} className="text-center text-gray-600">
+                    <motion.p variants={itemVariants} className="text-center text-gray-600 dark:text-gray-200">
                         회원가입이 성공적으로 완료되었습니다.
                     </motion.p>
-                    <motion.p variants={itemVariants} className="text-center text-gray-600 mb-6">
+                    <motion.p variants={itemVariants} className="text-center text-gray-600 mb-6 dark:text-gray-200">
                         이메일 인증을 통해 계정 활성화를 완료해주세요.
                     </motion.p>
 

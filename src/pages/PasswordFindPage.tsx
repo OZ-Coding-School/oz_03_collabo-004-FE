@@ -55,8 +55,8 @@ const PasswordFindPage = () => {
     return (
         <>
             <Header />
-            <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-[#323232]">
+            <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-700 md:dark:bg-gray-900">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971]  gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-slate-700">
                     <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
 
                     <div className="flex flex-col w-full ">

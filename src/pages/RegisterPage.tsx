@@ -210,8 +210,8 @@ const RegisterPage = () => {
     return (
         <>
             <Header />
-            <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10 dark:bg-slate-500   ">
+            <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-slate-700 md:dark:bg-slate-900">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center mt-7 py-12 px-10 dark:bg-slate-700   ">
                     <Link to={"/"}>
                         <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
                     </Link>
@@ -250,7 +250,7 @@ const RegisterPage = () => {
                                 <button
                                     type="button"
                                     onClick={handleIdCheck}
-                                    className="w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 hover:bg-stone-400"
+                                    className="w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 dark:bg-slate-200 dark:hover:bg-slate-400 hover:bg-stone-400"
                                 >
                                     <div>중복 확인</div>
                                 </button>
@@ -290,7 +290,7 @@ const RegisterPage = () => {
                                 <button
                                     type="button"
                                     onClick={handleNameCheck}
-                                    className="w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 hover:bg-stone-400"
+                                    className="dark:bg-slate-200 dark:hover:bg-slate-400 w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 hover:bg-stone-400"
                                 >
                                     <div>중복 확인</div>
                                 </button>
@@ -326,7 +326,7 @@ const RegisterPage = () => {
                                 <button
                                     type="button"
                                     onClick={handleEmailCheck}
-                                    className="w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 hover:bg-stone-400"
+                                    className="dark:bg-slate-200 dark:hover:bg-slate-400 w-[80px] p-1 flex gap-1 items-center justify-center rounded-sm bg-stone-200 hover:bg-stone-400"
                                 >
                                     <div>중복 확인</div>
                                 </button>
@@ -389,7 +389,7 @@ const RegisterPage = () => {
                             {isSubmit ? "회원가입 중.." : "회원가입"}
                         </Button>
                         <Link to={"/login"}>
-                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800 dark:text-primary-second dark:hover:text-primary-second-dark">
+                            <p className="mt-2 text-sm text-right text-gray-500 duration-200 cursor-pointer hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-100">
                                 로그인 하러 가기
                             </p>
                         </Link>

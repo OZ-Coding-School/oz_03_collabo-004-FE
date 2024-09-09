@@ -9,9 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const MyPage = () => {
-    const [isUserMypage, setIsUserMypage] = useState<boolean>(false); //마이페이지에 들어온 유저가 본인인지 아닌지 확인할거
+    const [isUserMypage, setIsUserMypage] = useState<boolean>(false);
     const { user, updateUser, initOtherUser } = useUserStore();
-    const { userId } = useParams(); // 유저 클릭해서 마이페이지 보는 경우 볼려는 유저의 아이디
+    const { userId } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {

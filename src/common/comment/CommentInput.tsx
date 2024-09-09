@@ -40,6 +40,10 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit, toast }:
     }, [setFocus]);
 
     const onSubmit = async (data: CommentFormData) => {
+        if (!data.content.trim()) {
+            toast("내용을 입력해주세요.");
+            return;
+        }
         const formData = new FormData();
         formData.append("content", data.content);
 
@@ -53,9 +57,11 @@ const CommentInput = ({ onClose = () => {}, articleId, onCommentSubmit, toast }:
             onCommentSubmit(newComment);
         } catch (error) {
             if (error instanceof AxiosError && error.response) {
-                console.log("훈수작성 실패", error);
+                console.error("훈수작성 실패", error);
                 if (error.response.status === 401) {
                     toast("로그인 후 사용가능합니다.");
+                } else if (error.response.status === 400) {
+                    toast("잘못된 요청입니다. 다시 시도해주세요.");
                 }
             }
         }

@@ -60,3 +60,7 @@ export const passwordResetConfirm = (uidb64: string, token: string, password: st
     };
     return axiosInstance.post(`/auth/password/reset/`, requestForm);
 };
+
+export const deleteAccount = () => {
+    return axiosInstance.delete("/auth/delete/");
+};

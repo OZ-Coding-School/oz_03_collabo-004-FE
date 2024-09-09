@@ -56,12 +56,14 @@ const PasswordFindPage = () => {
         <>
             <Header />
             <div className="relative flex items-center justify-center w-screen min-h-screen overflow-hidden bg-white font-default md:bg-transparent dark:bg-gray-900">
-                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10">
+                <div className="w-[520px] md:bg-white md:rounded-[40px] md:border-2 md:border-[#4d3e3971] gap-10 flex flex-col justify-center items-center py-12 px-10 dark:bg-[#323232]">
                     <img className="max-w-[130px]" src="img/hunsu_logo_dark.png" alt="hunsuking_logo" />
 
-                    <div className="flex flex-col w-full">
-                        <div className="w-full mb-20 text-xl text-center font-point">비밀번호 찾기</div>
-                        <label htmlFor="id" className="px-1 text-sm font-medium">
+                    <div className="flex flex-col w-full ">
+                        <div className="w-full mb-20 text-xl text-center font-point dark:text-primary-second-dark">
+                            비밀번호 찾기
+                        </div>
+                        <label htmlFor="id" className="px-1 text-sm font-medium dark:text-primary-second-dark">
                             아이디
                         </label>
                         <div className="flex gap-1">

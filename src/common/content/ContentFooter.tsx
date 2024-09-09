@@ -59,14 +59,14 @@ const ContentFooter = ({
     ];
 
     return (
-        <div className="min-w-full md:w-[626px] h-[50px] bg-white rounded-b-2xl py-2 px-14">
+        <div className="min-w-full md:w-[626px] h-[50px] bg-white rounded-b-2xl py-2 px-14 dark:bg-gray-800">
             <div className="flex items-center justify-between h-full font-default">
                 {data.map((item, index) => {
                     const Icon = item.icon;
                     return (
                         <div
                             key={index}
-                            className="relative flex items-center gap-2 cursor-pointer"
+                            className="relative flex items-center gap-2 cursor-pointer "
                             onMouseEnter={() => handleMouseEnter(index)}
                             onMouseLeave={handleMouseLeave}
                             onClick={item.onClick}
@@ -77,7 +77,7 @@ const ContentFooter = ({
                                     hoverIndex === index ? "text-primary-second-dark" : "text-primary-second"
                                 )}
                             />
-                            <p className="text-sm min-w-[80px] text-left">{item.count}</p>
+                            <p className="text-sm min-w-[80px] text-left dark:text-white">{item.count}</p>
                             {hoverIndex === index && (
                                 <motion.div
                                     animate={{ opacity: [0, 1], translateY: [10, 0] }}

@@ -23,11 +23,11 @@ const TopicDrop = () => {
     };
 
     return (
-        <div className="fixed bottom-5 right-5 flex flex-col items-end xl:hidden cursor-pointer">
+        <div className="fixed flex flex-col items-end cursor-pointer bottom-5 right-5 xl:hidden ">
             <button
                 onClick={toggleDropdown}
                 className={tw(
-                    "p-3 bg-primary bg-opacity-80 hover:bg-opacity-100 rounded-full text-white",
+                    "p-3 bg-primary bg-opacity-80 hover:bg-opacity-100 rounded-full text-white ",
                     isOpen && "bg-opacity-100"
                 )}
             >
@@ -38,20 +38,20 @@ const TopicDrop = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    className="p-2 bg-white border border-primary border-opacity-20 shadow-lg rounded-lg w-40 absolute bottom-14 right-0 z-50"
+                    className="absolute right-0 z-50 w-40 p-2 bg-white border rounded-lg shadow-lg border-primary border-opacity-20 bottom-14 dark:bg-gray-800"
                 >
                     <div className="flex flex-col gap-2">
                         <p
                             onClick={() => setTag(0)}
                             className={tw(
-                                "cursor-pointer hover:text-primary-second-dark transition font-default px-1 text-literal-normal text-base font-semibold",
+                                "cursor-pointer hover:text-primary-second-dark transition font-default px-1 text-literal-normal text-base font-semibold dark:text-white",
                                 selectTag === 0 && "text-primary-second-dark"
                             )}
                         >
                             모든 훈수
                         </p>
                         <Line />
-                        <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-1 rounded-md">
+                        <ul className="p-1 pl-2 space-y-2 overflow-hidden text-sm bg-gray-100 rounded-md text-literal-normal">
                             <li
                                 key={DUMMY_TAGS[1].id}
                                 onClick={() => setTag(DUMMY_TAGS[1].id)}
@@ -60,7 +60,7 @@ const TopicDrop = () => {
                                     selectTag === DUMMY_TAGS[1].id && "text-primary-second-dark"
                                 )}
                             >
-                                {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="text-sm ml-auto" />
+                                {DUMMY_TAGS[1].icon} {DUMMY_TAGS[1].text} <FaChevronRight className="ml-auto text-sm" />
                             </li>
                         </ul>
 
@@ -71,7 +71,7 @@ const TopicDrop = () => {
                                         key={i.id}
                                         onClick={() => handleTagClick(i.id)}
                                         className={tw(
-                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer",
+                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer dark:text-white",
                                             selectTag === i.id && "text-primary-second-dark"
                                         )}
                                     >
@@ -81,7 +81,7 @@ const TopicDrop = () => {
                             </ul>
                         </div>
                         <Line />
-                        <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-1 rounded-md">
+                        <ul className="p-1 pl-2 space-y-2 overflow-hidden text-sm bg-gray-100 rounded-md text-literal-normal">
                             <li
                                 key={DUMMY_TAGS[8].id}
                                 onClick={() => handleTagClick(DUMMY_TAGS[8].id)}
@@ -90,7 +90,7 @@ const TopicDrop = () => {
                                     selectTag === DUMMY_TAGS[8].id && "text-primary-second-dark"
                                 )}
                             >
-                                {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="text-sm ml-auto" />
+                                {DUMMY_TAGS[8].icon} {DUMMY_TAGS[8].text} <FaChevronRight className="ml-auto text-sm" />
                             </li>
                         </ul>
 
@@ -101,7 +101,7 @@ const TopicDrop = () => {
                                         key={i.id}
                                         onClick={() => handleTagClick(i.id)}
                                         className={tw(
-                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer",
+                                            "flex items-center gap-2 duration-100 font-normal hover:text-primary-second-dark cursor-pointer dark:text-white",
                                             selectTag === i.id && "text-primary-second-dark"
                                         )}
                                     >
@@ -112,7 +112,7 @@ const TopicDrop = () => {
                         </div>
                         <Line />
                         <div className="w-full">
-                            <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-1 rounded-md">
+                            <ul className="p-1 pl-2 space-y-2 overflow-hidden text-sm bg-gray-100 rounded-md text-literal-normal">
                                 <li
                                     key={DUMMY_TAGS[11].id}
                                     onClick={() => handleTagClick(DUMMY_TAGS[11].id)} // 태그 클릭 시 처리
@@ -129,7 +129,7 @@ const TopicDrop = () => {
                             <>
                                 <Line />
                                 <div className="w-full">
-                                    <ul className="pl-2 space-y-2 overflow-hidden text-sm text-literal-normal bg-gray-100 p-1 rounded-md">
+                                    <ul className="p-1 pl-2 space-y-2 overflow-hidden text-sm bg-gray-100 rounded-md text-literal-normal">
                                         <li
                                             key="customTag"
                                             onClick={() => setTag(100)}

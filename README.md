@@ -18,10 +18,10 @@
 | 이름       | 역할               | 사진                                       | GitHub                                           | Blog                                      |
 |------------|--------------------|--------------------------------------------|--------------------------------------------------|-------------------------------------------|
 | Kim, Min Su| 팀 & 프론트엔드 팀장 | <img src="https://github.com/yoyobar.png" width="50"/> | [GitHub](https://github.com/yoyobar)            | [Blog](https://wiki.yoyobar.xyz)            |
-| Kim, Se Rim | 프론트엔드 팀원  | <img src="https://github.com/srnnnn.png" width="50"/> | [GitHub](https://github.com/srnnnn)           | [Blog]()            |
-| Hwang, Seong Min | 프론트엔드 팀원  | <img src="https://github.com/akwjr963.png" width="50"/> | [GitHub](https://github.com/akwjr963)           | [Blog]()           |
-| Song, Yun Ju| 백엔드 팀장       | <img src="https://github.com/yoonju977.png" width="50"/> | [GitHub](https://github.com/yoonju977)          | [Blog]()           |
-| Kim, Da Yeon| 백엔드 팀원    | <img src="https://github.com/dayeonkimm.png" width="50"/> | [GitHub](https://github.com/dayeonkimm)       | [Blog]()         |
+| Kim, Se Rim | 프론트엔드 팀원  | <img src="https://github.com/srnnnn.png" width="50"/> | [GitHub](https://github.com/srnnnn)           | -            |
+| Hwang, Seong Min | 프론트엔드 팀원  | <img src="https://github.com/akwjr963.png" width="50"/> | [GitHub](https://github.com/akwjr963)           | -        |
+| Song, Yun Ju| 백엔드 팀장       | <img src="https://github.com/yoonju977.png" width="50"/> | [GitHub](https://github.com/yoonju977)          | -          |
+| Kim, Da Yeon| 백엔드 팀원    | <img src="https://github.com/dayeonkimm.png" width="50"/> | [GitHub](https://github.com/dayeonkimm)       | -        |
 
 ---
 

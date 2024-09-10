@@ -71,3 +71,7 @@ export const articleRePost = (
     };
     return axiosInstance.patch(`/article/update/${article_id}/`, requestForm);
 };
+
+export const likeList = () => {
+    return axiosInstance.get(`/article/list/like/`);
+};

@@ -5,7 +5,7 @@ import ProfileImage from "../common/profile/ProfileImage";
 import Topic from "../common/topic/Topic";
 import TrendingComment from "../common/trending/TrendingComment";
 import TrendingContent from "../common/trending/TrendingContent";
-import { useArticleStore, useUserStore } from "../config/store";
+import { useArticleStore, useLikeStore, useUserStore } from "../config/store";
 import { articleApi } from "../api";
 import SkeletonContent from "../common/skeleton/SkeletonContent";
 import Content from "../common/content/Content";
@@ -29,6 +29,7 @@ const HomePage = () => {
     const [filterArticle, setFilterArticle] = useState<AllArticle[] | null>(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const { initLike } = useLikeStore();
     const articleIdFromURL = new URLSearchParams(location.search).get("article");
     const searchFormURL = new URLSearchParams(location.search).get("search");
     const editorFormURL = new URLSearchParams(location.search).get("editor");
@@ -37,6 +38,11 @@ const HomePage = () => {
         const articleResponse = await articleApi.articleList();
         initArticle(articleResponse.data);
     }, [initArticle]);
+
+    const initLikes = useCallback(async () => {
+        const likeResponse = await articleApi.likeList();
+        initLike(likeResponse.data);
+    }, [initLike]);
 
     const [isAlert, setIsAlert] = useState(false);
     const [alertText, setAlertText] = useState<null | string>(null);
@@ -92,8 +98,9 @@ const HomePage = () => {
     useEffect(() => {
         if (!searchFormURL) {
             initArticles();
+            initLikes();
         }
-    }, [initArticles, searchFormURL]);
+    }, [initArticles, initLikes, searchFormURL]);
 
     // 필터링을 위한 useMemo
     const filteredArticles = useMemo(() => {
@@ -183,7 +190,6 @@ const HomePage = () => {
                                         view_count={article.view_count}
                                         like_count={article.like_count}
                                         articleId={article.article_id}
-                                        like={article.like}
                                         onAlert={alertHandler}
                                     />
                                 </div>

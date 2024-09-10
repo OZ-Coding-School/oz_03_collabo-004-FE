@@ -34,7 +34,6 @@ export const useUserStore = create<UserStore>((set) => ({
         status: true,
         exp: 0,
         verified: false,
-        like: false,
     },
     otherUser: {
         articles: [],
@@ -50,7 +49,6 @@ export const useUserStore = create<UserStore>((set) => ({
         status: false,
         exp: 0,
         verified: true,
-        like: false,
     },
     initUser: (form: UserData) => set(() => ({ user: form })),
     initOtherUser: (form: UserData) => set(() => ({ otherUser: form })),
@@ -81,6 +79,20 @@ export const useArticleStore = create<ArticleStore>((set) => ({
     initArticle: (form: AllArticle[]) => set(() => ({ article: form })),
     initSearch: (form: AllArticle[]) => set(() => ({ search: form })),
     setTag: (tag: number) => set(() => ({ selectTag: tag })),
+}));
+
+interface Like {
+    like: boolean;
+    article_id: number;
+}
+interface LikeStore {
+    likeData: Like[] | null;
+    initLike: (form: Like[]) => void;
+}
+
+export const useLikeStore = create<LikeStore>((set) => ({
+    likeData: null,
+    initLike: (form: Like[]) => set(() => ({ likeData: form })),
 }));
 
 interface Image {

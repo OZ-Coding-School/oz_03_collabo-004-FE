@@ -5,16 +5,15 @@ import { twMerge as tw } from "tailwind-merge";
 import { motion } from "framer-motion";
 import { axiosInstance } from "../../api/axios";
 import { FaHeart } from "react-icons/fa";
-import { useArticleStore } from "../../config/store";
-import { articleApi } from "../../api";
 import { AxiosError } from "axios";
+import { useLikeStore } from "../../config/store";
+import { articleApi } from "../../api";
 interface ContentFooterProps {
     articleId: number;
     like_count: number;
     view_count: number;
     commentsCount: number;
     commentsCountClick: (num: number) => void;
-    like: boolean;
     onAlert: (text: string) => void;
 }
 
@@ -24,13 +23,12 @@ const ContentFooter = ({
     view_count,
     commentsCount,
     commentsCountClick,
-    like,
     onAlert,
 }: ContentFooterProps) => {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const [currentLikeCount, setCurrentLikeCount] = useState<number>(like_count);
     const [currentViewCount] = useState<number>(view_count);
-    const { initArticle } = useArticleStore();
+    const { likeData, initLike } = useLikeStore();
 
     const handleMouseEnter = (i: number) => {
         setHoverIndex(i);
@@ -40,11 +38,13 @@ const ContentFooter = ({
         setHoverIndex(null);
     };
 
+    const nowLike = likeData?.find((item) => item.article_id === articleId);
+
     const handleAddLike = async () => {
         try {
             const commentResponse = await axiosInstance.post(`/article/${articleId}/like/`);
-            const articleResponse = await articleApi.articleList();
-            initArticle(articleResponse.data);
+            const likeResponse = await articleApi.likeList();
+            initLike(likeResponse.data);
 
             if (commentResponse.status === 200) {
                 const { like_count, message } = commentResponse.data;
@@ -73,7 +73,7 @@ const ContentFooter = ({
 
     const data = [
         { icon: FaMessage, text: "댓글", count: commentsCount, onClick: () => commentsCountClick(articleId) },
-        { icon: FaHeart, like: like, text: "좋아요", count: currentLikeCount, onClick: handleAddLike },
+        { icon: FaHeart, like: nowLike?.like, text: "좋아요", count: currentLikeCount, onClick: handleAddLike },
         { icon: PiCursorClickFill, text: "조회수", count: currentViewCount },
     ];
 

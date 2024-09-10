@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfileImage from "../profile/ProfileImage";
-import { useArticleStore, useUserStore } from "../../config/store";
+import { useLikeStore, useUserStore } from "../../config/store";
 import Button from "../button/Button";
 import { accountApi, articleApi, authApi, notificationApi } from "../../api";
 import { useCallback, useEffect, useState } from "react";
@@ -54,7 +54,7 @@ const HeaderInfoLogged = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
     const queryClient = useQueryClient();
-    const { initArticle } = useArticleStore();
+    const { initLike } = useLikeStore();
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
@@ -83,8 +83,8 @@ const HeaderInfoLogged = () => {
 
     const handleLogout = async () => {
         await authApi.userLogout();
-        const articleResponse = await articleApi.articleList();
-        initArticle(articleResponse.data);
+        const likeResponse = await articleApi.likeList();
+        initLike(likeResponse.data);
         window.location.reload();
     };
 

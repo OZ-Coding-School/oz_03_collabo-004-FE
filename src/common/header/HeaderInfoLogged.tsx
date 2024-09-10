@@ -85,7 +85,7 @@ const HeaderInfoLogged = () => {
         await authApi.userLogout();
         const articleResponse = await articleApi.articleList();
         initArticle(articleResponse.data);
-        nav("/");
+        window.location.reload();
     };
 
     const userLevelCalculate = useCallback(async () => {

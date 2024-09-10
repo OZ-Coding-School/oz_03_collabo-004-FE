@@ -163,7 +163,7 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
 ![Architecture](https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/architecture.png)
 
 ### 클라우드 아키텍처
-![CloudArchitecture](https://placehold.co/1280x720)
+![CloudArchitecture](https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/cloud_architecture.png)
 
 ### ERD
 ![ERD](https://github.com/OZ-Coding-School/oz_03_collabo-004-FE/blob/main/src/doc/ERD.png)

@@ -4,15 +4,16 @@ import BadgeDesc from "../badge/BadgeDesc";
 import { IoClose } from "react-icons/io5";
 import { ModalProps } from "../../config/types";
 import ButtonLogin from "../button/ButtonLogin";
-import { authApi } from "../../api";
+import { articleApi, authApi } from "../../api";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../config/store";
+import { useArticleStore, useAuthStore } from "../../config/store";
 
 const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const nav = useNavigate();
     const { setStatus } = useAuthStore();
+    const { initArticle } = useArticleStore();
     useEffect(() => {
         const parentElement = document.querySelector("." + parent);
         const headerElement = document.querySelector(".header");
@@ -59,6 +60,8 @@ const ModalLogin = ({ onClose, isOpen, parent }: ModalProps) => {
             await authApi.userGoogleAccessTokenReceiver(token);
             setStatus(true);
             onClose();
+            const articleResponse = await articleApi.articleList();
+            initArticle(articleResponse.data);
         } catch (error) {
             console.error("login failed", error);
         }

@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoWarning } from "react-icons/io5";
+import { articleApi } from "../api";
+import { useArticleStore } from "../config/store";
 
 interface LoginData {
     id: string;
@@ -30,6 +32,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [isAlert, setIsAlert] = useState(false);
     const [alertMsg, setAlertMsg] = useState<null | string>(null);
+    const { initArticle } = useArticleStore();
 
     const alertHandler = (text: string) => {
         setIsAlert(true);
@@ -41,6 +44,8 @@ const LoginPage = () => {
         setIsSubmit(true);
         try {
             const response = await userLogin({ username: id, password: password });
+            const articleResponse = await articleApi.articleList();
+            initArticle(articleResponse.data);
             if (response.status === 200) {
                 setIsSubmit(false);
                 navigate("/");

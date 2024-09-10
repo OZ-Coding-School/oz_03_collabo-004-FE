@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfileImage from "../profile/ProfileImage";
-import { useUserStore } from "../../config/store";
+import { useArticleStore, useUserStore } from "../../config/store";
 import Button from "../button/Button";
-import { accountApi, authApi, notificationApi } from "../../api";
+import { accountApi, articleApi, authApi, notificationApi } from "../../api";
 import { useCallback, useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { ModalPortal } from "../../config/ModalPortal";
@@ -54,6 +54,7 @@ const HeaderInfoLogged = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
     const queryClient = useQueryClient();
+    const { initArticle } = useArticleStore();
 
     const openDetailModal = (article_id: number, notification_id: number) => {
         setSelectedArticleId(article_id);
@@ -82,7 +83,9 @@ const HeaderInfoLogged = () => {
 
     const handleLogout = async () => {
         await authApi.userLogout();
-        window.location.reload();
+        const articleResponse = await articleApi.articleList();
+        initArticle(articleResponse.data);
+        nav("/");
     };
 
     const userLevelCalculate = useCallback(async () => {

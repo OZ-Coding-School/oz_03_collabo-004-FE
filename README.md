@@ -201,7 +201,19 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
 
 ---
 
-## 7. 개선 방향성
+## 7. 서버 성능
+
+### 테스트 커버리지
+<img width="1287" alt="image" src="https://github.com/user-attachments/assets/cb0906d3-f57b-4f29-8c72-07ae0020573b">
+
+
+### 성능 테스트 (Locust)
+![image](https://github.com/user-attachments/assets/f6c22d57-5099-4397-a926-852bcb367925)
+
+### 모니터링 (Whatap)
+![image](https://github.com/user-attachments/assets/cdbfb624-f251-4905-8675-d7aef43979fc)
+
+## 8. 개선 방향성
 
 - 게시물 데이터 `Pagination`
 - 게시물 데이터 `react-query`를 활용하여 실시간 동기화
@@ -209,7 +221,7 @@ PR과 관련된 템플릿은 PR을 생성할때 자동으로 생성됩니다. <b
 
 ---
 
-## 8. 프로젝트 후기
+## 9. 프로젝트 후기
 
 이번 프로젝트는 진행에 차질에 있었으나 빠르게 문제점을 파악하고 수정하고 <br/> 
 최신 기술 스택을 활용하여 사용자 중심의 서비스를 제공할 수 있었습니다. <br/> 

@@ -143,6 +143,7 @@ export interface AllArticle {
     updated_at: string;
     images: AllImages[];
     like_count: number;
+    like: boolean;
     tags: AllTags[];
     thumbnail_image: string;
     title: string;

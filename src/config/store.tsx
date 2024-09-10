@@ -34,6 +34,7 @@ export const useUserStore = create<UserStore>((set) => ({
         status: true,
         exp: 0,
         verified: false,
+        like: false,
     },
     otherUser: {
         articles: [],
@@ -49,6 +50,7 @@ export const useUserStore = create<UserStore>((set) => ({
         status: false,
         exp: 0,
         verified: true,
+        like: false,
     },
     initUser: (form: UserData) => set(() => ({ user: form })),
     initOtherUser: (form: UserData) => set(() => ({ otherUser: form })),

@@ -17,6 +17,22 @@ import { HiXCircle } from "react-icons/hi";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { calculateUserLevel } from "../../util/experience";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { adminNotificationList } from "../../api/notification";
+import { AiFillAlert } from "react-icons/ai";
+
+const getAdminNotificationList = async (): Promise<notification[] | null> => {
+    if (location.pathname === "/admin") {
+        try {
+            const response = await adminNotificationList();
+            return response.data;
+        } catch (error) {
+            console.error("알림 :", error);
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
 
 const getNotificationList = async (): Promise<notification[] | null> => {
     try {
@@ -43,6 +59,9 @@ const HeaderInfoLogged = () => {
         setSelectedArticleId(article_id);
 
         setIsDetailModalOpen(true);
+        if (location.pathname === "/admin") {
+            return adminReadNotificationMutation.mutate(notification_id);
+        }
         readNotificationMutation.mutate(notification_id);
     };
 
@@ -83,6 +102,35 @@ const HeaderInfoLogged = () => {
         fetchData();
     }, [updateUser, userLevelCalculate]);
 
+    //? admin Notification
+
+    const { data: adminNotificationData } = useQuery({
+        queryKey: ["adminNotifications"],
+        queryFn: getAdminNotificationList,
+        refetchInterval: 30000,
+    });
+
+    const adminDeleteNotificationMutation = useMutation({
+        mutationFn: (notificationId: number) => notificationApi.adminNotificationDelete(notificationId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
+        },
+        onError: (error) => {
+            console.error("알림 삭제 실패:", error);
+        },
+    });
+
+    const adminReadNotificationMutation = useMutation({
+        mutationFn: (notificationId: number) => notificationApi.adminNotificationRead(notificationId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
+        },
+        onError: (error) => {
+            console.error("알림 읽기 실패:", error);
+        },
+    });
+
+    //? user Notification
     const { data: notificationData } = useQuery({
         queryKey: ["notifications"],
         queryFn: getNotificationList,
@@ -137,18 +185,39 @@ const HeaderInfoLogged = () => {
         <>
             <div className="flex gap-4 items-center">
                 <div className="flex justify-center items-center relative group">
-                    <IoNotifications
-                        className={tw(
-                            "text-gray-200 cursor-pointer transition size-6 text-lg",
-                            notificationData &&
-                                notificationData.filter((notifi) => !notifi.read).length > 0 &&
-                                "text-yellow-500 animate-ring"
-                        )}
-                    />
-                    {notificationData && notificationData.filter((notifi) => !notifi.read).length > 0 && (
-                        <div className="absolute top-0 right-0 text-xs size-4 text-white font-normal bg-red-500 translate-x-[20%] px-[2px] rounded-full flex justify-center items-center">
-                            {notificationData.filter((notifi) => !notifi.read).length}
-                        </div>
+                    {location.pathname === "/admin" ? (
+                        <>
+                            <AiFillAlert
+                                className={tw(
+                                    "text-gray-200 mb-1 cursor-pointer transition size-6 text-lg",
+                                    adminNotificationData &&
+                                        adminNotificationData.filter((notifi) => !notifi.read).length > 0 &&
+                                        "text-indigo-500 animate-ring"
+                                )}
+                            />
+                            {adminNotificationData &&
+                                adminNotificationData.filter((notifi) => !notifi.read).length > 0 && (
+                                    <div className="absolute top-0 right-0 text-xs size-4 text-white font-normal bg-red-500 translate-x-[20%] px-[2px] rounded-full flex justify-center items-center">
+                                        {adminNotificationData.filter((notifi) => !notifi.read).length}
+                                    </div>
+                                )}
+                        </>
+                    ) : (
+                        <>
+                            <IoNotifications
+                                className={tw(
+                                    "text-gray-200 cursor-pointer transition size-6 text-lg",
+                                    notificationData &&
+                                        notificationData.filter((notifi) => !notifi.read).length > 0 &&
+                                        "text-yellow-500 animate-ring"
+                                )}
+                            />
+                            {notificationData && notificationData.filter((notifi) => !notifi.read).length > 0 && (
+                                <div className="absolute top-0 right-0 text-xs size-4 text-white font-normal bg-red-500 translate-x-[20%] px-[2px] rounded-full flex justify-center items-center">
+                                    {notificationData.filter((notifi) => !notifi.read).length}
+                                </div>
+                            )}
+                        </>
                     )}
 
                     <div
@@ -156,31 +225,63 @@ const HeaderInfoLogged = () => {
                         invisible group-hover:visible opacity-0 group-hover:opacity-100 duration-300 translate-x-[10%]"
                     >
                         <div className="w-full h-full px-1 py-1 flex flex-col gap-2">
-                            {notificationData && notificationData.length > 0 ? (
-                                notificationData.map((notifi) => (
-                                    <div
-                                        onClick={() => openDetailModal(notifi.article_id, notifi.id)}
-                                        key={notifi.id}
-                                        className={tw(
-                                            "w-full px-2 py-3 bg-white border relative border-gray-100 shadow-sm duration-200 rounded-xl cursor-pointer hover:-translate-y-0.5 hover:shadow-md",
-                                            notifi.read && "bg-gray-100"
-                                        )}
-                                    >
-                                        <HiXCircle
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                deleteNotificationMutation.mutate(notifi.id);
-                                            }}
-                                            className="absolute top-0 right-0 size-5 translate-x-[20%] translate-y-[-10%] text-gray-600 duration-150 hover:text-literal-info"
-                                        />
-                                        {generateNotificationMessage(notifi)}
-                                        <p className="text-xs font-normal text-gray-500 mt-2">
-                                            {dayjs(notifi.timestamp).format("MM월 DD일")}
-                                        </p>
-                                    </div>
-                                ))
+                            {location.pathname === "/admin" ? (
+                                <div className="flex flex-col gap-2">
+                                    {adminNotificationData && adminNotificationData.length > 0 ? (
+                                        adminNotificationData.map((notifi) => (
+                                            <div
+                                                key={notifi.id}
+                                                className={tw(
+                                                    "w-full px-2 py-3 bg-white border relative border-gray-100 shadow-sm duration-200 rounded-xl cursor-pointer hover:-translate-y-0.5 hover:shadow-md",
+                                                    notifi.read && "bg-gray-100"
+                                                )}
+                                            >
+                                                <HiXCircle
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        adminDeleteNotificationMutation.mutate(notifi.id);
+                                                    }}
+                                                    className="absolute top-0 right-0 size-5 translate-x-[20%] translate-y-[-10%] text-gray-600 duration-150 hover:text-literal-info"
+                                                />
+                                                {generateNotificationMessage(notifi)}
+                                                <p className="text-xs font-normal text-gray-500 mt-2">
+                                                    {dayjs(notifi.timestamp).format("MM월 DD일")}
+                                                </p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-literal-normal text-center">새로운 알림이 없습니다.</p>
+                                    )}
+                                </div>
                             ) : (
-                                <p className="text-literal-normal text-center">새로운 알림이 없습니다.</p>
+                                <>
+                                    {notificationData && notificationData.length > 0 ? (
+                                        notificationData.map((notifi) => (
+                                            <div
+                                                onClick={() => openDetailModal(notifi.article_id, notifi.id)}
+                                                key={notifi.id}
+                                                className={tw(
+                                                    "w-full px-2 py-3 bg-white border relative border-gray-100 shadow-sm duration-200 rounded-xl cursor-pointer hover:-translate-y-0.5 hover:shadow-md",
+                                                    notifi.read && "bg-gray-100"
+                                                )}
+                                            >
+                                                <HiXCircle
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        deleteNotificationMutation.mutate(notifi.id);
+                                                    }}
+                                                    className="absolute top-0 right-0 size-5 translate-x-[20%] translate-y-[-10%] text-gray-600 duration-150 hover:text-literal-info"
+                                                />
+                                                {generateNotificationMessage(notifi)}
+                                                <p className="text-xs font-normal text-gray-500 mt-2">
+                                                    {dayjs(notifi.timestamp).format("MM월 DD일")}
+                                                </p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-literal-normal text-center">새로운 알림이 없습니다.</p>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

@@ -16,8 +16,9 @@ import ModalDetail from "../common/modal/ModalDetail";
 import { AllArticle } from "../config/types";
 import ProfileStatus from "../common/profile/ProfileStatus";
 import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import TopicDrop from "../common/topic/TopicDrop";
+import { IoWarning } from "react-icons/io5";
 
 const HomePage = () => {
     const [editModalStatus, setEditModalStatus] = useState(false);
@@ -36,6 +37,14 @@ const HomePage = () => {
         const articleResponse = await articleApi.articleList();
         initArticle(articleResponse.data);
     }, [initArticle]);
+
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState<null | string>(null);
+
+    const alertHandler = (text: string) => {
+        setIsAlert(true);
+        setAlertText(text);
+    };
 
     const editModalSelectHandler = (id: string) => {
         navigate(`?editor=${id}`);
@@ -108,8 +117,19 @@ const HomePage = () => {
         setFilterArticle(filteredArticles);
     }, [filteredArticles]);
 
+    useEffect(() => {
+        if (isAlert) {
+            const timer = setTimeout(() => {
+                setIsAlert(false);
+                setAlertText(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isAlert]);
+
     return (
-        <div className="transition-colors min-h-screen text-black bg-gray-100 home-parent dark:bg-gray-900">
+        <div className="relative transition-colors min-h-screen text-black bg-gray-100 home-parent dark:bg-gray-900">
             <Header />
             <div className="flex font-default w-full justify-center mx-auto pt-[80px] gap-10">
                 <nav className="hidden xl:block w-[190px] h-fit sticky top-[80px]">
@@ -163,6 +183,8 @@ const HomePage = () => {
                                         view_count={article.view_count}
                                         like_count={article.like_count}
                                         articleId={article.article_id}
+                                        like={article.like}
+                                        onAlert={alertHandler}
                                     />
                                 </div>
                             </motion.div>
@@ -192,6 +214,22 @@ const HomePage = () => {
                     />
                 )}
             </ModalPortal>
+            <AnimatePresence>
+                {isAlert && (
+                    <div className="w-full flex justify-center fixed top-10 z-50">
+                        <motion.div
+                            initial={{ translateY: -150 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: -150 }}
+                            transition={{ type: "spring", duration: 1 }}
+                            className="flex items-center gap-2 bg-opacity-75 bg-orange-600 p-2 rounded-lg absolute top-20 text-background"
+                        >
+                            <IoWarning />
+                            <div>{alertText}</div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

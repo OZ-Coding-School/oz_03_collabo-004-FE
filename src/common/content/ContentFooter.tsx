@@ -29,6 +29,7 @@ const ContentFooter = ({
     const [currentLikeCount, setCurrentLikeCount] = useState<number>(like_count);
     const [currentViewCount] = useState<number>(view_count);
     const { likeData, initLike } = useLikeStore();
+    const [loading, setLoading] = useState(false);
 
     const handleMouseEnter = (i: number) => {
         setHoverIndex(i);
@@ -41,32 +42,37 @@ const ContentFooter = ({
     const nowLike = likeData?.find((item) => item.article_id === articleId);
 
     const handleAddLike = async () => {
-        try {
-            const commentResponse = await axiosInstance.post(`/article/${articleId}/like/`);
-            const likeResponse = await articleApi.likeList();
-            initLike(likeResponse.data);
+        if (!loading) {
+            setLoading(true);
+            try {
+                const commentResponse = await axiosInstance.post(`/article/${articleId}/like/`);
+                const likeResponse = await articleApi.likeList();
+                initLike(likeResponse.data);
 
-            if (commentResponse.status === 200) {
-                const { like_count, message } = commentResponse.data;
+                if (commentResponse.status === 200) {
+                    const { like_count, message } = commentResponse.data;
 
-                if (message === "Like added") {
-                    setCurrentLikeCount(like_count);
-                } else if (message === "Like removed") {
-                    setCurrentLikeCount(like_count);
+                    if (message === "Like added") {
+                        setCurrentLikeCount(like_count);
+                    } else if (message === "Like removed") {
+                        setCurrentLikeCount(like_count);
+                    }
+                } else {
+                    throw new Error(`Unexpected response status: ${commentResponse.status}`);
                 }
-            } else {
-                throw new Error(`Unexpected response status: ${commentResponse.status}`);
-            }
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 401) {
-                    return onAlert("로그인 후 이용 가능합니다.");
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    if (error.response?.status === 401) {
+                        return onAlert("로그인 후 이용 가능합니다.");
+                    }
+                    if (error.response?.status === 409) {
+                        return onAlert("자신의 게시글에는 좋아요를 할 수 없습니다.");
+                    }
+                } else {
+                    console.error("Failed to toggle like:", error);
                 }
-                if (error.response?.status === 409) {
-                    return onAlert("자신의 게시글에는 좋아요를 할 수 없습니다.");
-                }
-            } else {
-                console.error("Failed to toggle like:", error);
+            } finally {
+                setLoading(false);
             }
         }
     };

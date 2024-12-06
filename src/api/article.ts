@@ -27,7 +27,7 @@ export const articleCreate = (title: string, content: string, tags: number, imag
 };
 
 export const articleView = (article_id: number) => {
-    return axiosInstance.get(`article/${article_id}/view/`);
+    return axiosInstance.get(`article/${article_id}/`);
 };
 
 export const articleDelete = (article_id: number) => {
